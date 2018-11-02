@@ -21,6 +21,8 @@ cd /home/pi
 
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/pi-panel/samplebase.py
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/pi-panel/runtext.py
+wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/pi-panel/runtext16.ppm
+wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/pi-panel/image-scroller.py
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/pi-panel/9x15.bdf
 chmod +x runtext.py
 
