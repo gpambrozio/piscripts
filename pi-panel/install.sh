@@ -7,13 +7,13 @@ chmod +x send-notification.sh
 
 sudo apt-get update && sudo apt-get install python2.7-dev python-pillow -y
 
-./send-notification.sh "Setup ping 1 of 3"
+./send-notification.sh "Setup 1 of 3"
 
 git clone https://github.com/hzeller/rpi-rgb-led-matrix/
-./send-notification.sh "Setup ping 2 of 3"
+./send-notification.sh "Setup 2 of 3"
 cd rpi-rgb-led-matrix/
 make
-./send-notification.sh "Setup ping 3 of 3"
+./send-notification.sh "Setup 3 of 3"
 make build-python
 sudo make install-python
 
@@ -24,5 +24,5 @@ wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/pi-panel/runt
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/pi-panel/9x15.bdf
 chmod +x runtext.py
 
-./send-notification.sh "Setup is done"
+./send-notification.sh "Done. Rebooting."
 rm send-notification.sh
