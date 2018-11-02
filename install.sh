@@ -10,7 +10,7 @@ sudo sh -c 'echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf'
 cd /home/pi
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/send-notification.sh
 chmod +x send-notification.sh
-/home/pi/send-notification.sh "Setup started"
+/home/pi/send-notification.sh "Install started on $1"
 
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/bash_aliases.sh
 mv -f bash_aliases.txt ~/.bash_aliases
