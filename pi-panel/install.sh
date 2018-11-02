@@ -10,3 +10,7 @@ make build-python
 sudo make install-python
 
 cd /home/pi
+
+wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/pi-panel/samplebase.py
+wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/pi-panel/runtext.py
+wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/pi-panel/9x15.bdf
