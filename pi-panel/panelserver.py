@@ -13,7 +13,7 @@ PORT_NUMBER = 8080
 class ImageScroller(SampleBase):
     def __init__(self, *args, **kwargs):
         super(ImageScroller, self).__init__(*args, **kwargs)
-        self.parser.add_argument("-i", "--image", help="The image to display", default="runtext16.ppm")
+        self.parser.add_argument("-i", "--image", help="The image to display", default="images/blank.png")
 
     def run(self):
         self.image = Image.open(self.args.image).convert('RGB')
