@@ -1,13 +1,17 @@
 #!/bin/bash
 
 cd /home/pi
-wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/send-notification.sh
-chmod +x send-notification.sh
-/home/pi/send-notification.sh "Setup started"
+
+wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/common.sh
+chmod +x common.sh
+./common.sh
+rm common.sh
 
 sudo apt-get update && sudo apt-get install python2.7-dev python-pillow -y
 
 /home/pi/send-notification.sh "Setup 1 of 3"
+
+cd /home/pi
 
 git clone https://github.com/hzeller/rpi-rgb-led-matrix/
 /home/pi/send-notification.sh "Setup 2 of 3"
