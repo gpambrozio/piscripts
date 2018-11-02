@@ -7,13 +7,13 @@ IFS=$'\n\t'
 # From https://askubuntu.com/a/38468
 sudo sh -c 'echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf'
 
-sudo apt-get update
-sudo apt-get install subversion -y
-
 cd /home/pi
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/send-notification.sh
 chmod +x send-notification.sh
 /home/pi/send-notification.sh "Install started on $1"
+
+sudo apt-get update
+sudo apt-get install subversion -y
 
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/bash_aliases.sh
 mv -f bash_aliases.sh ~/.bash_aliases
