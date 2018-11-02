@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -euo pipefail
+IFS=$'\n\t'
+
 cd /home/pi
 
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/common.sh

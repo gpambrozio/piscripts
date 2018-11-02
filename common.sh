@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -euo pipefail
+IFS=$'\n\t'
+
 # We need to disable IPV6 otherwise a lot of things doesn't work (like notifications)
 # From https://askubuntu.com/a/38468
 sudo sh -c 'echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf'
