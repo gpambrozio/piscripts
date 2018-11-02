@@ -23,6 +23,9 @@ wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/send-notifica
 chmod +x send-notification.sh
 /home/pi/send-notification.sh "Install started on $1"
 
+wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/update.sh
+chmod +x update.sh
+
 sudo apt-get update
 sudo apt-get install subversion -y
 
@@ -30,6 +33,9 @@ wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/bash_aliases.
 mv -f bash_aliases.sh ~/.bash_aliases
 chmod +x ~/.bash_aliases
 
+echo -n "$1" > install_name
 svn checkout "https://github.com/gpambrozio/piscripts/trunk/$1"
 ./$1/install.sh
+
 /home/pi/send-notification.sh "Install Done."
+rm -f "$0"
