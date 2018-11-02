@@ -16,16 +16,14 @@ class ImageScroller(SampleBase):
         self.parser.add_argument("-i", "--image", help="The image to display", default="runtext16.ppm")
 
     def run(self):
+        self.image = Image.open(self.args.image).convert('RGB')
+        self.double_buffer = self.matrix.CreateFrameCanvas()
+
         self.thread = threading.Thread(target=self.runLoop)
         self.thread.daemon = True
         self.thread.start()
 
     def runLoop(self):
-        if not 'image' in self.__dict__:
-            self.image = Image.open(self.args.image).convert('RGB')
-        self.image.resize((self.matrix.width, self.matrix.height), Image.ANTIALIAS)
-
-        double_buffer = self.matrix.CreateFrameCanvas()
         img_width, img_height = self.image.size
 
         # let's scroll
@@ -35,11 +33,11 @@ class ImageScroller(SampleBase):
             if (xpos > img_width):
                 xpos = 0
 
-            double_buffer.SetImage(self.image, -xpos)
-            double_buffer.SetImage(self.image, -xpos + img_width)
+            self.double_buffer.SetImage(self.image, -xpos)
+            self.double_buffer.SetImage(self.image, -xpos + img_width)
 
-            double_buffer = self.matrix.SwapOnVSync(double_buffer)
-            time.sleep(0.01)
+            self.double_buffer = self.matrix.SwapOnVSync(self.double_buffer)
+            time.sleep(0.03)
 
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
@@ -47,7 +45,6 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.send_response(200)
         s.send_header("Content-type", "text/plain")
         s.end_headers()
-
 
     def do_GET(s):
         """Respond to a GET request."""
