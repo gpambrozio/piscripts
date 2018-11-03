@@ -22,24 +22,24 @@ class ImageScroller(SampleBase):
 
     def run(self):
         self.images = {os.path.splitext(file_name)[0]: Image.open(os.path.join('images', file_name)).convert('RGB') 
-            for file_name in os.listdir('images') if os.path.splitext(file_name)[1] == '.png'}
+            for file_name in os.listdir('images') if file_name[0] != '.' and os.path.splitext(file_name)[1] == '.png'}
         self.double_buffer = self.matrix.CreateFrameCanvas()
 
         self.font = graphics.Font()
         self.font.LoadFont("9x15.bdf")
-        self.textColor = graphics.Color(255, 255, 0)
+        self.textColor = graphics.Color(255, 255, 255)
         
         self.thread = threading.Thread(target=self.runLoop)
         self.thread.daemon = True
         self.thread.start()
 
     def runLoop(self):
-        global current_times
-        
+        global current_image, current_text
         image_name = ''
         image_text = ''
         is_drawing_image = True
         drawing_count = 0
+        width = self.matrix.width
 
         # let's scroll
         while True:
@@ -48,31 +48,30 @@ class ImageScroller(SampleBase):
                 if image_name in self.images:
                     image = self.images[image_name]
                     img_width, img_height = image.size
-                    xpos = 0
+                    xpos = -width
                     is_drawing_image = True
                     drawing_count = current_times
             elif image_text != current_text:
                 image_text = current_text
-                xpos = 0
+                xpos = -width
                 is_drawing_image = False
                 drawing_count = current_times
 
             if is_drawing_image:
                 self.double_buffer.SetImage(image, -xpos)
-                self.double_buffer.SetImage(image, -xpos + img_width)
             else:
                 self.double_buffer.Clear()
                 img_width = graphics.DrawText(self.double_buffer, self.font, -xpos, 12, self.textColor, image_text)
 
             self.double_buffer = self.matrix.SwapOnVSync(self.double_buffer)
             xpos += 1
-            if (xpos > img_width):
-                xpos = 0
+            if xpos > img_width + width:
+                xpos = -width
                 if drawing_count > 0:
                     drawing_count -= 1
                     if drawing_count == 0:
-                        image_text = ''
-                        xpos = 0
+                        image_text = current_text = ''
+                        image_name = current_image = ''
                         is_drawing_image = False
 
             time.sleep(0.03)
@@ -85,7 +84,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.end_headers()
 
     def do_GET(s):
-        global current_image, current_text
+        global current_image, current_text, current_times
         
         """Respond to a GET request."""
         s.send_response(200)
@@ -106,6 +105,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 current_times = int(components[2])
             except:
                 current_times = 0
+            print "setting %d" % current_times
 
 
 if __name__ == '__main__':
