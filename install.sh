@@ -27,7 +27,7 @@ wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/update.sh
 chmod +x update.sh
 
 sudo apt-get update
-sudo apt-get install subversion -y
+sudo apt-get install subversion screen -y
 
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/bash_aliases.sh
 mv -f bash_aliases.sh ~/.bash_aliases
