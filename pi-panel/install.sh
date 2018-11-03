@@ -20,7 +20,4 @@ make
 make build-python
 sudo make install-python
 
-crontab -l > mycron
-echo "@reboot /home/pi/pi-panel/start.sh" >> mycron
-crontab mycron
-rm mycron
+crontab crontab.txt
