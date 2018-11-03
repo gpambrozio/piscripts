@@ -68,13 +68,12 @@ class ImageScroller(SampleBase):
             xpos += 1
             if (xpos > img_width):
                 xpos = 0
-                if current_times > 0:
-                    current_times -= 1
-                    if current_times == 0:
+                if drawing_count > 0:
+                    drawing_count -= 1
+                    if drawing_count == 0:
                         image_text = ''
                         xpos = 0
                         is_drawing_image = False
-                        drawing_count = 0
 
             time.sleep(0.03)
 
