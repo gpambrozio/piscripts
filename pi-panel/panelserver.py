@@ -6,12 +6,15 @@ import threading
 import sys
 import BaseHTTPServer
 from samplebase import SampleBase
+from rgbmatrix import graphics
 from PIL import Image
 
 HOST_NAME = ''
 PORT_NUMBER = 8080
 
 current_image = 'blank'
+current_text = ''
+current_times = 0
 
 class ImageScroller(SampleBase):
     def __init__(self, *args, **kwargs):
@@ -21,13 +24,22 @@ class ImageScroller(SampleBase):
         self.images = {os.path.splitext(file_name)[0]: Image.open(os.path.join('images', file_name)).convert('RGB') 
             for file_name in os.listdir('images') if os.path.splitext(file_name)[1] == '.png'}
         self.double_buffer = self.matrix.CreateFrameCanvas()
+
+        self.font = graphics.Font()
+        self.font.LoadFont("9x15.bdf")
+        self.textColor = graphics.Color(255, 255, 0)
         
         self.thread = threading.Thread(target=self.runLoop)
         self.thread.daemon = True
         self.thread.start()
 
     def runLoop(self):
+        global current_times
+        
         image_name = ''
+        image_text = ''
+        is_drawing_image = True
+        drawing_count = 0
 
         # let's scroll
         while True:
@@ -37,14 +49,32 @@ class ImageScroller(SampleBase):
                     image = self.images[image_name]
                     img_width, img_height = image.size
                     xpos = 0
+                    is_drawing_image = True
+                    drawing_count = current_times
+            elif image_text != current_text:
+                image_text = current_text
+                xpos = 0
+                is_drawing_image = False
+                drawing_count = current_times
 
-            self.double_buffer.SetImage(image, -xpos)
-            self.double_buffer.SetImage(image, -xpos + img_width)
+            if is_drawing_image:
+                self.double_buffer.SetImage(image, -xpos)
+                self.double_buffer.SetImage(image, -xpos + img_width)
+            else:
+                self.double_buffer.Clear()
+                img_width = graphics.DrawText(self.double_buffer, self.font, -xpos, 12, self.textColor, image_text)
 
             self.double_buffer = self.matrix.SwapOnVSync(self.double_buffer)
             xpos += 1
             if (xpos > img_width):
                 xpos = 0
+                if current_times > 0:
+                    current_times -= 1
+                    if current_times == 0:
+                        image_text = ''
+                        xpos = 0
+                        is_drawing_image = False
+                        drawing_count = 0
 
             time.sleep(0.03)
 
@@ -56,7 +86,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.end_headers()
 
     def do_GET(s):
-        global current_image
+        global current_image, current_text
         
         """Respond to a GET request."""
         s.send_response(200)
@@ -64,8 +94,19 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.end_headers()
         # If someone went to "http://something.somewhere.net/foo/bar/",
         # then s.path equals "/foo/bar/".
-        current_image = s.path[1:]
-        s.wfile.write("You accessed path: %s" % s.path)
+        components = s.path[1:].split('/')
+        if len(components) < 3:
+            s.wfile.write("Need 3 components: %s" % s.path)
+        else:
+            s.wfile.write("You accessed path: %s" % s.path)
+            if components[0] == "image":
+                current_image = components[1]
+            else:
+                current_text = components[1]
+            try:
+                current_times = int(components[2])
+            except:
+                current_times = 0
 
 
 if __name__ == '__main__':
