@@ -5,26 +5,13 @@ IFS=$'\n\t'
 
 cd /home/pi
 
-# https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md
+# Bluepy: https://github.com/IanHarvey/bluepy
+sudo apt-get install -y python-pip libglib2.0-dev
+sudo pip install bluepy
 
-sudo apt-get install -y hostapd dnsmasq
-sudo cp VanTomation/config/iptables.ipv4.nat /etc/
-sudo cp -f VanTomation/config/hostapd /etc/default/hostapd
-
-PASS=`cat /home/pi/wifipass`
-sed "s/PASSWORD/$PASS --experimental/" VanTomation/config/hostapd.conf > VanTomation/config/hostapd.conf.replaced
-sudo mv -f VanTomation/config/hostapd.conf.replaced /etc/hostapd/hostapd.conf
-
-sudo cp -f VanTomation/config/interfaces.ap /etc/network/interfaces
-sudo cp -f VanTomation/config/dhcpcd.ap /etc/dhcpcd.conf
-sudo cp -f VanTomation/config/dnsmasq.conf /etc/dnsmasq.conf
-
-sudo update-rc.d hostapd enable
-
-sudo sh -c 'echo "iptables-restore < /etc/iptables.ipv4.nat" >> /etc/rc.local'
-sudo sh -c 'echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf'
-
-/home/pi/send-notification.sh "Setup net done"
+# Installing nodejs
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get install -y nodejs
 
 # Bleno (for bt peripheral)
 # Do this before bluez as it will be updated by better bluez bellow
@@ -32,6 +19,8 @@ cd /home/pi/VanTomation
 sudo apt-get install -y bluetooth bluez libbluetooth-dev libudev-dev
 npm install bleno
 cd /home/pi
+
+/home/pi/send-notification.sh "Setup node done"
 
 # Installing bluez
 sudo apt-get install -y libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev
@@ -51,18 +40,27 @@ cd /home/pi
 
 /home/pi/send-notification.sh "Setup bluez done"
 
-# Installing nodejs
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Bluepy: https://github.com/IanHarvey/bluepy
-sudo apt-get install -y python-pip libglib2.0-dev
-sudo pip install bluepy
-
-/home/pi/send-notification.sh "Setup node done"
-
 sudo sh -c 'echo "hdmi_ignore_hotplug=1" >> /boot/config.txt'
 sudo sh -c 'echo "sdtv_mode=0" >> /boot/config.txt'
 sudo sh -c 'echo "enable_uart=1" >> /boot/config.txt'
+
+# https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md
+
+sudo apt-get install -y hostapd dnsmasq
+sudo cp VanTomation/config/iptables.ipv4.nat /etc/
+sudo cp -f VanTomation/config/hostapd /etc/default/hostapd
+
+PASS=`cat /home/pi/wifipass`
+sed "s/PASSWORD/$PASS --experimental/" VanTomation/config/hostapd.conf > VanTomation/config/hostapd.conf.replaced
+sudo mv -f VanTomation/config/hostapd.conf.replaced /etc/hostapd/hostapd.conf
+
+sudo cp -f VanTomation/config/interfaces.ap /etc/network/interfaces
+sudo cp -f VanTomation/config/dhcpcd.ap /etc/dhcpcd.conf
+sudo cp -f VanTomation/config/dnsmasq.conf /etc/dnsmasq.conf
+
+sudo update-rc.d hostapd enable
+
+sudo sh -c 'echo "iptables-restore < /etc/iptables.ipv4.nat" >> /etc/rc.local'
+sudo sh -c 'echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf'
 
 crontab VanTomation/config/crontab.txt
