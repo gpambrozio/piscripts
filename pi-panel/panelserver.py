@@ -12,9 +12,7 @@ from PIL import Image
 HOST_NAME = ''
 PORT_NUMBER = 8080
 
-current_image = 'blank'
-current_text = ''
-current_times = 0
+current_command = ['text', '', 0]
 
 class ImageScroller(SampleBase):
     def __init__(self, *args, **kwargs):
@@ -34,7 +32,9 @@ class ImageScroller(SampleBase):
         self.thread.start()
 
     def runLoop(self):
-        global current_image, current_text
+        global current_command
+        
+        command = ['', '', '']
         image_name = ''
         image_text = ''
         is_drawing_image = True
@@ -43,19 +43,21 @@ class ImageScroller(SampleBase):
 
         # let's scroll
         while True:
-            if image_name != current_image:
-                image_name = current_image
-                if image_name in self.images:
-                    image = self.images[image_name]
-                    img_width, img_height = image.size
+            if command != current_command:
+                command = current_command
+                
+                if command[0] == 'image':
+                    if command[1] in self.images:
+                        image = self.images[command[1]]
+                        img_width, img_height = image.size
+                        drawing_count = command[2]
+                        xpos = -width
+                        is_drawing_image = True
+                else:
+                    image_text = command[1]
+                    drawing_count = command[2]
                     xpos = -width
-                    is_drawing_image = True
-                    drawing_count = current_times
-            elif image_text != current_text:
-                image_text = current_text
-                xpos = -width
-                is_drawing_image = False
-                drawing_count = current_times
+                    is_drawing_image = False
 
             if is_drawing_image:
                 self.double_buffer.SetImage(image, -xpos)
@@ -70,9 +72,7 @@ class ImageScroller(SampleBase):
                 if drawing_count > 0:
                     drawing_count -= 1
                     if drawing_count == 0:
-                        image_text = current_text = ''
-                        image_name = current_image = ''
-                        is_drawing_image = False
+                        command = current_command = ['text', '', 0]
 
             time.sleep(0.03)
 
@@ -84,28 +84,29 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.end_headers()
 
     def do_GET(s):
-        global current_image, current_text, current_times
+        global current_command
         
         """Respond to a GET request."""
         s.send_response(200)
         s.send_header("Content-type", "text/plain")
         s.end_headers()
+        
         # If someone went to "http://something.somewhere.net/foo/bar/",
         # then s.path equals "/foo/bar/".
         components = s.path[1:].split('/')
-        if len(components) < 3:
+        if components[0] == 'ping':
+            s.wfile.write('pong')
+        elif len(components) < 3:
             s.wfile.write("Need 3 components: %s" % s.path)
         else:
-            s.wfile.write("You accessed path: %s" % s.path)
-            if components[0] == "image":
-                current_image = components[1]
-            else:
-                current_text = components[1]
+            command = components[:3]
             try:
-                current_times = int(components[2])
+                command[2] = int(command[2])
             except:
-                current_times = 0
-            print "setting %d" % current_times
+                command[2] = 0
+            current_command = command
+            
+            s.wfile.write("You accessed path: %s" % s.path)
 
 
 if __name__ == '__main__':
