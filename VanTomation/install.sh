@@ -62,8 +62,9 @@ sudo cp VanTomation/config/iptables.ipv4.nat /etc/
 sudo cp -f VanTomation/config/hostapd /etc/default/hostapd
 
 PASS=`cat /home/pi/wifipass`
-sed "s/PASSWORD/$PASS --experimental/" VanTomation/config/hostapd.conf > VanTomation/config/hostapd.conf.replaced
+sed "s/PASSWORD/$PASS/" VanTomation/config/hostapd.conf > VanTomation/config/hostapd.conf.replaced
 sudo mv -f VanTomation/config/hostapd.conf.replaced /etc/hostapd/hostapd.conf
+rm /home/pi/wifipass
 
 sudo cp -f VanTomation/config/interfaces.ap /etc/network/interfaces
 sudo cp -f VanTomation/config/dhcpcd.ap /etc/dhcpcd.conf
