@@ -3,7 +3,7 @@
 from bluepy.btle import Scanner, DefaultDelegate, BTLEException
 from bluepy import btle
 import threading
-import queue
+import Queue as queue
 import uuid
 import time
 import binascii
