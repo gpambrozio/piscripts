@@ -35,7 +35,10 @@ chmod +x ~/.bash_aliases
 
 echo -n "$1" > install_name
 svn checkout "https://github.com/gpambrozio/piscripts/trunk/$1"
+
+/home/pi/send-notification.sh "Config started on $1"
+
 ./$1/install.sh
 
-/home/pi/send-notification.sh "Install Done."
+/home/pi/send-notification.sh "Install done on $1."
 rm -f "$0"
