@@ -6,7 +6,7 @@ set -e
 
 # https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md
 
-sudo apt-get install hostapd dnsmasq
+sudo apt-get install -y hostapd dnsmasq
 sudo cp config/iptables.ipv4.nat /etc/
 sudo cp -f config/hostapd /etc/default/hostapd
 
