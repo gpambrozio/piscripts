@@ -11,7 +11,7 @@ while true ; do
    newfilelist=$( $listcommand )
    if [[ $oldfilelist != $newfilelist ]] ; then
       oldfilelist=$newfilelist
-      rsync --exclude='.*' --delete --recursive --perms --itemize-changes --times --compress --human-readable --rsh=ssh "$1/" "pi@$2:/home/pi/$1/"
+      rsync --exclude='.*' --exclude='node_modules' --delete --recursive --perms --itemize-changes --times --compress --human-readable --rsh=ssh "$1/" "pi@$2:/home/pi/$1/"
    fi
    sleep 1 || exit 2 
 done
