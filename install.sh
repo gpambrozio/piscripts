@@ -31,6 +31,9 @@ wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/bash_aliases.
 mv -f bash_aliases.sh ~/.bash_aliases
 chmod +x ~/.bash_aliases
 
+wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/screenrc.txt
+mv -f screenrc.txt ~/.screenrc
+
 sudo apt-get update
 sudo apt-get install -y subversion screen
 

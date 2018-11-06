@@ -1,0 +1,2 @@
+# ~/.screenrc
+defshell -bash      # dash makes it a login shell
