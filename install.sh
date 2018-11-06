@@ -24,7 +24,7 @@ sudo sh -c 'echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf'
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/send-notification.sh
 chmod +x send-notification.sh
 
-IPS=`ifconfig 2 > /dev/null | awk '/inet / {print $2}'`
+IPS=`ifconfig | awk '/inet / {print $2}'`
 /home/pi/send-notification.sh "Install started on $1: $IPS"
 
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/bash_aliases.sh
