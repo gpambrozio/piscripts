@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 import os
-import time
-import threading
+import socket
 import sys
+import threading
+import time
 import BaseHTTPServer
 from samplebase import SampleBase
 from rgbmatrix import graphics
@@ -72,12 +73,59 @@ class ImageScroller(SampleBase):
                 if drawing_count > 0:
                     drawing_count -= 1
                     if drawing_count == 0:
-                        command = current_command = ['text', '', 0]
+                        current_command = ['text', '', 0]
 
             time.sleep(0.03)
 
 
-class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+class SocketServer(object):
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.sock.bind((self.host, self.port))
+        self.thread = threading.Thread(target=self.listen)
+        self.thread.daemon = True
+        self.thread.start()
+
+
+    def listen(self):
+        self.sock.listen(5)
+        while True:
+            client, address = self.sock.accept()
+            client.settimeout(60)
+            threading.Thread(target=self.listenToClient, args=(client,address)).start()
+
+
+    def listenToClient(self, client, address):
+        global current_command
+
+        size = 1024
+        while True:
+            try:
+                data = client.recv(size)
+                if data:
+                    components = data.strip(" \r\n").split('/')
+                    if components[0] == 'ping':
+                        client.send("Pong\n")
+                    elif len(components) < 3:
+                        client.send("Need 3 components: %s\n" % data)
+                    else:
+                        command = components[:3]
+                        try:
+                            command[2] = int(command[2])
+                        except:
+                            command[2] = 0
+                        current_command = command
+                        client.send("OK\n")
+                else:
+                    raise error('Client disconnected')
+            except:
+                client.close()
+
+
+class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_HEAD(s):
         s.send_response(200)
         s.send_header("Content-type", "text/plain")
@@ -110,12 +158,13 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
+    socket_server = SocketServer('', 10000)
     image_scroller = ImageScroller()
     if not image_scroller.process():
         image_scroller.print_help()
         sys.exit(1)
 
-    httpd = BaseHTTPServer.HTTPServer((HOST_NAME, PORT_NUMBER), MyHandler)
+    httpd = BaseHTTPServer.HTTPServer((HOST_NAME, PORT_NUMBER), HTTPHandler)
     print time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER)
     try:
         httpd.serve_forever()
