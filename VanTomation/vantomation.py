@@ -23,6 +23,11 @@ logging.basicConfig(format=FORMAT)
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
+def reverse_uuid(service_uuid):
+    if len(service_uuid) == 4:
+        return service_uuid[2:4] + service_uuid[0:2]
+    return uuid.UUID(bytes="".join([uuid.UUID(service_uuid).bytes[15-i] for i in range(16)])).hex
+
 # Define service and characteristic UUIDs.
 
 class DeviceManager(object):
@@ -30,7 +35,7 @@ class DeviceManager(object):
         self.threads_by_addr = {}
         self.threads_by_name = {}
         self.service_and_char_uuids = service_and_char_uuids
-        self.required_services = set([s[0] for s in service_and_char_uuids])
+        self.required_services = set([reverse_uuid(s[0]) for s in service_and_char_uuids])
         self.thread_class = thread_class
         self.coordinator = None
 
@@ -107,6 +112,7 @@ class BroadcastMessage(object):
     def __str__(self):
         return "Broadcast from %s to %s, %s = %s" % (self.source, self.destination, self.prop, self.value)
 
+        
 
 class SenderReceiver(object):
     def __init__(self, name):
