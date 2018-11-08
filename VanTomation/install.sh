@@ -65,7 +65,7 @@ sudo sh -c 'echo "framebuffer_width=800" >> /boot/config.txt'
 sudo sh -c 'echo "framebuffer_height=600" >> /boot/config.txt'
 
 OWM_API_KEY=`cat /home/pi/owm_api_key`
-echo "export OWM_API_KEY=$OWM_API_KEY" >> .bashrc
+echo "export OWM_API_KEY=$OWM_API_KEY" >> .bash_profile
 rm /home/pi/owm_api_key
 
 # https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md
@@ -91,5 +91,8 @@ sudo sh -c 'echo "iw dev wlan0 set power_save off" >> /etc/rc.local'
 sudo sh -c 'echo "iw dev wlan1 set power_save off" >> /etc/rc.local'
 
 sudo sh -c 'echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf'
+
+# To start the monitor when the desktop starts
+echo "@lxterminal -e bash -c -l /home/pi/VanTomation/monitor.py" >> /home/pi/.config/lxsession/LXDE-pi/autostart
 
 crontab VanTomation/config/crontab.txt
