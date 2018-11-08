@@ -8,6 +8,7 @@ import os
 import logging
 import traceback
 import threading
+import sys
 import Queue as queue
 
 import ephem
@@ -17,6 +18,7 @@ import requests
 from PIL import ImageTk
 from PIL import Image
 
+folder = os.path.dirname(os.path.normpath(os.path.join(os.getcwd(), sys.argv[0])))
 
 FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT)
@@ -85,10 +87,10 @@ def fill_time(state):
 ## Heading
 heading_canvas = tk.Canvas(root, width=100, height=100)
 
-compass_image = ImageTk.PhotoImage(Image.open("./compass.png").resize((100, 100), Image.ANTIALIAS))
+compass_image = ImageTk.PhotoImage(Image.open(os.path.join(folder, "compass.png")).resize((100, 100), Image.ANTIALIAS))
 compass_object = heading_canvas.create_image(50, 50, image=compass_image)
 
-compass_arrow = Image.open("./compass-arrow.png").resize((150, 150), Image.ANTIALIAS)
+compass_arrow = Image.open(os.path.join(folder, "compass-arrow.png")).resize((150, 150), Image.ANTIALIAS)
 compass_arrow_image = ImageTk.PhotoImage(compass_arrow)
 compass_arrow_object = heading_canvas.create_image(50, 50, image=compass_arrow_image)
 
@@ -121,11 +123,11 @@ class WeatherThread:
         self.thread.start()                                  # Start the execution
 
     def download_weather_icon(self, icon_name):
-        icon_file_name = "./owm_icons/%s.png" % icon_name
+        icon_file_name = os.path.join(folder, "owm_icons", "%s.png" % icon_name)
         if not os.path.exists(icon_file_name):
             icon = requests.get("http://openweathermap.org/img/w/%s.png" % icon_name)
             if icon.status_code == 200:
-                os.makedirs('./owm_icons')
+                os.makedirs(os.path.join(folder, 'owm_icons'))
                 f = file(icon_file_name, "w")
                 f.write(icon.content)
                 f.close()
