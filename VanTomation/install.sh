@@ -18,7 +18,13 @@ cd /home/pi
 
 # Bluepy: https://github.com/IanHarvey/bluepy
 sudo apt-get install -y python-pip libglib2.0-dev
-sudo pip install bluepy
+sudo pip install bluepy==1.1.4
+
+# Stuff for monitor.sh
+sudo pip install pillow
+sudo pip install pyephem
+sudo pip install pyowm
+sudo apt-get install -y python-imaging-tk
 
 # Installing nodejs
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
@@ -37,6 +43,7 @@ cd /home/pi
 sudo apt-get install -y libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev
 wget http://www.kernel.org/pub/linux/bluetooth/bluez-5.50.tar.xz
 tar xvf bluez-5.50.tar.xz
+rm bluez-5.50.tar.xz
 
 # This path disables the second adapter as it is used by bleno directly
 cp -f VanTomation/config/adapter.c bluez-5.50/src/
@@ -54,6 +61,12 @@ cd /home/pi
 sudo sh -c 'echo "hdmi_ignore_hotplug=1" >> /boot/config.txt'
 sudo sh -c 'echo "sdtv_mode=0" >> /boot/config.txt'
 sudo sh -c 'echo "enable_uart=1" >> /boot/config.txt'
+sudo sh -c 'echo "framebuffer_width=800" >> /boot/config.txt'
+sudo sh -c 'echo "framebuffer_height=600" >> /boot/config.txt'
+
+OWM_API_KEY=`cat /home/pi/owm_api_key`
+echo "export OWM_API_KEY=$OWM_API_KEY" >> .bashrc
+rm /home/pi/owm_api_key
 
 # https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md
 
@@ -73,6 +86,7 @@ sudo cp -f VanTomation/config/dnsmasq.conf /etc/dnsmasq.conf
 sudo update-rc.d hostapd enable
 
 sudo sh -c 'echo "iptables-restore < /etc/iptables.ipv4.nat" >> /etc/rc.local'
+sudo sh -c 'echo "iwconfig wlan1 power off" >> /etc/rc.local'
 sudo sh -c 'echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf'
 
 crontab VanTomation/config/crontab.txt

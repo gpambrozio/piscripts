@@ -125,6 +125,7 @@ class WeatherThread:
         if not os.path.exists(icon_file_name):
             icon = requests.get("http://openweathermap.org/img/w/%s.png" % icon_name)
             if icon.status_code == 200:
+                os.makedirs('./owm_icons')
                 f = file(icon_file_name, "w")
                 f.write(icon.content)
                 f.close()
