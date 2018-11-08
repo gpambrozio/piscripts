@@ -87,6 +87,9 @@ sudo update-rc.d hostapd enable
 
 sudo sh -c 'echo "iptables-restore < /etc/iptables.ipv4.nat" >> /etc/rc.local'
 sudo sh -c 'echo "iwconfig wlan1 power off" >> /etc/rc.local'
+sudo sh -c 'echo "iw dev wlan0 set power_save off" >> /etc/rc.local'
+sudo sh -c 'echo "iw dev wlan1 set power_save off" >> /etc/rc.local'
+
 sudo sh -c 'echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf'
 
 crontab VanTomation/config/crontab.txt
