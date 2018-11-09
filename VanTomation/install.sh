@@ -70,6 +70,7 @@ echo ". ~/.bashrc" >> .bash_profile
 rm /home/pi/owm_api_key
 
 # https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md
+# https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
 
 sudo apt-get install -y hostapd dnsmasq
 sudo cp VanTomation/config/iptables.ipv4.nat /etc/
