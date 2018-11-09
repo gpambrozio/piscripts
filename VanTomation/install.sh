@@ -66,6 +66,7 @@ sudo sh -c 'echo "framebuffer_height=600" >> /boot/config.txt'
 
 OWM_API_KEY=`cat /home/pi/owm_api_key`
 echo "export OWM_API_KEY=$OWM_API_KEY" >> .bash_profile
+echo ". ~/.bashrc" >> .bash_profile
 rm /home/pi/owm_api_key
 
 # https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md
@@ -85,10 +86,9 @@ sudo cp -f VanTomation/config/dnsmasq.conf /etc/dnsmasq.conf
 
 sudo update-rc.d hostapd enable
 
-sudo sh -c 'echo "iptables-restore < /etc/iptables.ipv4.nat" >> /etc/rc.local'
-sudo sh -c 'echo "iwconfig wlan1 power off" >> /etc/rc.local'
-sudo sh -c 'echo "iw dev wlan0 set power_save off" >> /etc/rc.local'
-sudo sh -c 'echo "iw dev wlan1 set power_save off" >> /etc/rc.local'
+sudo sh -c 'cp -f /home/pi/VanTomation/rclocal.txt /etc/rc.local'
+sudo sh -c 'chown root:root /etc/rc.local'
+sudo sh -c 'chmod 755 /etc/rc.local'
 
 sudo sh -c 'echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf'
 
