@@ -10,31 +10,32 @@ console.log = function(){
 };
 
 var client = null;
-fs.watch('/tmp', (eventType, filename) => {
-  if (client == null && filename == 'vantomation.socket' && eventType == 'rename') {
-    console.log('socket created');
-    client = startClient();
-  }
-});
-if (fs.existsSync('/tmp/vantomation.socket')) {
-  client = startClient();
-}
 
 function startClient() {
-  const c = net.createConnection({ path: '/tmp/vantomation.socket' }, () => {
-    // 'connect' listener
-    console.log('connected to server!');
-  });
+  const c = net.Socket()
   c.on('data', (data) => {
     console.log(data.toString());
     c.end();
   });
+  c.on('error', () => {
+  });
   c.on('end', () => {
     console.log('disconnected from server');
-    client = null;
   });
+  c.on('connect', function() {
+    // 'connect' listener
+    console.log('connected to server!');
+  });
+  c.on('close', function(e) {
+    console.log('connection closed');
+    c.setTimeout(10000, function() {
+	  c.connect(8000);
+    })
+  });
+  c.connect(8000);
   return c;
 }
+client = startClient();
 
 function relay(msg) {
   if (client != null) {

@@ -498,56 +498,52 @@ class PIManager(SenderReceiver):
 class SocketManager(SenderReceiver):
     def __init__(self):
         SenderReceiver.__init__(self, "Socket")
-        server_address = '/tmp/vantomation.socket'
-
-        # Make sure the socket does not already exist
-        try:
-            os.unlink(server_address)
-        except OSError:
-            if os.path.exists(server_address):
-                raise
+        server_port = 8000
 
         # Create a UDS socket
-        self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        self.sock.bind(server_address)
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.sock.bind(('', server_port))
 
         # Listen for incoming connections
-        self.sock.listen(1)
-        self.thread = threading.Thread(target=self.run)
+        self.sock.listen(5)
+        self.thread = threading.Thread(target=self.listen)
         self.thread.daemon = True                            # Daemonize thread
         self.thread.start()                                  # Start the execution
 
 
-    def run(self):
+    def listen(self):
         """ Method that runs forever """
         while True:
-            # Wait for a connection
-            connection, client_address = self.sock.accept()
-            try:
-                logger.debug("connection from %s", client_address)
+            client, address = self.sock.accept()
+            client.settimeout(60)
+            threading.Thread(target=self.listenToClient, args=(client,address)).start()
 
-                # Receive the data in small chunks and retransmit it
-                past_data = ""
-                while True:
-                    data = connection.recv(256)
-                    if data == '':
-                        continue
-                    past_data += data
-                    lines = past_data.split("\n")
-                    past_data = lines[-1]
-                    for command in lines[0:-1]:
-                        if command[0] == "L":
-                            components = command[1:].split(',')
-                            self.add_broadcast(None, "Location", (float(components[0]) / 10000, float(components[1]) / 10000))
-                        elif command[0] == "A":
-                            components = command[1:].split(',')
-                            self.add_broadcast(None, "Altitude", int(components[0]))
-                            self.add_broadcast(None, "Speed", int(components[1]))
-                            self.add_broadcast(None, "Heading", int(components[2]))
-                            
-            finally:
-                # Clean up the connection
-                connection.close()
+
+    def listenToClient(self, connection, client_address):
+        # Receive the data in small chunks and retransmit it
+        try:
+            logger.debug("connection from %s", client_address)
+            past_data = ""
+            while True:
+                data = connection.recv(256)
+                if data == '':
+                    continue
+                past_data += data
+                lines = past_data.split("\n")
+                past_data = lines[-1]
+                for command in lines[0:-1]:
+                    if command[0] == "L":
+                        components = command[1:].split(',')
+                        self.add_broadcast(None, "Location", (float(components[0]) / 10000, float(components[1]) / 10000))
+                    elif command[0] == "A":
+                        components = command[1:].split(',')
+                        self.add_broadcast(None, "Altitude", int(components[0]))
+                        self.add_broadcast(None, "Speed", int(components[1]))
+                        self.add_broadcast(None, "Heading", int(components[2]))
+        finally:
+            # Clean up the connection
+            connection.close()
 
 
 class StateManager(SenderReceiver):
