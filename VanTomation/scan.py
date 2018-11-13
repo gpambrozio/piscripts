@@ -95,27 +95,30 @@ scanner = Scanner()#.withDelegate(ScanPrint())
 print("Starting scan")
 scanner.start()
 scanner.clear()
+previous = []
 while True:
     scanner.process(5)
     devices = scanner.getDevices()
     print("")
     for dev in devices:
-        scan_data = dev.getScanData()
-        services = [s[2] for s in scan_data if s[0] in [3, 6, 7]]
+        if dev.addr not in previous:
+            previous.append(dev.addr)
+            scan_data = dev.getScanData()
+            services = [s[2] for s in scan_data if s[0] in [3, 6, 7]]
 
-        # flags = [s[2] for s in scan_data if s[0] == 1]
-        # if len(flags) == 0 or flags[0] != '1a':
-        #     continue
-            
-        try:
-            print("Found device %s (%s) scan_data %s" % (dev.addr, dev.getValueText(9), scan_data))
-        except:
-            print("Error printing info for %s" % dev.addr)
+            # flags = [s[2] for s in scan_data if s[0] == 1]
+            # if len(flags) == 0 or flags[0] != '1a':
+            #     continue
 
-        interested_uuid = 'AAAA'
-        if interested_uuid in services:
-            peripheral = btle.Peripheral(dev)
+            try:
+                print("Found device %s (%s) scan_data %s" % (dev.addr, dev.getValueText(9) or dev.getValueText(8), scan_data))
+            except:
+                print("Error printing info for %s" % dev.addr)
 
-            dump_services(peripheral)
-            peripheral.disconnect()
-            exit(0)
+            interested_uuid = 'AAAA'
+            if interested_uuid in services:
+                peripheral = btle.Peripheral(dev)
+
+                dump_services(peripheral)
+                peripheral.disconnect()
+                exit(0)
