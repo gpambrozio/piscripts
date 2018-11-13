@@ -24,6 +24,7 @@ function startClient() {
     c.on('connect', function() {
         // 'connect' listener
         console.log('connected to server!');
+        c.write("PhoneGPS\n");
     });
     c.on('close', function(e) {
         console.log('connection closed');
