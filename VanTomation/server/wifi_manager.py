@@ -31,6 +31,6 @@ class WiFiManager(SenderReceiver):
                 self.add_broadcast(None, "Scan", scan)
 
             except Exception, e:
-                logger.debug("Exception: %s\n%s", e, traceback.format_exc())
+                logger.debug("Exception: %s", e)
 
             time.sleep(10)
