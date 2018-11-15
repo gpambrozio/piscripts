@@ -9,26 +9,27 @@ class ImageScroller(SampleBase):
         super(ImageScroller, self).__init__(*args, **kwargs)
 
     def run(self):
-        text = "Thank you!!!"
+        double_buffer = self.matrix.CreateFrameCanvas()
+        text = ""
         font = ImageFont.truetype('test/test.ttf', 16)
-        self.image = Image.new('RGB', (len(text) * 14 + self.matrix.width, self.matrix.height), color = (0, 0, 0))
-        draw = ImageDraw.Draw(self.image)
+        image = Image.new('RGB', (len(text) * 14 + self.matrix.width, self.matrix.height), color = (0, 0, 0))
+        draw = ImageDraw.Draw(image)
         draw.text((0, 0), text, font=font, fill=(255, 255, 255))
 
-        double_buffer = self.matrix.CreateFrameCanvas()
-        img_width, img_height = self.image.size
+        img_width, img_height = image.size
 
         # let's scroll
-        xpos = 0
+        width = self.matrix.width
+        xpos = -width
         while True:
+            print "%s, %d, %d" % (image, xpos, img_width)
+            double_buffer.SetImage(image, -xpos)
+            double_buffer = self.matrix.SwapOnVSync(double_buffer)
+
             xpos += 1
             if (xpos > img_width):
-                xpos = 0
+                xpos = -32
 
-            double_buffer.SetImage(self.image, -xpos)
-            double_buffer.SetImage(self.image, -xpos + img_width)
-
-            double_buffer = self.matrix.SwapOnVSync(double_buffer)
             time.sleep(0.03)
 
 # Main function

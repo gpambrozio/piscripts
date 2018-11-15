@@ -8,12 +8,14 @@ import time
 import BaseHTTPServer
 from samplebase import SampleBase
 from rgbmatrix import graphics
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 HOST_NAME = ''
 PORT_NUMBER = 8080
 
-current_command = ['text', '', 0]
+# Fonts from https://fonts2u.com/font-vendors/the-grandoplex-project.html
+
+current_command = ['', '', 0]
 
 class ImageScroller(SampleBase):
     def __init__(self, *args, **kwargs):
@@ -22,12 +24,7 @@ class ImageScroller(SampleBase):
     def run(self):
         self.images = {os.path.splitext(file_name)[0]: Image.open(os.path.join('images', file_name)).convert('RGB') 
             for file_name in os.listdir('images') if file_name[0] != '.' and os.path.splitext(file_name)[1] == '.png'}
-        self.double_buffer = self.matrix.CreateFrameCanvas()
 
-        self.font = graphics.Font()
-        self.font.LoadFont("9x15.bdf")
-        self.textColor = graphics.Color(255, 255, 255)
-        
         self.thread = threading.Thread(target=self.runLoop)
         self.thread.daemon = True
         self.thread.start()
@@ -35,38 +32,37 @@ class ImageScroller(SampleBase):
     def runLoop(self):
         global current_command
         
+        font = ImageFont.truetype('fonts/PixelOperator8.ttf', 16)
+        textColor = (255, 255, 255)
+        
+        double_buffer = self.matrix.CreateFrameCanvas()
         command = ['', '', '']
-        image_name = ''
-        image_text = ''
-        is_drawing_image = True
         drawing_count = 0
+        image = None
+        img_width = 0
         width = self.matrix.width
+        xpos = -width
 
         # let's scroll
         while True:
             if command != current_command:
                 command = current_command
+                drawing_count = command[2]
                 
                 if command[0] == 'image':
                     if command[1] in self.images:
                         image = self.images[command[1]]
-                        img_width, img_height = image.size
-                        drawing_count = command[2]
-                        xpos = -width
-                        is_drawing_image = True
                 else:
-                    image_text = command[1]
-                    drawing_count = command[2]
-                    xpos = -width
-                    is_drawing_image = False
+                    text = command[1]
+                    image = Image.new('RGB', (len(text) * 14 + width, self.matrix.height), color = (0, 0, 0))
+                    draw = ImageDraw.Draw(image)
+                    draw.text((0, 0), text, font = font, fill = textColor)
 
-            if is_drawing_image:
-                self.double_buffer.SetImage(image, -xpos)
-            else:
-                self.double_buffer.Clear()
-                img_width = graphics.DrawText(self.double_buffer, self.font, -xpos, 12, self.textColor, image_text)
+                img_width, _ = image.size
+                xpos = -width
 
-            self.double_buffer = self.matrix.SwapOnVSync(self.double_buffer)
+            double_buffer.SetImage(image, -xpos, unsafe = False)
+            double_buffer = self.matrix.SwapOnVSync(double_buffer)
             xpos += 1
             if xpos > img_width + width:
                 xpos = -width
