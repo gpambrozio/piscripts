@@ -61,6 +61,7 @@ class ImageScroller(SampleBase):
                 img_width, _ = image.size
                 xpos = -width
 
+            double_buffer.Clear()
             double_buffer.SetImage(image, -xpos, unsafe = False)
             double_buffer = self.matrix.SwapOnVSync(double_buffer)
             xpos += 1
