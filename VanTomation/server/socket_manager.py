@@ -1,6 +1,7 @@
 import threading
 import socket
 import sys
+import Queue as queue
 
 from base import SenderReceiver, logger
 
@@ -8,16 +9,21 @@ from base import SenderReceiver, logger
 class SocketManagerConnectionHandler(SenderReceiver):
     def __init__(self, name):
         SenderReceiver.__init__(self, name)
-        self.addr = ''
+        self.commands = queue.Queue()
+        self.addr = name
 
     def handle(self, command):
         pass
 
 
+    def add_command(self, command):
+        self.commands.put(command)
+
+
 class SocketManager(SenderReceiver):
     def __init__(self):
         SenderReceiver.__init__(self, "Socket")
-        server_port = 8000
+        server_port = 5000
 
         # Create a UDS socket
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -49,12 +55,27 @@ class SocketManager(SenderReceiver):
         # Receive the data in small chunks and retransmit it
         try:
             logger.debug("connection from %s", client_address)
+            connection.setblocking(0)
             past_data = ""
             handler = None
             while True:
-                data = connection.recv(256)
+                try:
+                    data = connection.recv(256)
+                except socket.error:
+                    # No data received but still connected
+                    if handler is not None:
+                        try:
+                            command = handler.commands.get(False)
+                            connection.sendall(command + "\n")
+                            handler.commands.task_done()
+                        except queue.Empty:
+                            pass
+
+                    continue
+
                 if data == '':   # connection closed
                     break
+
                 past_data += data
                 lines = past_data.split("\n")
                 past_data = lines[-1]
@@ -88,8 +109,7 @@ class SocketManager(SenderReceiver):
 class PhoneGPSHandler(SocketManagerConnectionHandler):
 
     def __init__(self):
-        SocketManagerConnectionHandler.__init__(self, 'PhoneGPS')
-        self.addr = 'gps'
+        SocketManagerConnectionHandler.__init__(self, 'gps')
 
 
     def handle(self, command):
@@ -101,3 +121,22 @@ class PhoneGPSHandler(SocketManagerConnectionHandler):
             self.add_broadcast(None, "Altitude", int(components[0]))
             self.add_broadcast(None, "Speed", int(components[1]))
             self.add_broadcast(None, "Heading", int(components[2]))
+
+
+class PanelHandler(SocketManagerConnectionHandler):
+
+    def __init__(self):
+        SocketManagerConnectionHandler.__init__(self, 'panel')
+
+
+    def broadcast_received(self, broadcast):
+        if broadcast.destination == None and broadcast.prop == "Temperature" and broadcast.source == "Thermostat":
+            self.add_command("Ti%.0f" % (broadcast.value * 10))
+        elif broadcast.destination == None and broadcast.prop == "Temperature" and broadcast.source == "AgnesOutside":
+            self.add_command("To%.0f" % (broadcast.value * 10))
+        elif broadcast.destination == None and broadcast.prop == "Humidity" and broadcast.source == "Thermostat":
+            self.add_command("Hm%.0f" % (broadcast.value * 10))
+        elif broadcast.destination == None and broadcast.prop == "On" and broadcast.source == "Thermostat":
+            self.add_command("To%d" % broadcast.value)
+        elif broadcast.destination == None and broadcast.prop == "Target" and broadcast.source == "Thermostat":
+            self.add_command("Tt%.0f" % (broadcast.value * 10))

@@ -32,6 +32,7 @@ class Coordinator(SenderReceiver):
             'O': '98:7b:f3:59:1e:d4',
             'I': '98:7b:f3:5a:d2:3f',
             'G' : 'gps',
+            'P' : 'panel',
         }
         
         self.devices_by_addr = {v: k for (k, v) in self.devices.iteritems()}
@@ -53,8 +54,9 @@ class Coordinator(SenderReceiver):
 
 
     def device_disconnected(self, thread):
-        self.connected_devices.remove(thread.addr)
-        self.update_connected_devices()
+        if thread.addr in self.connected_devices:
+            self.connected_devices.remove(thread.addr)
+            self.update_connected_devices()
 
 
     def update_connected_devices(self):

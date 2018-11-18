@@ -29,10 +29,10 @@ function startClient() {
     c.on('close', function(e) {
         console.log('connection closed');
         c.setTimeout(10000, function() {
-            c.connect(8000);
+            c.connect(5000);
         })
     });
-    c.connect(8000);
+    c.connect(5000);
     return c;
 }
 client = startClient();
