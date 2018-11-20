@@ -22,7 +22,6 @@ class WiFiManager(SenderReceiver):
             try:
                 status = subprocess.check_output('wpa_cli -i wlan1 status', shell=True)
                 status = {l.split('=', 1)[0]: l.split('=', 1)[1] for l in status.splitlines()}
-                self.add_broadcast(None, "State", status.get('wpa_state'))
                 self.add_broadcast(None, "SSID", status.get('ssid'))
                 self.add_broadcast(None, "IP", status.get('ip_address'))
 
