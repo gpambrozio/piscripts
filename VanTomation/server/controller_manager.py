@@ -43,13 +43,22 @@ class ControllerThread(DeviceThread):
     def broadcast_received(self, broadcast):
         if broadcast.destination == None and broadcast.prop == "Devices":
             self.add_command(lambda: self.output_characteristic.write("Dv" + broadcast.value))
+
         elif broadcast.destination == None and broadcast.prop == "Temperature" and broadcast.source == "Thermostat":
             self.add_command(lambda: self.output_characteristic.write("Ti%.0f" % (broadcast.value * 10)))
         elif broadcast.destination == None and broadcast.prop == "Temperature" and broadcast.source == "AgnesOutside":
             self.add_command(lambda: self.output_characteristic.write("To%.0f" % (broadcast.value * 10)))
+
         elif broadcast.destination == None and broadcast.prop == "Humidity" and broadcast.source == "Thermostat":
             self.add_command(lambda: self.output_characteristic.write("Hm%.0f" % (broadcast.value * 10)))
         elif broadcast.destination == None and broadcast.prop == "On" and broadcast.source == "Thermostat":
             self.add_command(lambda: self.output_characteristic.write("To%d" % broadcast.value))
         elif broadcast.destination == None and broadcast.prop == "Target" and broadcast.source == "Thermostat":
             self.add_command(lambda: self.output_characteristic.write("Tt%.0f" % (broadcast.value * 10)))
+
+        elif broadcast.destination == None and broadcast.prop == "State" and broadcast.source == "Wifi":
+            self.add_command(lambda: self.output_characteristic.write("Ws%s" % broadcast.value))
+        elif broadcast.destination == None and broadcast.prop == "SSID" and broadcast.source == "Wifi":
+            self.add_command(lambda: self.output_characteristic.write("WS%s" % broadcast.value))
+        elif broadcast.destination == None and broadcast.prop == "IP" and broadcast.source == "Wifi":
+            self.add_command(lambda: self.output_characteristic.write("Wi%s" % broadcast.value))
