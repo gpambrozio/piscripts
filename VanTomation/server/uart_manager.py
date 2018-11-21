@@ -58,7 +58,7 @@ class UARTThread(DeviceThread):
 
             color = binascii.unhexlify(broadcast.value[1:])
             self.send_command(mode + strip + color)
-        elif broadcast.prop == "Speed" and broadcast.source == "Socket" and broadcast.value > 10:
+        elif broadcast.prop == "Speed" and broadcast.source == "gps" and broadcast.value > 10:
             # Turn light off
             self.send_command("CI\x00\x00\x00\x00")
             self.send_command("CO\x00\x00\x00\x00")

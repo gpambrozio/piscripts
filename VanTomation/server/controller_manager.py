@@ -72,7 +72,7 @@ class ControllerThread(DeviceThread):
         elif broadcast.destination == None and broadcast.prop == "Humidity" and broadcast.source == "Thermostat":
             self.send("Hm%.0f" % (broadcast.value * 10))
         elif broadcast.destination == None and broadcast.prop == "On" and broadcast.source == "Thermostat":
-            self.send("To%d" % broadcast.value)
+            self.send("TO%d" % broadcast.value)
         elif broadcast.destination == None and broadcast.prop == "Target" and broadcast.source == "Thermostat":
             self.send("Tt%.0f" % (broadcast.value * 10))
 

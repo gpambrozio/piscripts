@@ -35,7 +35,7 @@ class ThermostatThread(DeviceThread):
         self.onoff = int(struct.unpack('B', self.onoff_characteristic.read())[0])
         self.target = float(struct.unpack('<h', self.target_characteristic.read())[0]) / 10
         self.add_broadcast(None, "On", self.onoff)
-        self.add_broadcast(None, "Target", self.target) 
+        self.add_broadcast(None, "Target", self.target)
 
 
     def received_data(self, cHandle, data):
@@ -57,13 +57,15 @@ class ThermostatThread(DeviceThread):
 
     def broadcast_received(self, broadcast):
         if broadcast.destination == "Thermostat" and broadcast.prop == "On":
-            onoff = broadcast.value
-            logger.debug("Setting onoff to %d", onoff)
-            self.add_command(lambda: self.onoff_characteristic.write('\x01' if onoff else '\x00'))
+            self.onoff = broadcast.value
+            logger.debug("Setting onoff to %d", self.onoff)
+            self.add_command(lambda: self.onoff_characteristic.write('\x01' if self.onoff else '\x00'))
         elif broadcast.destination == "Thermostat" and broadcast.prop == "Target":
-            temp = broadcast.value
-            logger.debug("Setting temp to %d", temp)
-            self.add_command(lambda: self.target_characteristic.write(struct.pack('<h', temp)))
-        elif broadcast.prop == "Speed" and broadcast.source == "Socket" and broadcast.value > 10:
+            self.target = broadcast.value
+            logger.debug("Setting temp to %d", self.target)
+            self.add_command(lambda: self.target_characteristic.write(struct.pack('<h', self.target)))
+        elif broadcast.prop == "Speed" and broadcast.source == "gps" and broadcast.value > 10:
             # Turn thermostat off
+            self.onoff = 0
             self.add_command(lambda: self.onoff_characteristic.write('\x00'))
+            self.add_broadcast(None, "On", 0)
