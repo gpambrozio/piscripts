@@ -22,41 +22,63 @@ class ControllerThread(DeviceThread):
         self.input_characteristic = self.characteristics[service_uuid][0]
         self.output_characteristic = self.characteristics[service_uuid][1]
         self.start_notifications(self.input_characteristic)
+        self.past_data = ''
 
 
     def received_data(self, cHandle, data):
         if cHandle == self.input_characteristic.getHandle():
-            destination = data[0]
-            if destination == "L":
-                strip = data[1]
-                value = data[2:]
-                self.add_broadcast("Light:%s" % strip, "Mode", value)
-            elif destination == "P":
-                self.add_broadcast("Locks", "State", data[1])
-            elif destination == "T":
-                self.add_broadcast("Thermostat", "On", int(data[2]))
-                self.add_broadcast("Thermostat", "Target", int(data[3:], 16))
-            else:
-                logger.info("Unknown destination: %s" % data)
+            self.past_data += data
+            lines = self.past_data.split("\n")
+            self.past_data = lines[-1]
+            lines = lines[0:-1]
+            if len(lines) == 0:
+                return
+            
+            for line in lines:
+                destination = line[0]
+                if destination == "L":
+                    strip = line[1]
+                    value = line[2:]
+                    self.add_broadcast("Light:%s" % strip, "Mode", value)
+                elif destination == "P":
+                    self.add_broadcast("Locks", "State", line[1])
+                elif destination == "T":
+                    self.add_broadcast("Thermostat", "On", int(line[2]))
+                    self.add_broadcast("Thermostat", "Target", int(line[3:], 16))
+                else:
+                    logger.info("Unknown destination: %s" % line)
 
+
+    def send_command(self, command):
+        self.add_command(lambda: self.output_characteristic.write(command))
+
+
+    def send(self, whatever):
+        whatever += "\n"
+        while whatever:
+            self.send_command(whatever[:20])
+            whatever = whatever[20:]
+            
 
     def broadcast_received(self, broadcast):
         if broadcast.destination == None and broadcast.prop == "Devices":
-            self.add_command(lambda: self.output_characteristic.write("Dv" + broadcast.value))
+            self.send("Dv" + broadcast.value)
 
         elif broadcast.destination == None and broadcast.prop == "Temperature" and broadcast.source == "Thermostat":
-            self.add_command(lambda: self.output_characteristic.write("Ti%.0f" % (broadcast.value * 10)))
+            self.send("Ti%.0f" % (broadcast.value * 10))
         elif broadcast.destination == None and broadcast.prop == "Temperature" and broadcast.source == "AgnesOutside":
-            self.add_command(lambda: self.output_characteristic.write("To%.0f" % (broadcast.value * 10)))
+            self.send("To%.0f" % (broadcast.value * 10))
 
         elif broadcast.destination == None and broadcast.prop == "Humidity" and broadcast.source == "Thermostat":
-            self.add_command(lambda: self.output_characteristic.write("Hm%.0f" % (broadcast.value * 10)))
+            self.send("Hm%.0f" % (broadcast.value * 10))
         elif broadcast.destination == None and broadcast.prop == "On" and broadcast.source == "Thermostat":
-            self.add_command(lambda: self.output_characteristic.write("To%d" % broadcast.value))
+            self.send("To%d" % broadcast.value)
         elif broadcast.destination == None and broadcast.prop == "Target" and broadcast.source == "Thermostat":
-            self.add_command(lambda: self.output_characteristic.write("Tt%.0f" % (broadcast.value * 10)))
+            self.send("Tt%.0f" % (broadcast.value * 10))
 
         elif broadcast.destination == None and broadcast.prop == "SSID" and broadcast.source == "Wifi":
-            self.add_command(lambda: self.output_characteristic.write("Ws%s" % (broadcast.value or "")))
+            self.send("Ws%s" % (broadcast.value or ""))
         elif broadcast.destination == None and broadcast.prop == "IP" and broadcast.source == "Wifi":
-            self.add_command(lambda: self.output_characteristic.write("Wi%s" % (broadcast.value or "")))
+            self.send("Wi%s" % (broadcast.value or ""))
+        elif broadcast.destination == None and broadcast.prop == "Scan" and broadcast.source == "Wifi":
+            self.send("WS%s" % (broadcast.value or ""))
