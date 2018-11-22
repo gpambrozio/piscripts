@@ -3,7 +3,7 @@ import socket
 import sys
 import Queue as queue
 
-from base import SenderReceiver, logger
+from base import SenderReceiver, SerialBuffer, logger
 
 
 class SocketManagerConnectionHandler(SenderReceiver):
@@ -53,11 +53,11 @@ class SocketManager(SenderReceiver):
 
     def listenToClient(self, connection, client_address):
         # Receive the data in small chunks and retransmit it
+        handler = None
         try:
             logger.debug("connection from %s", client_address)
             connection.setblocking(0)
-            past_data = ""
-            handler = None
+            past_data = SerialBuffer()
             while True:
                 try:
                     data = connection.recv(256)
@@ -76,10 +76,8 @@ class SocketManager(SenderReceiver):
                 if data == '':   # connection closed
                     break
 
-                past_data += data
-                lines = past_data.split("\n")
-                past_data = lines[-1]
-                lines = lines[0:-1]
+                past_data.received(data)
+                lines = past_data.pending_data()
                 if len(lines) == 0:
                     continue
 

@@ -2,7 +2,7 @@ import json
 import threading
 import Queue as queue
 
-from base import logger
+from base import logger, SerialBuffer
 from device_manager import DeviceManager, DeviceThread
 
 
@@ -23,20 +23,14 @@ class ControllerThread(DeviceThread):
         self.input_characteristic = self.characteristics[service_uuid][0]
         self.output_characteristic = self.characteristics[service_uuid][1]
         self.start_notifications(self.input_characteristic)
-        self.past_data = ''
+        self.received_data = SerialBuffer()
         self.last_sent_data = {}
 
 
     def received_data(self, cHandle, data):
         if cHandle == self.input_characteristic.getHandle():
-            self.past_data += data
-            lines = self.past_data.split("\n")
-            self.past_data = lines[-1]
-            lines = lines[0:-1]
-            if len(lines) == 0:
-                return
-            
-            for line in lines:
+            self.received_data.received(data)
+            for line in self.received_data.pending_data():
                 destination = line[0]
                 if destination == "L":
                     strip = line[1]
@@ -55,12 +49,12 @@ class ControllerThread(DeviceThread):
         self.add_command(lambda: self.output_characteristic.write(command))
 
 
-    def send(self, prefix, whatever):
-        if prefix in self.last_sent_data and self.last_sent_data[prefix] == whatever:
+    def send(self, identifier, message):
+        if identifier in self.last_sent_data and self.last_sent_data[identifier] == message:
             return
 
-        self.last_sent_data[prefix] = whatever
-        to_send = "%s%s\n" % (prefix, whatever)
+        self.last_sent_data[identifier] = message
+        to_send = "%s%s\n" % (identifier, message)
         while to_send:
             self.send_command(to_send[:20])
             to_send = to_send[20:]

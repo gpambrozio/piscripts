@@ -48,3 +48,19 @@ class SenderReceiver(object):
 
     def set_coordinator(self, coordinator):
         self.coordinator = coordinator
+
+
+class SerialBuffer:
+    def __init__(self, separator = "\n"):
+        self.separator = separator
+        self.past_data = ""
+
+
+    def received(self, data):
+        self.past_data += data
+
+
+    def pending_data(self):
+        lines = self.past_data.split(self.separator)
+        self.past_data = lines[-1]
+        return lines[0:-1]
