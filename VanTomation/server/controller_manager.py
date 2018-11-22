@@ -1,3 +1,4 @@
+import json
 import threading
 import Queue as queue
 
@@ -23,6 +24,7 @@ class ControllerThread(DeviceThread):
         self.output_characteristic = self.characteristics[service_uuid][1]
         self.start_notifications(self.input_characteristic)
         self.past_data = ''
+        self.last_sent_data = {}
 
 
     def received_data(self, cHandle, data):
@@ -53,32 +55,36 @@ class ControllerThread(DeviceThread):
         self.add_command(lambda: self.output_characteristic.write(command))
 
 
-    def send(self, whatever):
-        whatever += "\n"
-        while whatever:
-            self.send_command(whatever[:20])
-            whatever = whatever[20:]
-            
+    def send(self, prefix, whatever):
+        if prefix in self.last_sent_data and self.last_sent_data[prefix] == whatever:
+            return
+
+        self.last_sent_data[prefix] = whatever
+        to_send = "%s%s\n" % (prefix, whatever)
+        while to_send:
+            self.send_command(to_send[:20])
+            to_send = to_send[20:]
+
 
     def broadcast_received(self, broadcast):
         if broadcast.destination == None and broadcast.prop == "Devices":
-            self.send("Dv" + broadcast.value)
+            self.send("Dv", broadcast.value)
 
         elif broadcast.destination == None and broadcast.prop == "Temperature" and broadcast.source == "Thermostat":
-            self.send("Ti%.0f" % (broadcast.value * 10))
+            self.send("Ti", "%.0f" % (broadcast.value * 10))
         elif broadcast.destination == None and broadcast.prop == "Temperature" and broadcast.source == "AgnesOutside":
-            self.send("To%.0f" % (broadcast.value * 10))
+            self.send("To", "%.0f" % (broadcast.value * 10))
 
         elif broadcast.destination == None and broadcast.prop == "Humidity" and broadcast.source == "Thermostat":
-            self.send("Hm%.0f" % (broadcast.value * 10))
+            self.send("Hm", "%.0f" % (broadcast.value * 10))
         elif broadcast.destination == None and broadcast.prop == "On" and broadcast.source == "Thermostat":
-            self.send("TO%d" % broadcast.value)
+            self.send("TO", "%d" % broadcast.value)
         elif broadcast.destination == None and broadcast.prop == "Target" and broadcast.source == "Thermostat":
-            self.send("Tt%.0f" % (broadcast.value * 10))
+            self.send("Tt", "%.0f" % (broadcast.value * 10))
 
         elif broadcast.destination == None and broadcast.prop == "SSID" and broadcast.source == "Wifi":
-            self.send("Ws%s" % (broadcast.value or ""))
+            self.send("Ws", "%s" % (broadcast.value or ""))
         elif broadcast.destination == None and broadcast.prop == "IP" and broadcast.source == "Wifi":
-            self.send("Wi%s" % (broadcast.value or ""))
+            self.send("Wi", "%s" % (broadcast.value or ""))
         elif broadcast.destination == None and broadcast.prop == "Scan" and broadcast.source == "Wifi":
-            self.send("WS%s" % (broadcast.value or ""))
+            self.send("WS", "%s" % (json.dumps(broadcast.value) if broadcast.value else ""))
