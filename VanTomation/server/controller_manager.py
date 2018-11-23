@@ -88,4 +88,6 @@ class ControllerThread(DeviceThread):
         elif broadcast.destination == None and broadcast.prop == "IP" and broadcast.source == "WiFi":
             self.send("Wi", "%s" % (broadcast.value or ""))
         elif broadcast.destination == None and broadcast.prop == "Scan" and broadcast.source == "WiFi":
-            self.send("WS", "%s" % (json.dumps(broadcast.value) if broadcast.value else ""))
+            networks = broadcast.value if broadcast.value else []
+            networks = [(n[4], n[1], n[2], "O" if (n[3] in ("[ESS]", "")) else "") for n in networks if n[4]]
+            self.send("WS", "%s" % json.dumps(networks))
