@@ -140,7 +140,7 @@ class PanelHandler(SocketManagerConnectionHandler):
         elif broadcast.destination == None and broadcast.prop == "Target" and broadcast.source == "Thermostat":
             self.add_command("Tt%.0f" % (broadcast.value * 10))
 
-        elif broadcast.destination == None and broadcast.prop == "SSID" and broadcast.source == "Wifi":
+        elif broadcast.destination == None and broadcast.prop == "SSID" and broadcast.source == "WiFi":
             self.add_command("Ws%s" % (broadcast.value or ""))
 
 

@@ -23,14 +23,14 @@ class ControllerThread(DeviceThread):
         self.input_characteristic = self.characteristics[service_uuid][0]
         self.output_characteristic = self.characteristics[service_uuid][1]
         self.start_notifications(self.input_characteristic)
-        self.received_data = SerialBuffer()
+        self.serial_buffer = SerialBuffer()
         self.last_sent_data = {}
 
 
     def received_data(self, cHandle, data):
         if cHandle == self.input_characteristic.getHandle():
-            self.received_data.received(data)
-            for line in self.received_data.pending_data():
+            self.serial_buffer.received(data)
+            for line in self.serial_buffer.pending_data():
                 destination = line[0]
                 if destination == "L":
                     strip = line[1]
@@ -41,6 +41,13 @@ class ControllerThread(DeviceThread):
                 elif destination == "T":
                     self.add_broadcast("Thermostat", "On", int(line[2]))
                     self.add_broadcast("Thermostat", "Target", int(line[3:], 16))
+                elif destination == "W":
+                    command = line[1]
+                    if command == "A":
+                        network_data = line[2:].split(",", 1)
+                        self.add_broadcast("WiFi", "Add", network_data)
+                    else:
+                        logger.info("Unknown destination: %s" % line)
                 else:
                     logger.info("Unknown destination: %s" % line)
 
@@ -76,9 +83,9 @@ class ControllerThread(DeviceThread):
         elif broadcast.destination == None and broadcast.prop == "Target" and broadcast.source == "Thermostat":
             self.send("Tt", "%.0f" % (broadcast.value * 10))
 
-        elif broadcast.destination == None and broadcast.prop == "SSID" and broadcast.source == "Wifi":
+        elif broadcast.destination == None and broadcast.prop == "SSID" and broadcast.source == "WiFi":
             self.send("Ws", "%s" % (broadcast.value or ""))
-        elif broadcast.destination == None and broadcast.prop == "IP" and broadcast.source == "Wifi":
+        elif broadcast.destination == None and broadcast.prop == "IP" and broadcast.source == "WiFi":
             self.send("Wi", "%s" % (broadcast.value or ""))
-        elif broadcast.destination == None and broadcast.prop == "Scan" and broadcast.source == "Wifi":
+        elif broadcast.destination == None and broadcast.prop == "Scan" and broadcast.source == "WiFi":
             self.send("WS", "%s" % (json.dumps(broadcast.value) if broadcast.value else ""))
