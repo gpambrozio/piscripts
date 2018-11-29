@@ -140,6 +140,7 @@ class DeviceThread(SenderReceiver):
 
             except Exception, e:
                 logger.debug("Exception: %s\n%s", e, traceback.format_exc())
+                break
 
             try:
                 command = self.commands.get(False)
