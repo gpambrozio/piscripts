@@ -18,6 +18,12 @@ class ParkingSensorManager(DeviceManager):
 
 class ParkingSensorThread(DeviceThread):
 
+    def __init__(self, manager, dev, name, service_and_char_uuids):
+        """ Constructor
+        """
+        DeviceThread.__init__(self, manager, dev, "ParkingSensor", service_and_char_uuids)
+
+
     def before_thread(self):
         service_uuid = self.service_and_char_uuids[0][0]
         self.tx_characteristic = self.characteristics[service_uuid][0]
