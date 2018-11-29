@@ -15,6 +15,7 @@ from uart_manager import UARTManager
 from thermostat_manager import ThermostatManager
 from pi_manager import PIManager
 from socket_manager import SocketManager
+from parking_sensor_manager import ParkingSensorManager
 
 from base import SenderReceiver
 from base import logger
@@ -107,6 +108,7 @@ managers = [
     SocketManager(),
     StateManager(),
     WiFiManager(),
+    ParkingSensorManager(),
 ]
 coordinator = Coordinator(managers)
 
