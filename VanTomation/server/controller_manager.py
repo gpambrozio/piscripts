@@ -68,26 +68,26 @@ class ControllerThread(DeviceThread):
 
 
     def broadcast_received(self, broadcast):
-        if broadcast.destination == None and broadcast.prop == "Devices":
+        if broadcast.destination is None and broadcast.prop == "Devices":
             self.send("Dv", broadcast.value)
 
-        elif broadcast.destination == None and broadcast.prop == "Temperature" and broadcast.source == "Thermostat":
+        elif broadcast.destination is None and broadcast.prop == "Temperature" and broadcast.source == "Thermostat":
             self.send("Ti", "%.0f" % (broadcast.value * 10))
-        elif broadcast.destination == None and broadcast.prop == "Temperature" and broadcast.source == "AgnesOutside":
+        elif broadcast.destination is None and broadcast.prop == "Temperature" and broadcast.source == "AgnesOutside":
             self.send("To", "%.0f" % (broadcast.value * 10))
 
-        elif broadcast.destination == None and broadcast.prop == "Humidity" and broadcast.source == "Thermostat":
+        elif broadcast.destination is None and broadcast.prop == "Humidity" and broadcast.source == "Thermostat":
             self.send("Hm", "%.0f" % (broadcast.value * 10))
-        elif broadcast.destination == None and broadcast.prop == "On" and broadcast.source == "Thermostat":
+        elif broadcast.destination is None and broadcast.prop == "On" and broadcast.source == "Thermostat":
             self.send("TO", "%d" % broadcast.value)
-        elif broadcast.destination == None and broadcast.prop == "Target" and broadcast.source == "Thermostat":
+        elif broadcast.destination is None and broadcast.prop == "Target" and broadcast.source == "Thermostat":
             self.send("Tt", "%.0f" % (broadcast.value * 10))
 
-        elif broadcast.destination == None and broadcast.prop == "SSID" and broadcast.source == "WiFi":
+        elif broadcast.destination is None and broadcast.prop == "SSID" and broadcast.source == "WiFi":
             self.send("Ws", "%s" % (broadcast.value or ""))
-        elif broadcast.destination == None and broadcast.prop == "IP" and broadcast.source == "WiFi":
+        elif broadcast.destination is None and broadcast.prop == "IP" and broadcast.source == "WiFi":
             self.send("Wi", "%s" % (broadcast.value or ""))
-        elif broadcast.destination == None and broadcast.prop == "Scan" and broadcast.source == "WiFi":
+        elif broadcast.destination is None and broadcast.prop == "Scan" and broadcast.source == "WiFi":
             networks = broadcast.value if broadcast.value else []
             networks = [(n[4], int(n[1]), int(n[2]), 1 if (n[3] in ("[ESS]", "")) else 0) for n in networks if n[4] and n[4] != "agnes"]
             unique_networks = {}

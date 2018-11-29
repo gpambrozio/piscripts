@@ -128,19 +128,19 @@ class PanelHandler(SocketManagerConnectionHandler):
 
 
     def broadcast_received(self, broadcast):
-        if broadcast.destination == None and broadcast.prop == "Temperature" and broadcast.source == "Thermostat":
+        if broadcast.destination is None and broadcast.prop == "Temperature" and broadcast.source == "Thermostat":
             self.add_command("Ti%.0f" % (broadcast.value * 10))
-        elif broadcast.destination == None and broadcast.prop == "Temperature" and broadcast.source == "AgnesOutside":
+        elif broadcast.destination is None and broadcast.prop == "Temperature" and broadcast.source == "AgnesOutside":
             self.add_command("To%.0f" % (broadcast.value * 10))
 
-        elif broadcast.destination == None and broadcast.prop == "Humidity" and broadcast.source == "Thermostat":
+        elif broadcast.destination is None and broadcast.prop == "Humidity" and broadcast.source == "Thermostat":
             self.add_command("Hm%.0f" % (broadcast.value * 10))
-        elif broadcast.destination == None and broadcast.prop == "On" and broadcast.source == "Thermostat":
+        elif broadcast.destination is None and broadcast.prop == "On" and broadcast.source == "Thermostat":
             self.add_command("TO%d" % broadcast.value)
-        elif broadcast.destination == None and broadcast.prop == "Target" and broadcast.source == "Thermostat":
+        elif broadcast.destination is None and broadcast.prop == "Target" and broadcast.source == "Thermostat":
             self.add_command("Tt%.0f" % (broadcast.value * 10))
 
-        elif broadcast.destination == None and broadcast.prop == "SSID" and broadcast.source == "WiFi":
+        elif broadcast.destination is None and broadcast.prop == "SSID" and broadcast.source == "WiFi":
             self.add_command("Ws%s" % (broadcast.value or ""))
 
 
