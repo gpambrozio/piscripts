@@ -22,6 +22,7 @@ class ParkingSensorThread(DeviceThread):
         service_uuid = self.service_and_char_uuids[0][0]
         self.tx_characteristic = self.characteristics[service_uuid][0]
         self.next_temp_read = datetime.datetime.now()
+        self.on_off = False
         
         
     def read_distance(self):
@@ -31,6 +32,12 @@ class ParkingSensorThread(DeviceThread):
 
 
     def no_data_received(self):
-        if datetime.datetime.now() > self.next_temp_read:
+        if datetime.datetime.now() > self.next_temp_read and self.on_off:
             self.next_temp_read = datetime.datetime.now() + datetime.timedelta(milliseconds=500)
             self.add_command(lambda: self.read_distance())
+
+
+    def broadcast_received(self, broadcast):
+        if broadcast.destination == "ParkingSensor" and broadcast.prop == "OnOff":
+            self.on_off = broadcast.value
+            self.next_temp_read = datetime.datetime.now()
