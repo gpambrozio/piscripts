@@ -39,8 +39,8 @@ class ControllerThread(DeviceThread):
                 elif destination == "P":
                     self.add_broadcast("Locks", "State", line[1])
                 elif destination == "T":
-                    self.add_broadcast("Thermostat", "On", int(line[2]))
-                    self.add_broadcast("Thermostat", "Target", int(line[3:], 16))
+                    self.add_broadcast(None, "ThermostatOnOff", int(line[2]))
+                    self.add_broadcast(None, "ThermostatTarget", int(line[3:], 16))
                 elif destination == "W":
                     command = line[1]
                     if command == "A":
@@ -78,9 +78,9 @@ class ControllerThread(DeviceThread):
 
         elif broadcast.destination is None and broadcast.prop == "Humidity" and broadcast.source == "Thermostat":
             self.send("Hm", "%.0f" % (broadcast.value * 10))
-        elif broadcast.destination is None and broadcast.prop == "On" and broadcast.source == "Thermostat":
+        elif broadcast.destination is None and broadcast.prop == "ThermostatOnOff":
             self.send("TO", "%d" % broadcast.value)
-        elif broadcast.destination is None and broadcast.prop == "Target" and broadcast.source == "Thermostat":
+        elif broadcast.destination is None and broadcast.prop == "ThermostatTarget":
             self.send("Tt", "%.0f" % (broadcast.value * 10))
 
         elif broadcast.destination is None and broadcast.prop == "SSID" and broadcast.source == "WiFi":

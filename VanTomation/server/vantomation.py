@@ -28,12 +28,13 @@ class Coordinator(SenderReceiver):
         self.connected_devices = set()
 
         self.devices = {
-            'L': 'fd:6e:55:f0:de:06',
-            'T': 'eb:cc:ee:35:55:c0',
-            'O': '98:7b:f3:59:1e:d4',
-            'I': '98:7b:f3:5a:d2:3f',
-            'G' : 'gps',
-            'P' : 'panel',
+            'Lights'    : 'fd:6e:55:f0:de:06',
+            'Thermostat': 'eb:cc:ee:35:55:c0',
+            'Outside'   : '98:7b:f3:59:1e:d4',
+            'Inside'    : '98:7b:f3:5a:d2:3f',
+            'Parking'   : '24:0a:c4:00:a0:2c',
+            'GPS'       : 'gps',
+            'Panel'     : 'panel',
         }
         
         self.devices_by_addr = {v: k for (k, v) in self.devices.iteritems()}
@@ -61,7 +62,7 @@ class Coordinator(SenderReceiver):
 
 
     def update_connected_devices(self):
-        connected = "!" + ("".join(sorted([self.devices_by_addr[addr] for addr in self.connected_devices if addr in self.devices_by_addr])))
+        connected = ", ".join(sorted([self.devices_by_addr[addr] for addr in self.connected_devices if addr in self.devices_by_addr]))
         self.add_broadcast(None, "Devices", connected)
 
 
