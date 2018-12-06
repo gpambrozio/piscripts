@@ -8,7 +8,7 @@ import time
 import BaseHTTPServer
 from samplebase import SampleBase
 from rgbmatrix import graphics
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageChops
 
 HOST_NAME = ''
 PORT_NUMBER = 8080
@@ -16,6 +16,15 @@ PORT_NUMBER = 8080
 # Fonts from https://fonts2u.com/font-vendors/the-grandoplex-project.html
 
 current_command = ['', '', 0]
+
+def trim(im):
+    bg = Image.new(im.mode, im.size, color = (0, 0, 0))
+    diff = ImageChops.difference(im, bg)
+    bbox = diff.getbbox()
+    if bbox:
+        return im.crop(bbox)
+    return im
+
 
 class ImageScroller(SampleBase):
     def __init__(self, *args, **kwargs):
@@ -57,6 +66,7 @@ class ImageScroller(SampleBase):
                     image = Image.new('RGB', (len(text) * 14 + width, self.matrix.height), color = (0, 0, 0))
                     draw = ImageDraw.Draw(image)
                     draw.text((0, 0), text, font = font, fill = textColor)
+                    image = trim(image)
 
                 img_width, _ = image.size
                 xpos = -width
@@ -72,7 +82,7 @@ class ImageScroller(SampleBase):
                     if drawing_count == 0:
                         current_command = ['text', '', 0]
 
-            time.sleep(0.03)
+            time.sleep(0.02)
 
 
 class SocketServer(object):
