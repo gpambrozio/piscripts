@@ -138,7 +138,7 @@ class PanelHandler(SocketManagerConnectionHandler):
         elif broadcast.destination is None and broadcast.prop == "ThermostatOnOff":
             self.add_command("TO%d" % broadcast.value)
         elif broadcast.destination is None and broadcast.prop == "ThermostatTarget":
-            self.add_command("Tt%.0f" % (broadcast.value * 10))
+            self.add_command("Tt%.0f" % (broadcast.value))
 
         elif broadcast.destination is None and broadcast.prop == "SSID" and broadcast.source == "WiFi":
             self.add_command("Ws%s" % (broadcast.value or ""))
@@ -153,6 +153,6 @@ class PanelHandler(SocketManagerConnectionHandler):
         if items[0] == "ParkingSensor":
             self.add_broadcast(None, "ParkingOnOff", int(items[1]) != 0)
         elif items[0] == "ThermostatOnOff":
-            self.add_broadcast(None, "ThermostatOnOff", int(items[1]) != 0)
+            self.add_broadcast(None, "ThermostatOnOff", int(items[1]))
         elif items[0] == "ThermostatTarget":
             self.add_broadcast(None, "ThermostatTarget", int(items[1]))

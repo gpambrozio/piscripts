@@ -63,7 +63,7 @@ class ThermostatThread(DeviceThread):
         elif broadcast.destination is None and broadcast.prop == "ThermostatTarget":
             self.target = broadcast.value
             logger.debug("Setting temp to %d", self.target)
-            self.add_command(lambda: self.target_characteristic.write(struct.pack('<h', self.target)))
+            self.add_command(lambda: self.target_characteristic.write(struct.pack('<h', self.target * 10)))
         elif broadcast.prop == "Speed" and broadcast.source == "gps" and broadcast.value > 10:
             # Turn thermostat off
             self.onoff = 0

@@ -81,7 +81,7 @@ class ControllerThread(DeviceThread):
         elif broadcast.destination is None and broadcast.prop == "ThermostatOnOff":
             self.send("TO", "%d" % broadcast.value)
         elif broadcast.destination is None and broadcast.prop == "ThermostatTarget":
-            self.send("Tt", "%.0f" % (broadcast.value * 10))
+            self.send("Tt", "%.0f" % (broadcast.value))
 
         elif broadcast.destination is None and broadcast.prop == "SSID" and broadcast.source == "WiFi":
             self.send("Ws", "%s" % (broadcast.value or ""))
