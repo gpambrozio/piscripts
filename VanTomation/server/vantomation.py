@@ -84,7 +84,8 @@ class Coordinator(SenderReceiver):
                         if broadcast.destination is None:
                             self.current_state[broadcast.key] = broadcast
 
-                        for receiver in broadcasters:
+                        # Don't send the broadcast to whoever sent it.
+                        for receiver in [b for b in broadcasters if b.name != broadcaster.name]:
                             receiver.broadcast_received(broadcast)
                         
                     except queue.Empty:
