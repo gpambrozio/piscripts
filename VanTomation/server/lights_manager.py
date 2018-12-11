@@ -21,7 +21,7 @@ class Strip:
         data = characteristic.read()
         self.characteristic = characteristic
         self.mode = data[0]                                             # uint8_t
-        self.targetBrightness = int(struct.unpack('b', data[1])[0])     # uint8_t
+        self.targetBrightness = int(struct.unpack('B', data[1])[0])     # uint8_t
         self.cycleDelay = int(struct.unpack('B', data[2])[0])           # uint8_t
         self.color = int(struct.unpack('I', data[3:7])[0])              # uint32_t
 
