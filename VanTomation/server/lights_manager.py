@@ -20,19 +20,22 @@ class Strip:
     def __init__(self, characteristic):
         data = characteristic.read()
         self.characteristic = characteristic
-        self.mode = data[0]                                             # uint8_t
-        self.targetBrightness = int(struct.unpack('B', data[1])[0])     # uint8_t
-        self.cycleDelay = int(struct.unpack('B', data[2])[0])           # uint8_t
-        self.color = int(struct.unpack('I', data[3:7])[0])              # uint32_t
+        (m, b, d, _, c) = struct.unpack('<cBBBI', data)
+        self.mode = m
+        self.targetBrightness = int(b)     # uint8_t
+        self.cycleDelay = int(d)           # uint8_t
+        self.color = int(c)              # uint32_t
+        logger.debug("Light: %s, %d", self.mode, self.color)
 
 
     def update(self):
+        logger.debug("Updating Light: %s, %d %d %d", self.mode, self.targetBrightness, self.cycleDelay, self.color)
         self.characteristic.write(self.toData())
 
 
     def toData(self):
         # Last 1 is padding to make it 8 bytes (multiple of 4)
-        return struct.pack('BBBIB', self.mode, self.targetBrightness, self.cycleDelay, self.color, 0)
+        return struct.pack('<cBBBI', self.mode, self.targetBrightness, self.cycleDelay, 0, self.color)
 
 
 class LightsThread(DeviceThread):
@@ -59,10 +62,11 @@ class LightsThread(DeviceThread):
                 return
 
             strip.mode = mode
-            strip.targetBrightness = binascii.unhexlify(broadcast.value[1:3])
-            strip.cycleDelay = binascii.unhexlify(broadcast.value[3:5])
-            strip.color = binascii.unhexlify(broadcast.value[5:])
+            strip.targetBrightness = ord(binascii.unhexlify(broadcast.value[1:3]))
+            strip.cycleDelay = ord(binascii.unhexlify(broadcast.value[3:5]))
+            strip.color = struct.unpack('<I', binascii.unhexlify(broadcast.value[5:]) + '\x00')[0]
             self.write(strip)
+
         elif broadcast.prop == "Speed" and broadcast.source == "gps" and broadcast.value > 10:
             # Turn light off
             self.inside.mode = 'C'
