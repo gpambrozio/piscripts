@@ -11,7 +11,7 @@ from state_manager import StateManager
 from wifi_manager import WiFiManager
 from controller_manager import ControllerManager
 from bean_manager import BeanManager
-from uart_manager import UARTManager
+from lights_manager import LightsManager
 from thermostat_manager import ThermostatManager
 from pi_manager import PIManager
 from socket_manager import SocketManager
@@ -102,7 +102,7 @@ subprocess.call("hciconfig hci0 up", shell=True)
 subprocess.call("hciconfig hci1 up", shell=True)
 scanner = Scanner()
 managers = [
-    UARTManager(),
+    LightsManager(),
     PIManager(),
     ThermostatManager(),
     BeanManager(),
