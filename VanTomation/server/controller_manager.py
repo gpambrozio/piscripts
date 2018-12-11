@@ -1,6 +1,5 @@
 import json
 import threading
-import Queue as queue
 
 from base import logger, SerialBuffer
 from device_manager import DeviceManager, DeviceThread
