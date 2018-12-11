@@ -142,6 +142,8 @@ class PanelHandler(SocketManagerConnectionHandler):
 
         elif broadcast.destination is None and broadcast.prop == "SSID" and broadcast.source == "WiFi":
             self.add_command("Ws%s" % (broadcast.value or ""))
+        elif broadcast.destination is None and broadcast.prop == "IP" and broadcast.source == "WiFi":
+            self.add_command("WI%s" % (broadcast.value or ""))
 
         elif broadcast.destination is None and broadcast.prop == "Distance" and broadcast.source == "AgnesBehinds":
             self.add_command("Ds%s" % (broadcast.value or ""))
