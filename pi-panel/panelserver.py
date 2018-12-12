@@ -34,6 +34,7 @@ class ImageScroller:
         options.cols = 32
         options.chain_length = 1
         options.parallel = 1
+        options.pixel_mapper_config = "Rotate:180"
 
         self.matrix = RGBMatrix(options = options)
 
