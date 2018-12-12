@@ -1,4 +1,6 @@
+import binascii
 import json
+import struct
 import threading
 
 from base import logger, SerialBuffer
@@ -34,7 +36,15 @@ class ControllerThread(DeviceThread):
                 if destination == "L":
                     strip = line[1]
                     value = line[2:]
-                    self.add_broadcast("Light:%s" % strip, "Mode", value)
+
+                    state = {
+                        'mode': value[0],
+                        'targetBrightness': ord(binascii.unhexlify(value[1:3])),
+                        'cycleDelay': ord(binascii.unhexlify(value[3:5])),
+                        'color': struct.unpack('<I', binascii.unhexlify(value[5:]) + '\x00')[0],
+                    }
+
+                    self.add_broadcast(None, "Light:%s" % strip, state)
                 elif destination == "P":
                     self.add_broadcast("Locks", "State", line[1])
                 elif destination == "T":

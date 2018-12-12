@@ -1,4 +1,3 @@
-import binascii
 import struct
 
 from base import logger
@@ -21,21 +20,29 @@ class Strip:
         data = characteristic.read()
         self.characteristic = characteristic
         (m, b, d, _, c) = struct.unpack('<cBBBI', data)
-        self.mode = m
-        self.targetBrightness = int(b)     # uint8_t
-        self.cycleDelay = int(d)           # uint8_t
-        self.color = int(c)              # uint32_t
-        logger.debug("Light: %s, %d", self.mode, self.color)
+        self.state = {
+            'mode': m,
+            'targetBrightness': int(b),
+            'cycleDelay': int(d),
+            'color': int(c),
+        }
+        logger.debug("Light: %s", self.state)
 
 
     def update(self):
-        logger.debug("Updating Light: %s, %d %d %d", self.mode, self.targetBrightness, self.cycleDelay, self.color)
+        logger.debug("Updating Light: %s", self.state)
         self.characteristic.write(self.toData())
 
 
     def toData(self):
         # Last 1 is padding to make it 8 bytes (multiple of 4)
-        return struct.pack('<cBBBI', self.mode, self.targetBrightness, self.cycleDelay, 0, self.color)
+        return struct.pack('<cBBBI', self.state['mode'], self.state['targetBrightness'], self.state['cycleDelay'], 0, self.state['color'])
+
+
+    def parseState(self, state):
+        for k in self.state.keys():
+            if k in state:
+                self.state[k] = state[k]
 
 
 class LightsThread(DeviceThread):
@@ -44,8 +51,15 @@ class LightsThread(DeviceThread):
         service_uuid = self.service_and_char_uuids[0][0]
         self.inside_characteristic = self.characteristics[service_uuid][0]
         self.outside_characteristic = self.characteristics[service_uuid][1]
-        self.inside = Strip(self.inside_characteristic)
+        self.inside  = Strip(self.inside_characteristic)
         self.outside = Strip(self.outside_characteristic)
+        self.strips = {
+            'I': self.inside,
+            'O': self.outside,
+        }
+        for stripId in self.strips:
+            strip = self.strips[stripId]
+            self.add_broadcast(None, "Light:%s" % stripId, strip.state)
 
 
     def write(self, strip):
@@ -53,18 +67,14 @@ class LightsThread(DeviceThread):
 
 
     def broadcast_received(self, broadcast):
-        if broadcast.destination is not None and broadcast.destination.startswith("Light:") and broadcast.prop == "Mode":
-            strip = self.inside if broadcast.destination[-1] == 'I' else self.outside
-        
-            mode = broadcast.value[0]
-            if mode not in "CRT":
-                logger.debug("Unknown mode: %s", mode)
+        if broadcast.prop.startswith("Light:"):
+            stripId = broadcast.prop[-1]
+            if not stripId in self.strips:
+                logger.debug("Unknown strip: %s" % stripId)
                 return
 
-            strip.mode = mode
-            strip.targetBrightness = ord(binascii.unhexlify(broadcast.value[1:3]))
-            strip.cycleDelay = ord(binascii.unhexlify(broadcast.value[3:5]))
-            strip.color = struct.unpack('<I', binascii.unhexlify(broadcast.value[5:]) + '\x00')[0]
+            strip = self.strips[stripId]
+            strip.parseState(broadcast.value)
             self.write(strip)
 
         elif broadcast.prop == "Speed" and broadcast.source == "gps" and broadcast.value > 10:
