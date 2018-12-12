@@ -125,9 +125,13 @@ class PanelHandler(SocketManagerConnectionHandler):
 
     def __init__(self):
         SocketManagerConnectionHandler.__init__(self, 'panel')
+        self.current_state = {}
 
 
     def broadcast_received(self, broadcast):
+        if broadcast.destination is None:
+            self.current_state[broadcast.prop]= broadcast.value
+
         if broadcast.destination is None and broadcast.prop == "Temperature" and broadcast.source == "Thermostat":
             self.add_command("Ti%.0f" % (broadcast.value * 10))
         elif broadcast.destination is None and broadcast.prop == "Temperature" and broadcast.source == "AgnesOutside":
@@ -148,13 +152,28 @@ class PanelHandler(SocketManagerConnectionHandler):
         elif broadcast.destination is None and broadcast.prop == "Distance" and broadcast.source == "AgnesBehinds":
             self.add_command("Ds%s" % (broadcast.value or ""))
 
+        elif broadcast.destination is None and broadcast.prop.startswith("Light:"):
+            stripId = broadcast.prop[-1]
+            brightness = broadcast.value['brightness']
+            if broadcast.value['mode'] == 'C' and broadcast.value['color'] == 0:
+                brightness = 0
+            self.add_command("L%s%d" % (stripId, brightness))
+
 
     def handle(self, command):
         logger.debug("Received command: %s", command)
         items = command.split(':')
         if items[0] == "ParkingSensor":
             self.add_broadcast(None, "ParkingOnOff", int(items[1]) != 0)
+
         elif items[0] == "ThermostatOnOff":
             self.add_broadcast(None, "ThermostatOnOff", int(items[1]))
         elif items[0] == "ThermostatTarget":
             self.add_broadcast(None, "ThermostatTarget", int(items[1]))
+
+        elif items[0][0] == "L":
+            stripId = "Light:%s" % items[0][1]
+            state = self.current_state.get(stripId)
+            if state is not None:
+                state['brightness'] = int(items[1])
+                self.add_broadcast(None, stripId, state)

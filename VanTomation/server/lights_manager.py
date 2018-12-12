@@ -22,7 +22,7 @@ class Strip:
         (m, b, d, _, c) = struct.unpack('<cBBBI', data)
         self.state = {
             'mode': m,
-            'targetBrightness': int(b),
+            'brightness': int(b),
             'cycleDelay': int(d),
             'color': int(c),
         }
@@ -36,7 +36,7 @@ class Strip:
 
     def toData(self):
         # Last 1 is padding to make it 8 bytes (multiple of 4)
-        return struct.pack('<cBBBI', self.state['mode'], self.state['targetBrightness'], self.state['cycleDelay'], 0, self.state['color'])
+        return struct.pack('<cBBBI', self.state['mode'], self.state['brightness'], self.state['cycleDelay'], 0, self.state['color'])
 
 
     def parseState(self, state):
@@ -51,11 +51,9 @@ class LightsThread(DeviceThread):
         service_uuid = self.service_and_char_uuids[0][0]
         self.inside_characteristic = self.characteristics[service_uuid][0]
         self.outside_characteristic = self.characteristics[service_uuid][1]
-        self.inside  = Strip(self.inside_characteristic)
-        self.outside = Strip(self.outside_characteristic)
         self.strips = {
-            'I': self.inside,
-            'O': self.outside,
+            'I': Strip(self.inside_characteristic),
+            'O': Strip(self.outside_characteristic),
         }
         for stripId in self.strips:
             strip = self.strips[stripId]
@@ -78,12 +76,10 @@ class LightsThread(DeviceThread):
             self.write(strip)
 
         elif broadcast.prop == "Speed" and broadcast.source == "gps" and broadcast.value > 10:
-            # Turn light off
-            self.inside.mode = 'C'
-            self.inside.targetBrightness = 0;
-            self.inside.color = 0
-            self.outside.mode = 'C'
-            self.outside.targetBrightness = 0;
-            self.outside.color = 0
-            self.write(self.inside)
-            self.write(self.outside)
+            # Turn lights off
+            for stripId in self.strips:
+                strip = self.strips[stripId]
+                strip.state['mode'] = 'C'
+                strip.state['brightness'] = 0;
+                self.write(strip)
+                self.add_broadcast(None, "Light:%s" % stripId, strip.state)
