@@ -157,7 +157,7 @@ class PanelHandler(SocketManagerConnectionHandler):
             brightness = broadcast.value['brightness']
             if broadcast.value['mode'] == 'C' and broadcast.value['color'] == 0:
                 brightness = 0
-            self.add_command("L%s%d" % (stripId, brightness))
+            self.add_command("L%s%s%d" % (stripId, broadcast.value['mode'], brightness))
 
 
     def handle(self, command):
@@ -176,4 +176,10 @@ class PanelHandler(SocketManagerConnectionHandler):
             state = self.current_state.get(stripId)
             if state is not None:
                 state['brightness'] = int(items[1])
+                self.add_broadcast(None, stripId, state)
+        elif items[0][0] == "M":
+            stripId = "Light:%s" % items[0][1]
+            state = self.current_state.get(stripId)
+            if state is not None:
+                state['mode'] = items[1]
                 self.add_broadcast(None, stripId, state)
