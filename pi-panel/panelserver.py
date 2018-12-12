@@ -6,8 +6,8 @@ import sys
 import threading
 import time
 import BaseHTTPServer
-from samplebase import SampleBase
 from rgbmatrix import graphics
+from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from PIL import Image, ImageDraw, ImageFont, ImageChops
 
 HOST_NAME = ''
@@ -15,7 +15,7 @@ PORT_NUMBER = 8080
 
 # Fonts from https://fonts2u.com/font-vendors/the-grandoplex-project.html
 
-current_command = ['', '', 0]
+current_command = ['text', 'Welcome', 1]
 
 def trim(im):
     bg = Image.new(im.mode, im.size, color = (0, 0, 0))
@@ -26,9 +26,27 @@ def trim(im):
     return im
 
 
-class ImageScroller(SampleBase):
-    def __init__(self, *args, **kwargs):
-        super(ImageScroller, self).__init__(*args, **kwargs)
+class ImageScroller:
+    def __init__(self):
+        options = RGBMatrixOptions()
+
+        options.rows = 16
+        options.cols = 32
+        options.chain_length = 1
+        options.parallel = 1
+
+        self.matrix = RGBMatrix(options = options)
+
+    def process(self):
+        try:
+            # Start loop
+            print("Press CTRL-C to stop sample")
+            self.run()
+        except KeyboardInterrupt:
+            print("Exiting\n")
+            sys.exit(0)
+
+        return True
 
     def run(self):
         self.images = {os.path.splitext(file_name)[0]: Image.open(os.path.join('images', file_name)).convert('RGB') 
