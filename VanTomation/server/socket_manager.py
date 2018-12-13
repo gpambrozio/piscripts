@@ -182,4 +182,5 @@ class PanelHandler(SocketManagerConnectionHandler):
             state = self.current_state.get(stripId)
             if state is not None:
                 state['mode'] = items[1]
+                state['color'] = 0xFFFFFF
                 self.add_broadcast(None, stripId, state)
