@@ -171,6 +171,9 @@ class PanelHandler(SocketManagerConnectionHandler):
         elif items[0] == "ThermostatTarget":
             self.add_broadcast(None, "ThermostatTarget", int(items[1]))
 
+        elif items[0] == "Locks":
+            self.add_broadcast("Locks", "State", "L" if items[1] == "lock" else "U")
+
         elif items[0][0] == "L":
             stripId = "Light:%s" % items[0][1]
             state = self.current_state.get(stripId)
