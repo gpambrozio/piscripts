@@ -174,16 +174,12 @@ class PanelHandler(SocketManagerConnectionHandler):
         elif items[0] == "Locks":
             self.add_broadcast("Locks", "State", "L" if items[1] == "lock" else "U")
 
-        elif items[0][0] == "L":
-            stripId = "Light:%s" % items[0][1]
+        elif items[0] == "Light":
+            stripId = "Light:%s" % items[1]
             state = self.current_state.get(stripId)
             if state is not None:
-                state['brightness'] = int(items[1])
-                self.add_broadcast(None, stripId, state)
-        elif items[0][0] == "M":
-            stripId = "Light:%s" % items[0][1]
-            state = self.current_state.get(stripId)
-            if state is not None:
-                state['mode'] = items[1]
-                state['color'] = 0xFFFFFF
+                state['brightness'] = int(items[3])
+                if state['mode'] != items[2]:
+                    state['mode'] = items[2]
+                    state['color'] = 0xFFFFFF
                 self.add_broadcast(None, stripId, state)
