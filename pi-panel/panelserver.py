@@ -60,7 +60,8 @@ class ImageScroller:
     def runLoop(self):
         global current_command
         
-        font = ImageFont.truetype('fonts/PixelOperator8.ttf', 16)
+        # font = ImageFont.truetype('fonts/PixelOperator8.ttf', 16)
+        font = ImageFont.load_path('fonts/9x15.pil')
         textColor = (255, 255, 255)
         
         double_buffer = self.matrix.CreateFrameCanvas()
