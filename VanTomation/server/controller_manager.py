@@ -65,8 +65,10 @@ class ControllerThread(DeviceThread):
         self.add_command(lambda: self.output_characteristic.write(command))
 
 
-    def send(self, identifier, message):
-        if identifier in self.last_sent_data and self.last_sent_data[identifier] == message:
+    # For commands that the controller can change we need to force sending it again
+    # because the value we have cached might not be the latest one.
+    def send(self, identifier, message, force = False):
+        if not force and identifier in self.last_sent_data and self.last_sent_data[identifier] == message:
             return
 
         self.last_sent_data[identifier] = message
@@ -88,9 +90,9 @@ class ControllerThread(DeviceThread):
         elif broadcast.destination is None and broadcast.prop == "Humidity" and broadcast.source == "Thermostat":
             self.send("Hm", "%.0f" % (broadcast.value * 10))
         elif broadcast.destination is None and broadcast.prop == "ThermostatOnOff":
-            self.send("TO", "%d" % broadcast.value)
+            self.send("TO", "%d" % broadcast.value, True)
         elif broadcast.destination is None and broadcast.prop == "ThermostatTarget":
-            self.send("Tt", "%.0f" % (broadcast.value))
+            self.send("Tt", "%.0f" % (broadcast.value), True)
 
         elif broadcast.destination is None and broadcast.prop == "SSID" and broadcast.source == "WiFi":
             self.send("Ws", "%s" % (broadcast.value or ""))
