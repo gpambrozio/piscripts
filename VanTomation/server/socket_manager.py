@@ -136,6 +136,8 @@ class PanelHandler(SocketManagerConnectionHandler):
             self.add_command("Ti%.0f" % (broadcast.value * 10))
         elif broadcast.destination is None and broadcast.prop == "Temperature" and broadcast.source == "AgnesOutside":
             self.add_command("To%.0f" % (broadcast.value * 10))
+        elif broadcast.destination is None and broadcast.prop == "Battery" and broadcast.source == "AgnesOutside":
+            self.add_command("Bo%.0f" % (broadcast.value))
 
         elif broadcast.destination is None and broadcast.prop == "Humidity" and broadcast.source == "Thermostat":
             self.add_command("Hm%.0f" % (broadcast.value * 10))
