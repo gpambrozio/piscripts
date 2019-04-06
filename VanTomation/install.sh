@@ -96,4 +96,16 @@ sudo sh -c 'echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf'
 # To start the monitor when the desktop starts
 echo "@lxterminal -e bash -c -l /home/pi/VanTomation/monitor.py" >> /home/pi/.config/lxsession/LXDE-pi/autostart
 
+# Dropbox uploader: https://github.com/andreafabrizi/Dropbox-Uploader
+curl "https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh" -o /home/pi/dropbox_uploader.sh
+TOKEN=`cat /home/pi/dropboxtoken`
+echo "OAUTH_ACCESS_TOKEN=$TOKEN" > /home/pi/.dropbox_uploader
+sudo cp .dropbox_uploader /root/.dropbox_uploader
+sudo chmod +x /home/pi/dropbox_uploader.sh
+rm /home/pi/dropboxtoken
+
+# Download saved files
+/home/pi/dropbox_uploader.sh download wpa_supplicant.conf wpa_supplicant.conf
+sudo mv -f wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+
 crontab VanTomation/config/crontab.txt
