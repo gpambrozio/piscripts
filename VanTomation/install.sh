@@ -58,11 +58,21 @@ cd /home/pi
 
 /home/pi/send-notification.sh "Setup bluez done"
 
+# Make display work better for small screen
 sudo sh -c 'echo "hdmi_ignore_hotplug=1" >> /boot/config.txt'
 sudo sh -c 'echo "sdtv_mode=0" >> /boot/config.txt'
 sudo sh -c 'echo "enable_uart=1" >> /boot/config.txt'
 sudo sh -c 'echo "framebuffer_width=800" >> /boot/config.txt'
 sudo sh -c 'echo "framebuffer_height=600" >> /boot/config.txt'
+
+# No screen saver
+# From https://www.raspberrypi.org/forums/viewtopic.php?t=57552
+echo "@xset s noblank" >> /home/pi/.config/lxsession/LXDE-pi/autostart
+echo "@xset s off" >> /home/pi/.config/lxsession/LXDE-pi/autostart
+echo "@xset -dpms" >> /home/pi/.config/lxsession/LXDE-pi/autostart
+
+# To start the monitor when the desktop starts
+echo "@lxterminal -e bash -c -l /home/pi/VanTomation/monitor.py" >> /home/pi/.config/lxsession/LXDE-pi/autostart
 
 OWM_API_KEY=`cat /home/pi/owm_api_key`
 echo "export OWM_API_KEY=$OWM_API_KEY" >> .bash_profile
@@ -92,9 +102,6 @@ sudo sh -c 'chown root:root /etc/rc.local'
 sudo sh -c 'chmod 755 /etc/rc.local'
 
 sudo sh -c 'echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf'
-
-# To start the monitor when the desktop starts
-echo "@lxterminal -e bash -c -l /home/pi/VanTomation/monitor.py" >> /home/pi/.config/lxsession/LXDE-pi/autostart
 
 # Dropbox uploader: https://github.com/andreafabrizi/Dropbox-Uploader
 curl "https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh" -o /home/pi/dropbox_uploader.sh
