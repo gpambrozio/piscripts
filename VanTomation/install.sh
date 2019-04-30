@@ -74,9 +74,9 @@ echo "@xset -dpms" >> /home/pi/.config/lxsession/LXDE-pi/autostart
 # To start the monitor when the desktop starts
 echo "@lxterminal -e bash -c -l /home/pi/VanTomation/monitor.py" >> /home/pi/.config/lxsession/LXDE-pi/autostart
 
+# Open weather map API key
 OWM_API_KEY=`cat /home/pi/owm_api_key`
-echo "export OWM_API_KEY=$OWM_API_KEY" >> .bash_profile
-echo ". ~/.bashrc" >> .bash_profile
+echo "export OWM_API_KEY=$OWM_API_KEY" >> .bashrc
 rm /home/pi/owm_api_key
 
 # https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md

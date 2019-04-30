@@ -59,22 +59,22 @@ lines = {
     "Temperature:Thermostat": [34, 2*60, lambda x: "i ?" if x is None else u"i %.1f \N{DEGREE SIGN}F" % x],
     "Temperature:AgnesOutside": [34, 2*60, lambda x: "o ?" if x is None else u"o %.1f \N{DEGREE SIGN}F" % x],
     "Humidity:Thermostat": [34, 2*60, lambda x: "? %%" if x is None else "%.1f%%" % x],
-    "Speed:Socket": [60, 60, lambda x: "?" if x is None else "%d" % x],
-    "Altitude:Socket": [34, 24*60*60, lambda x: "?" if x is None else "%d ft\n%d m" % (x * 3.281, x)],
-    "Location:Socket": [16, 24*60*60, lambda x: "?" if x is None else sunrise_sunset(x)],
+    "Speed:gps": [60, 60, lambda x: "?" if x is None else "%d" % x],
+    "Altitude:gps": [34, 24*60*60, lambda x: "?" if x is None else "%d ft\n%d m" % (x * 3.281, x)],
+    "Location:gps": [16, 24*60*60, lambda x: "?" if x is None else sunrise_sunset(x)],
 }
 
 ui = {k: tk.Label(root, text=v[2](None), font="Helvetica %d" % v[0]) for (k, v) in lines.iteritems()}
 
-ui["Speed:Socket"].grid(row=0, column=0, padx=2, pady=5, columnspan=2, sticky=tk.E)
+ui["Speed:gps"].grid(row=0, column=0, padx=2, pady=5, columnspan=2, sticky=tk.E)
 tk.Label(root, text="m\np\nh", font="Helvetica 20").grid(row=0, column=2, padx=2, pady=5, columnspan=1, sticky=tk.W)
 
 ui["Temperature:Thermostat"].grid(row=2, column=0, sticky=tk.E, padx=20, columnspan=3)
 ui["Temperature:AgnesOutside"].grid(row=3, column=0, sticky=tk.E, padx=20, columnspan=3)
 ui["Humidity:Thermostat"].grid(row=4, column=0, sticky=tk.E, padx=20, columnspan=3)
 
-ui["Location:Socket"].grid(row=2, column=3, columnspan=3)
-ui["Altitude:Socket"].grid(row=3, column=3, rowspan=2, padx=5, columnspan=3)
+ui["Location:gps"].grid(row=2, column=3, columnspan=3)
+ui["Altitude:gps"].grid(row=3, column=3, rowspan=2, padx=5, columnspan=3)
 
 
 ## Time
@@ -98,7 +98,7 @@ heading_canvas.grid(row=0, column=3, padx=5, pady=20, columnspan=3)
 
 def fill_heading(state):
     global compass_arrow_image, compass_arrow_object
-    heading = state.get("Heading:Socket")
+    heading = state.get("Heading:gps")
     if heading is not None:
         heading_canvas.delete(compass_arrow_object)
         compass_arrow_image = ImageTk.PhotoImage(compass_arrow.rotate(heading["value"]))
@@ -127,7 +127,8 @@ class WeatherThread:
         if not os.path.exists(icon_file_name):
             icon = requests.get("http://openweathermap.org/img/w/%s.png" % icon_name)
             if icon.status_code == 200:
-                os.makedirs(os.path.join(folder, 'owm_icons'))
+                if not os.path.exists(os.path.join(folder, 'owm_icons')):
+                    os.makedirs(os.path.join(folder, 'owm_icons'))
                 f = file(icon_file_name, "w")
                 f.write(icon.content)
                 f.close()
@@ -140,7 +141,7 @@ class WeatherThread:
         # Sleep a bit to make sure we get a state in the beginning
         time.sleep(2)
         while True:
-            location = state.get("Location:Socket")
+            location = state.get("Location:gps")
             if location is None:
                 time.sleep(30 * 60)
             else:
