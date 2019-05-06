@@ -28,11 +28,10 @@ class Coordinator(SenderReceiver):
         self.connected_devices = set()
 
         self.devices = {
-            # 'Lights'    : 'fd:6e:55:f0:de:06',
-            'Lights'    : 'f7:7d:b1:2b:07:30',
+            'Lights'    : 'fd:6e:55:f0:de:06',
             'Thermostat': 'eb:cc:ee:35:55:c0',
-            'Outside'   : '98:7b:f3:59:1e:d4',
-            'Inside'    : '98:7b:f3:5a:d2:3f',
+            'Inside'    : '98:7b:f3:59:1e:d4',
+            'Outside'   : '98:7b:f3:5a:d2:3f',
             'Parking'   : '24:0a:c4:00:a0:2c',
             'GPS'       : 'gps',
             'Panel'     : 'panel',
