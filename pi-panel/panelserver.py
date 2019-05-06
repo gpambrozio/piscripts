@@ -15,7 +15,8 @@ PORT_NUMBER = 8080
 
 # Fonts from https://fonts2u.com/font-vendors/the-grandoplex-project.html
 
-current_command = ['text', 'Have a good day!', 1]
+current_command = ['image', 'haveagoodday', 1]
+images = []
 
 def trim(im):
     bg = Image.new(im.mode, im.size, color = (0, 0, 0))
@@ -28,6 +29,8 @@ def trim(im):
 
 class ImageScroller:
     def __init__(self):
+        global images
+        
         options = RGBMatrixOptions()
 
         options.rows = 16
@@ -37,6 +40,8 @@ class ImageScroller:
         options.pixel_mapper_config = "Rotate:180"
 
         self.matrix = RGBMatrix(options = options)
+        images = {os.path.splitext(file_name)[0]: Image.open(os.path.join('images', file_name)).convert('RGB') 
+            for file_name in os.listdir('images') if file_name[0] != '.' and os.path.splitext(file_name)[1] == '.png'}
 
     def process(self):
         try:
@@ -50,9 +55,6 @@ class ImageScroller:
         return True
 
     def run(self):
-        self.images = {os.path.splitext(file_name)[0]: Image.open(os.path.join('images', file_name)).convert('RGB') 
-            for file_name in os.listdir('images') if file_name[0] != '.' and os.path.splitext(file_name)[1] == '.png'}
-
         self.thread = threading.Thread(target=self.runLoop)
         self.thread.daemon = True
         self.thread.start()
@@ -79,8 +81,8 @@ class ImageScroller:
                 drawing_count = command[2]
                 
                 if command[0] == 'image':
-                    if command[1] in self.images:
-                        image = self.images[command[1]]
+                    if command[1] in images:
+                        image = images[command[1]]
                 else:
                     text = command[1]
                     image = Image.new('RGB', (len(text) * 14 + width, self.matrix.height), color = (0, 0, 0))
@@ -102,10 +104,10 @@ class ImageScroller:
                     if drawing_count == 0:
                         current_command = ['text', '', 0]
 
-            time.sleep(0.015)
+            time.sleep(0.010)
 
 
-class SocketServer(object):
+class SocketServer:
     def __init__(self, host, port):
         self.host = host
         self.port = port
@@ -171,6 +173,8 @@ class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         components = s.path[1:].split('/')
         if components[0] == 'ping':
             s.wfile.write('pong')
+        elif components[0] == 'files':
+            s.wfile.write(','.join(images))
         elif len(components) < 3:
             s.wfile.write("Need 3 components: %s" % s.path)
         else:
