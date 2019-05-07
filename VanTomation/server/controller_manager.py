@@ -1,7 +1,6 @@
 import binascii
 import json
 import struct
-import threading
 
 from base import logger, SerialBuffer
 from device_manager import DeviceManager, DeviceThread
