@@ -35,7 +35,14 @@ wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/screenrc.txt
 mv -f screenrc.txt ~/.screenrc
 
 sudo apt-get update
-sleep 1
+# In some installs the apt-get install complains about not being able to lock the db
+# Maybe this will help
+while [ 1 ] ; do
+    ps aux | grep apt | grep -v grep
+    if [ $? -ne 0 ] ; then
+        break
+    fi
+done
 sudo apt-get install -y subversion screen
 
 svn checkout "https://github.com/gpambrozio/piscripts/trunk/$1"
