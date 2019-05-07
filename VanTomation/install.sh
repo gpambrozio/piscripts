@@ -115,6 +115,9 @@ rm /home/pi/dropboxtoken
 /home/pi/dropbox_uploader.sh download wpa_supplicant.conf wpa_supplicant.conf
 sudo mv -f wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 
+# Save files when dhcp changes
+sudo ln -s /home/pi/VanTomation/dhcp_up.sh /etc/dhcpcd.enter-hook
+
 # For temperature controller
 # From https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/ds18b20
 sudo sh -c 'echo "dtoverlay=w1-gpio" >> /boot/config.txt'
