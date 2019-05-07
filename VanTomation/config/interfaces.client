@@ -16,7 +16,7 @@ iface wlan0 inet manual
     wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 
 auto wlan1
-iface wlan1 inet dhcp
+iface wlan1 inet manual
     wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 
 post-up /home/pi/VanTomation/dropbox_sync.sh
