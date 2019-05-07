@@ -27,8 +27,14 @@ sudo pip install pyowm
 sudo apt-get install -y python-imaging-tk
 
 # Installing nodejs
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-sudo apt-get install -y nodejs
+# From https://warlord0blog.wordpress.com/2018/06/27/node-js-v8-on-raspberry-pi-zero/
+cd /home/pi
+wget https://nodejs.org/dist/v8.11.3/node-v8.11.3-linux-armv6l.tar.xz
+tar -xvf node-v8.11.3-linux-armv6l.tar.xz
+cd node-v8.11.3-linux-armv6l
+sudo cp -R * /usr/local/
+cd ..
+rm -Rf node-v8.11.3-linux-armv6l
 
 # Bleno (for bt peripheral)
 # Do this before bluez as it will be updated by better bluez bellow
