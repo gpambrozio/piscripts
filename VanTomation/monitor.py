@@ -57,7 +57,7 @@ root.title("Hello NonVanLifers!")
 
 lines = {
     "Temperature:Thermostat": [34, 2*60, lambda x: "i ?" if x is None else u"i %.1f \N{DEGREE SIGN}F" % x],
-    "Temperature:AgnesOutside": [34, 2*60, lambda x: "o ?" if x is None else u"o %.1f \N{DEGREE SIGN}F" % x],
+    "Temperature:Pi": [34, 2*60, lambda x: "o ?" if x is None else u"o %.1f \N{DEGREE SIGN}F" % x],
     "Humidity:Thermostat": [34, 2*60, lambda x: "? %%" if x is None else "%.1f%%" % x],
     "Speed:gps": [60, 60, lambda x: "?" if x is None else "%d" % x],
     "Altitude:gps": [34, 24*60*60, lambda x: "?" if x is None else "%d ft\n%d m" % (x * 3.281, x)],
@@ -70,7 +70,7 @@ ui["Speed:gps"].grid(row=0, column=0, padx=2, pady=5, columnspan=2, sticky=tk.E)
 tk.Label(root, text="m\np\nh", font="Helvetica 20").grid(row=0, column=2, padx=2, pady=5, columnspan=1, sticky=tk.W)
 
 ui["Temperature:Thermostat"].grid(row=2, column=0, sticky=tk.E, padx=20, columnspan=3)
-ui["Temperature:AgnesOutside"].grid(row=3, column=0, sticky=tk.E, padx=20, columnspan=3)
+ui["Temperature:Pi"].grid(row=3, column=0, sticky=tk.E, padx=20, columnspan=3)
 ui["Humidity:Thermostat"].grid(row=4, column=0, sticky=tk.E, padx=20, columnspan=3)
 
 ui["Location:gps"].grid(row=2, column=3, columnspan=3)
