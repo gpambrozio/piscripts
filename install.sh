@@ -35,6 +35,7 @@ wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/screenrc.txt
 mv -f screenrc.txt ~/.screenrc
 
 sudo apt-get update
+sleep 1
 sudo apt-get install -y subversion screen
 
 svn checkout "https://github.com/gpambrozio/piscripts/trunk/$1"
