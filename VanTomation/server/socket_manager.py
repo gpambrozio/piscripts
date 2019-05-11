@@ -121,7 +121,7 @@ class PhoneGPSHandler(SocketManagerConnectionHandler):
             self.add_broadcast(None, "Heading", int(components[2]))
 
 
-class PanelHandler(SocketManagerConnectionHandler):
+class KeypadHandler(SocketManagerConnectionHandler):
 
     def __init__(self):
         SocketManagerConnectionHandler.__init__(self, 'panel')
