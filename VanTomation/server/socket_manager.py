@@ -124,7 +124,7 @@ class PhoneGPSHandler(SocketManagerConnectionHandler):
 class KeypadHandler(SocketManagerConnectionHandler):
 
     def __init__(self):
-        SocketManagerConnectionHandler.__init__(self, 'panel')
+        SocketManagerConnectionHandler.__init__(self, 'keypad')
         self.current_state = {}
 
 
