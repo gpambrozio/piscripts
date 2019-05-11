@@ -138,6 +138,8 @@ class SocketServer:
                     components = data.strip(" \r\n").split('/')
                     if components[0] == 'ping':
                         client.send("Pong\n")
+                    elif components[0] == 'files':
+                        client.send((','.join(images)) + "\n")
                     elif len(components) < 3:
                         client.send("Need 3 components: %s\n" % data)
                     else:
