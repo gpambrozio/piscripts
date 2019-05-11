@@ -121,6 +121,19 @@ class PhoneGPSHandler(SocketManagerConnectionHandler):
             self.add_broadcast(None, "Heading", int(components[2]))
 
 
+class PanelHandler(SocketManagerConnectionHandler):
+
+    def __init__(self):
+        SocketManagerConnectionHandler.__init__(self, 'panel')
+        self.add_command("files")
+
+
+    def handle(self, command):
+        if command.startsWith('files:'):
+            files = command[6:].strip(" \r\n").split(',')
+            self.add_broadcast(None, "Files", files)
+
+
 class KeypadHandler(SocketManagerConnectionHandler):
 
     def __init__(self):
