@@ -152,6 +152,9 @@ class KeypadHandler(SocketManagerConnectionHandler):
         elif broadcast.destination is None and broadcast.prop == "Distance" and broadcast.source == "Behinds":
             self.add_command("Ds%s" % (broadcast.value or ""))
 
+        elif broadcast.prop == "Speed" and broadcast.value > 20:
+            self.add_command("Md")
+
         elif broadcast.destination is None and broadcast.prop.startswith("Light:"):
             stripId = broadcast.prop[-1]
             brightness = broadcast.value['brightness']
