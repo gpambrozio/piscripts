@@ -29,8 +29,6 @@ def trim(im):
 
 class ImageScroller:
     def __init__(self):
-        global images
-        
         options = RGBMatrixOptions()
 
         options.rows = 16
@@ -40,8 +38,6 @@ class ImageScroller:
         options.pixel_mapper_config = "Rotate:180"
 
         self.matrix = RGBMatrix(options = options)
-        images = {os.path.splitext(file_name)[0]: Image.open(os.path.join('images', file_name)).convert('RGB') 
-            for file_name in os.listdir('images') if file_name[0] != '.' and os.path.splitext(file_name)[1] == '.png'}
 
     def process(self):
         try:
@@ -107,29 +103,30 @@ class ImageScroller:
             time.sleep(0.010)
 
 
-class SocketServer:
+class SocketClient:
     def __init__(self, host, port):
         self.host = host
         self.port = port
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.sock.bind((self.host, self.port))
-        self.thread = threading.Thread(target=self.listen)
+        self.thread = threading.Thread(target=self.connect)
         self.thread.daemon = True
         self.thread.start()
 
 
-    def listen(self):
-        self.sock.listen(5)
+    def connect(self):
         while True:
-            client, address = self.sock.accept()
-            client.settimeout(60)
-            threading.Thread(target=self.listenToClient, args=(client,address)).start()
+            try:
+                print("Trying to connect")
+                client = socket.create_connection((self.host, self.port), 5)
+                print("Connected to server")
+                client.send("Panel\n")
+                self.listenToClient(client)
+            except Exception as e:
+                print("Exception %s" % e)
 
 
-    def listenToClient(self, client, address):
+    def listenToClient(self, client):
         global current_command
-
+        
         size = 1024
         while True:
             try:
@@ -139,9 +136,9 @@ class SocketServer:
                     if components[0] == 'ping':
                         client.send("Pong\n")
                     elif components[0] == 'files':
-                        client.send((','.join(images)) + "\n")
+                        client.send("files:%s\n" % (','.join(images)))
                     elif len(components) < 3:
-                        client.send("Need 3 components: %s\n" % data)
+                        client.send("error\n")
                     else:
                         command = components[:3]
                         try:
@@ -151,9 +148,14 @@ class SocketServer:
                         current_command = command
                         client.send("OK\n")
                 else:
-                    raise error('Client disconnected')
-            except:
+                    raise Exception('Client disconnected')
+
+            except socket.timeout:
+                pass
+
+            except Exception as e:
                 client.close()
+                raise e
 
 
 class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
@@ -191,7 +193,9 @@ class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
-    socket_server = SocketServer('', 10000)
+    images = {os.path.splitext(file_name)[0]: Image.open(os.path.join('images', file_name)).convert('RGB') 
+        for file_name in os.listdir('images') if file_name[0] != '.' and os.path.splitext(file_name)[1] == '.png'}
+    socket_client = SocketClient('192.168.42.1', 5000)
     image_scroller = ImageScroller()
     if not image_scroller.process():
         image_scroller.print_help()
