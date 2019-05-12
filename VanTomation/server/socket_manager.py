@@ -129,7 +129,7 @@ class PanelHandler(SocketManagerConnectionHandler):
 
 
     def handle(self, command):
-        if command.startsWith('files:'):
+        if command.startswith('files:'):
             files = command[6:].strip(" \r\n").split(',')
             self.add_broadcast(None, "Files", files)
 
