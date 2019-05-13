@@ -183,6 +183,7 @@ class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.wfile.write("Need 3 components: %s" % s.path)
         else:
             command = components[:3]
+            command[1] = command[1].replace('+', ' ')
             try:
                 command[2] = int(command[2])
             except:
