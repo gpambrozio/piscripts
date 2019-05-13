@@ -75,7 +75,7 @@ class LightsThread(DeviceThread):
             strip.parseState(broadcast.value)
             self.write(strip)
 
-        elif broadcast.prop == "Speed" and broadcast.value > 10:
+        elif broadcast.prop == "Moving" and broadcast.value:
             # Turn lights off
             for stripId in self.strips:
                 strip = self.strips[stripId]

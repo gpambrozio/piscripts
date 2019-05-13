@@ -165,7 +165,7 @@ class KeypadHandler(SocketManagerConnectionHandler):
         elif broadcast.destination is None and broadcast.prop == "Distance" and broadcast.source == "Behinds":
             self.add_command("Ds%s" % (broadcast.value or ""))
 
-        elif broadcast.prop == "Speed" and broadcast.value > 10:
+        elif broadcast.prop == "Moving" and broadcast.value:
             self.add_command("Md")
 
         elif broadcast.prop == "Files" and broadcast.source == "panel":
