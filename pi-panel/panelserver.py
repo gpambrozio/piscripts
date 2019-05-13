@@ -136,7 +136,7 @@ class SocketClient:
                     if components[0] == 'ping':
                         client.send("Pong\n")
                     elif components[0] == 'files':
-                        client.send("files:%s\n" % (','.join(images)))
+                        client.send("files:%s\n" % (','.join([i for i in images if i != 'blank'])))
                     elif len(components) < 3:
                         client.send("error\n")
                     else:
@@ -178,7 +178,7 @@ class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         if components[0] == 'ping':
             s.wfile.write('pong')
         elif components[0] == 'files':
-            s.wfile.write(','.join(images))
+            s.wfile.write(','.join([i for i in images if i != 'blank']))
         elif len(components) < 3:
             s.wfile.write("Need 3 components: %s" % s.path)
         else:
