@@ -94,9 +94,9 @@ class ControllerThread(DeviceThread):
             self.send("Tt", "%.0f" % (broadcast.value), True)
 
         elif broadcast.destination is None and broadcast.prop == "SSID" and broadcast.source == "WiFi":
-            self.send("Ws", "%s" % (broadcast.value or ""))
+            self.send("Ws", broadcast.value or "")
         elif broadcast.destination is None and broadcast.prop == "IP" and broadcast.source == "WiFi":
-            self.send("Wi", "%s" % (broadcast.value or ""))
+            self.send("Wi", broadcast.value or "")
         elif broadcast.destination is None and broadcast.prop == "Scan" and broadcast.source == "WiFi":
             networks = broadcast.value if broadcast.value else []
             networks = [(n[4], int(n[1]), int(n[2]), 1 if (n[3] in ("[ESS]", "")) else 0) for n in networks if n[4] and n[4] != "agnes"]
@@ -104,5 +104,11 @@ class ControllerThread(DeviceThread):
             for network in networks:
                 if network[0] not in unique_networks or network[2] > unique_networks[network[0]][2]:
                     unique_networks[network[0]] = network
-                    
-            self.send("WS", "%s" % json.dumps(unique_networks.values()))
+
+            self.send("WS", json.dumps(unique_networks.values()))
+
+        elif broadcast.prop == "Files" and broadcast.source == "panel":
+            self.send("Pf", json.dumps(broadcast.value))
+
+        elif broadcast.prop == "Moving" and broadcast.value:
+            self.send("Mv", "1")
