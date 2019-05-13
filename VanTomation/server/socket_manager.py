@@ -169,7 +169,7 @@ class KeypadHandler(SocketManagerConnectionHandler):
             self.add_command("Md")
 
         elif broadcast.prop == "Files" and broadcast.source == "panel":
-            self.add_command("Pf%s" % (','.join(sort(broadcast.value))))
+            self.add_command("Pf%s" % (','.join(sorted(broadcast.value))))
 
         elif broadcast.destination is None and broadcast.prop.startswith("Light:"):
             stripId = broadcast.prop[-1]
