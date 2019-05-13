@@ -49,6 +49,8 @@ class ControllerThread(DeviceThread):
                 elif destination == "T":
                     self.add_broadcast(None, "ThermostatOnOff", int(line[2]))
                     self.add_broadcast(None, "ThermostatTarget", int(line[3:], 16))
+                elif destination == "D":
+                    self.add_broadcast("Panel", "Play", line[2:])
                 elif destination == "W":
                     command = line[1]
                     if command == "A":

@@ -134,6 +134,11 @@ class PanelHandler(SocketManagerConnectionHandler):
             self.add_broadcast(None, "Files", files)
 
 
+    def broadcast_received(self, broadcast):
+        if broadcast.destination == "Panel" and broadcast.prop == "Play":
+            self.add_command("image/%s/1" % broadcast.value)
+
+
 class KeypadHandler(SocketManagerConnectionHandler):
 
     def __init__(self):
