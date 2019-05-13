@@ -15,7 +15,7 @@ PORT_NUMBER = 8080
 
 # Fonts from https://fonts2u.com/font-vendors/the-grandoplex-project.html
 
-current_command = ['image', 'haveagoodday', 1]
+current_command = ['image', 'Have a good day', 1]
 images = []
 
 def trim(im):
