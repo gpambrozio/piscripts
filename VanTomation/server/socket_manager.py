@@ -16,6 +16,10 @@ class SocketManagerConnectionHandler(SenderReceiver):
         pass
 
 
+    def disconnected(self):
+        pass
+
+
     def add_command(self, command):
         self.commands.put(command)
 
@@ -100,6 +104,7 @@ class SocketManager(SenderReceiver):
             # Clean up the connection
             logger.debug("Closed socket")
             if handler is not None:
+                handler.disconnected()
                 self.handlers.remove(handler)
                 self.coordinator.device_disconnected(handler)
 
@@ -137,6 +142,11 @@ class PanelHandler(SocketManagerConnectionHandler):
     def broadcast_received(self, broadcast):
         if broadcast.destination == "Panel" and broadcast.prop == "Play":
             self.add_command("image/%s/1" % broadcast.value)
+
+
+    def disconnected(self):
+        SocketManagerConnectionHandler.disconnected(self)
+        self.add_broadcast(None, "Files", [])
 
 
 class KeypadHandler(SocketManagerConnectionHandler):
