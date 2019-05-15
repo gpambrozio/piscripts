@@ -143,6 +143,7 @@ class DeviceThread(SenderReceiver):
                 break
 
             try:
+                self.will_check_commands()
                 command = self.commands.get(False)
                 command()
                 self.commands.task_done()
@@ -174,7 +175,11 @@ class DeviceThread(SenderReceiver):
     def no_data_received(self):
         # Just in case a subclass wants to do something about it.
         pass
-        
-        
+
+
+    def will_check_commands(self):
+        pass
+
+
     def add_command(self, command):
         self.commands.put(command)

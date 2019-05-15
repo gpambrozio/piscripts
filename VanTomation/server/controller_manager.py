@@ -25,6 +25,7 @@ class ControllerThread(DeviceThread):
         self.start_notifications(self.input_characteristic)
         self.serial_buffer = SerialBuffer()
         self.last_sent_data = {}
+        self.waiting_to_send_data = []
 
 
     def received_data(self, cHandle, data):
@@ -66,6 +67,15 @@ class ControllerThread(DeviceThread):
         self.add_command(lambda: self.output_characteristic.write(command))
 
 
+    def will_check_commands(self):
+        if self.waiting_to_send_data:
+            identifier, message = self.waiting_to_send_data.pop(0)
+            to_send = "%s%s\n" % (identifier, message)
+            while to_send:
+                self.send_command(to_send[:20])
+                to_send = to_send[20:]
+
+
     # For commands that the controller can change we need to force sending it again
     # because the value we have cached might not be the latest one.
     def send(self, identifier, message, force = False):
@@ -73,10 +83,11 @@ class ControllerThread(DeviceThread):
             return
 
         self.last_sent_data[identifier] = message
-        to_send = "%s%s\n" % (identifier, message)
-        while to_send:
-            self.send_command(to_send[:20])
-            to_send = to_send[20:]
+        for i, identifierAndMessage in enumerate(self.waiting_to_send_data):
+            if identifierAndMessage[0] == identifier:
+                del self.waiting_to_send_data[i]
+                break
+        self.waiting_to_send_data.append((identifier, message))
 
 
     def broadcast_received(self, broadcast):
