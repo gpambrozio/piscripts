@@ -23,7 +23,7 @@ class PIManager(SenderReceiver):
         device_folder = glob.glob(base_dir + "28*")[0]
         self.device_file = device_folder + "/w1_slave"
 
-        self.thread = threading.Thread(target=self.run)
+        self.thread = threading.Thread(target=self.read_temperature_thread)
         self.thread.daemon = True                            # Daemonize thread
         self.thread.start()                                  # Start the execution
 
@@ -43,11 +43,11 @@ class PIManager(SenderReceiver):
             subprocess.call("gpio write %d 0" % port, shell=True)
 
 
-    def run(self):
+    def read_temperature_thread(self):
         while True:
             temp_f = self.read_temp()
             self.add_broadcast(None, "Temperature", temp_f)
-            time.sleep(5)
+            time.sleep(10)
 
 
     def read_temp_raw(self):
