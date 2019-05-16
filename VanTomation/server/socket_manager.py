@@ -52,7 +52,11 @@ class SocketManager(SenderReceiver):
         while True:
             client, address = self.sock.accept()
             client.settimeout(60)
-            threading.Thread(target=self.listenToClient, args=(client,address)).start()
+            client.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+            client.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, 15)
+            client.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, 15)
+            client.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPCNT, 3)
+            threading.Thread(target=self.listenToClient, args=(client, address)).start()
 
 
     def listenToClient(self, connection, client_address):
