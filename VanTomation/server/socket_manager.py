@@ -182,6 +182,8 @@ class KeypadHandler(SocketManagerConnectionHandler):
 
         elif broadcast.prop == "Moving" and broadcast.value:
             self.add_command("Md")
+        elif broadcast.prop == "Parked" and broadcast.value:
+            self.add_command("Mh")
 
         elif broadcast.prop == "Files" and broadcast.source == "panel":
             self.add_command("Pf%s" % (','.join(sorted(broadcast.value))))
