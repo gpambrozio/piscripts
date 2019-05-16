@@ -59,6 +59,7 @@ class Coordinator(SenderReceiver):
 
     def device_disconnected(self, thread):
         if thread.addr in self.connected_devices:
+            self.check_broadcasts(thread)
             self.connected_devices.remove(thread.addr)
             self.update_connected_devices()
 
@@ -68,34 +69,41 @@ class Coordinator(SenderReceiver):
         self.add_broadcast(None, "Devices", connected)
 
 
+    def broadcasters(self):
+        broadcasters = [self]
+        for manager in self.device_managers:
+            broadcasters += manager.all_broadcasters()
+        return broadcasters
+
+
+    def check_broadcasts(self, broadcaster):
+        while True:
+            try:
+                broadcast = broadcaster.broadcast_messages.get(False)
+                broadcaster.broadcast_messages.task_done()
+
+                logger.debug("Got %s", broadcast)
+                if broadcast.destination is None:
+                    self.current_state[broadcast.key] = broadcast
+
+                # Don't send the broadcast to whoever sent it.
+                for receiver in [b for b in self.broadcasters() if b.name != broadcaster.name]:
+                    receiver.broadcast_received(broadcast)
+            
+            except queue.Empty:
+                # Nothing available, just move on...
+                break
+
+            except Exception, e:
+                logger.debug("Exception: %s\n%s", e, traceback.format_exc())
+
+
     def run(self):
         """ Method that runs forever """
 
         while True:
-            broadcasters = [self]
-            for manager in self.device_managers:
-                broadcasters += manager.all_broadcasters()
-            
-            for broadcaster in broadcasters:
-                while True:
-                    try:
-                        broadcast = broadcaster.broadcast_messages.get(False)
-                        broadcaster.broadcast_messages.task_done()
-
-                        logger.debug("Got %s", broadcast)
-                        if broadcast.destination is None:
-                            self.current_state[broadcast.key] = broadcast
-
-                        # Don't send the broadcast to whoever sent it.
-                        for receiver in [b for b in broadcasters if b.name != broadcaster.name]:
-                            receiver.broadcast_received(broadcast)
-                        
-                    except queue.Empty:
-                        # Nothing available, just move on...
-                        break
-                    
-                    except Exception, e:
-                        logger.debug("Exception: %s\n%s", e, traceback.format_exc())
+            for broadcaster in self.broadcasters():
+                self.check_broadcasts(broadcaster)
 
             time.sleep(0.2)
 
