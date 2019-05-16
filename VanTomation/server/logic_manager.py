@@ -13,7 +13,7 @@ class LogicManager(SenderReceiver):
         }
         for (name, value) in self.properties.iteritems():
             self.add_broadcast(None, name, value)
-        self.stopped_time = 0
+        self.stopped_time = None
 
 
     def set_property(self, name, value):
@@ -29,16 +29,16 @@ class LogicManager(SenderReceiver):
         if broadcast.prop == 'Speed' and broadcast.value > 10 and not self.properties['Moving']:
             self.set_property('Moving', True)
             self.set_property('Parked', False)
-            self.stopped_time = 0
+            self.stopped_time = None
 
         elif broadcast.prop == "Speed" and broadcast.value < 3:
             self.set_property('Moving', False)
-            if self.stopped_time == 0:
+            if self.stopped_time is None:
                 self.stopped_time = datetime.datetime.now()
 
-        if not self.properties['Moving'] and self.stopped_time > 0:
+        if not self.properties['Moving'] and self.stopped_time is not None:
             elapsed = (datetime.datetime.now() - self.stopped_time).seconds
             if elapsed > 2 * 60:
                 self.set_property('Parked', True)
-                self.stopped_time = 0
+                self.stopped_time = None
 
