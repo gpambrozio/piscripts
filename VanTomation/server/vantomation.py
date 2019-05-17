@@ -104,6 +104,7 @@ class Coordinator(SenderReceiver):
         while True:
             for broadcaster in self.broadcasters():
                 self.check_broadcasts(broadcaster)
+                broadcaster.tick()
 
             time.sleep(0.2)
 

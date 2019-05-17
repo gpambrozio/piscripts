@@ -38,6 +38,11 @@ class SenderReceiver(object):
         pass
 
 
+    # Happens periodically regardless of having broadcasts or not.
+    def tick(self):
+        pass
+
+
     def add_broadcast(self, destination, prop, value):
         self.broadcast_messages.put(BroadcastMessage(self.name, destination, prop, value))
 
