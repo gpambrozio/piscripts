@@ -41,7 +41,7 @@ class ControllerThread(DeviceThread):
                         'mode': value[0],
                         'brightness': ord(binascii.unhexlify(value[1:3])),
                         'cycleDelay': ord(binascii.unhexlify(value[3:5])),
-                        'color': struct.unpack('<I', binascii.unhexlify(value[5:]) + '\x00')[0],
+                        'color': struct.unpack('>I', binascii.unhexlify(value[5:]) + '\x00')[0] / 256,
                     }
 
                     self.add_broadcast(None, "Light:%s" % strip, state)
