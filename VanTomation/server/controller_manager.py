@@ -125,3 +125,13 @@ class ControllerThread(DeviceThread):
 
         elif broadcast.prop == "Moving" and broadcast.value:
             self.send("Mv", "1")
+
+        elif broadcast.prop == "Parked" and broadcast.value:
+            self.send("Mv", "0")
+
+        elif broadcast.destination is None and broadcast.prop.startswith("Light:"):
+            stripId = broadcast.prop[-1]
+            brightness = broadcast.value['brightness']
+            if broadcast.value['mode'] == 'C' and broadcast.value['color'] == 0:
+                brightness = 0
+            self.send("L%s" % stripId, "%s%d,%d,%d" % (broadcast.value['mode'], brightness, broadcast.value['cycleDelay'], broadcast.value['color']))
