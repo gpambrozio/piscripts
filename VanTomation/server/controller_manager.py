@@ -41,7 +41,7 @@ class ControllerThread(DeviceThread):
                     state = {
                         'mode': value[0],
                         'brightness': ord(binascii.unhexlify(value[1:3])),
-                        'cycleDelay': ord(binascii.unhexlify(value[3:5])),
+                        'cycleDelay': 2 * ord(binascii.unhexlify(value[3:5])),
                         'color': struct.unpack('>I', binascii.unhexlify(value[5:]) + '\x00')[0] / 256,
                     }
 
