@@ -1,6 +1,7 @@
 import threading
 import time
 import traceback
+import re
 import subprocess
 
 from base import SenderReceiver, logger
@@ -22,16 +23,29 @@ class WiFiManager(SenderReceiver):
             try:
                 status = subprocess.check_output('wpa_cli -i wlan1 status', shell=True)
                 status = {l.split('=', 1)[0]: l.split('=', 1)[1] for l in status.splitlines()}
-                self.add_broadcast(None, "SSID", status.get('ssid'))
-                self.add_broadcast(None, "IP", status.get('ip_address'))
+                ssid = status.get('ssid')
+                ip = status.get('ip_address')
+                self.add_broadcast(None, "SSID", ssid)
+                self.add_broadcast(None, "IP", ip)
 
                 scan = subprocess.check_output('wpa_cli -i wlan1 scan_results', shell=True).splitlines()[1:]
                 self.add_broadcast(None, "Scan", [l.split('\t') for l in scan])
+                
+                if ip is not None:
+                    ip_stats = subprocess.check_output('ping -q -c 2 -t 5 google.com || true', shell=True).splitlines()[3:]
+                    ping_time = None
+                    for ip_stat in ip_stats:
+                        ping = re.search(r'\d+ packets transmitted, \d+ received, \+\d+ errors, \d+. packet loss, time (\d+)ms', ip_stat, re.S)
+                        if ping is not None:
+                            ping_time = int(ping.group(1))
+                            break
+                    self.add_broadcast(None, "Ping", ping_time)
+                    time.sleep(5)
+                else:
+                    time.sleep(10)
 
             except Exception, e:
                 logger.debug("Exception: %s", e)
-
-            time.sleep(10)
 
 
     def broadcast_received(self, broadcast):
