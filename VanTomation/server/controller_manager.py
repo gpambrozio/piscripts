@@ -1,6 +1,7 @@
 import binascii
 import json
 import struct
+import time
 
 from base import logger, SerialBuffer
 from device_manager import DeviceManager, DeviceThread
@@ -123,10 +124,10 @@ class ControllerThread(DeviceThread):
         elif broadcast.prop == "Files" and broadcast.source == "panel":
             self.send("Pf", json.dumps(broadcast.value))
 
-        elif broadcast.prop == "Moving" and broadcast.value:
+        elif broadcast.prop == "Moving" and broadcast.value and (time.time() - broadcast.ts) < 5:
             self.send("Mv", "1")
 
-        elif broadcast.prop == "Parked" and broadcast.value:
+        elif broadcast.prop == "Parked" and broadcast.value and (time.time() - broadcast.ts) < 5:
             self.send("Mv", "0")
 
         elif broadcast.destination is None and broadcast.prop.startswith("Light:"):

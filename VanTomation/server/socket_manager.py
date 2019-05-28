@@ -1,6 +1,7 @@
 import threading
 import socket
 import sys
+import time
 import Queue as queue
 
 from base import SenderReceiver, SerialBuffer, logger
@@ -184,9 +185,9 @@ class KeypadHandler(SocketManagerConnectionHandler):
         elif broadcast.destination is None and broadcast.prop == "Distance" and broadcast.source == "Behinds":
             self.add_command("Ds%s" % (broadcast.value or ""))
 
-        elif broadcast.prop == "Moving" and broadcast.value:
+        elif broadcast.prop == "Moving" and broadcast.value and (time.time() - broadcast.ts) < 5:
             self.add_command("Md")
-        elif broadcast.prop == "Parked" and broadcast.value:
+        elif broadcast.prop == "Parked" and broadcast.value and (time.time() - broadcast.ts) < 5:
             self.add_command("Mh")
 
         elif broadcast.prop == "Files" and broadcast.source == "panel":
