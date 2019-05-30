@@ -48,7 +48,7 @@ class LogicManager(SenderReceiver):
 
         elif not self.properties['Moving'] and self.moving_time is not None:
             elapsed = (datetime.datetime.now() - self.moving_time).seconds
-            if elapsed > 30:
+            if elapsed > 15:
                 self.set_property('Parked', False)
                 self.set_property('Moving', True)
                 self.moving_time = None
