@@ -111,7 +111,7 @@ bleno.on('accept', function(clientAddress) {
     console.log("Accepted connection from: " + clientAddress);
     interval = setInterval(function() {
         bleno.updateRssi();
-    }, 5000);
+    }, 1000);
 });
 
 bleno.on('disconnect', function(clientAddress) {
