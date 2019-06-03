@@ -33,7 +33,7 @@ class Coordinator(SenderReceiver):
             'Thermostat': 'eb:cc:ee:35:55:c0',
             'Inside'    : '98:7b:f3:59:1e:d4',
             'Outside'   : '98:7b:f3:5a:d2:3f',
-            'Parking'   : '24:0a:c4:00:a0:2c',
+            'Parking'   : '24:0a:c4:00:a1:66',
             'GPS'       : 'gps',
             'Keypad'    : 'keypad',
             'Panel'     : 'panel',
