@@ -224,3 +224,25 @@ class KeypadHandler(SocketManagerConnectionHandler):
                     state['mode'] = items[2]
                     state['color'] = 0xFFFFFF
                 self.add_broadcast(None, stripId, state)
+
+
+class FanHandler(SocketManagerConnectionHandler):
+
+    def __init__(self):
+        SocketManagerConnectionHandler.__init__(self, 'fan')
+
+
+    def handle(self, command):
+        if command.startswith('P:'):
+            try:
+                position = int(command[2:].strip(" \r\n"))
+                self.add_broadcast(None, "Position", position)
+            except Exception as e:
+                logger.error("Error parsing command: %s" % command)
+
+
+    def broadcast_received(self, broadcast):
+        if broadcast.destination == "Fan" and broadcast.prop == "Relative":
+            self.add_command("R%d" % broadcast.value)
+        elif broadcast.destination == "Fan" and broadcast.prop == "Position":
+            self.add_command("P%d" % broadcast.value)

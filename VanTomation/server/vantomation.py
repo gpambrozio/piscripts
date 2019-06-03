@@ -37,6 +37,7 @@ class Coordinator(SenderReceiver):
             'GPS'       : 'gps',
             'Keypad'    : 'keypad',
             'Panel'     : 'panel',
+            'Fan'       : 'fan',
         }
         
         self.devices_by_addr = {v: k for (k, v) in self.devices.iteritems()}
