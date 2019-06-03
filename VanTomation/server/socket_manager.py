@@ -216,7 +216,10 @@ class KeypadHandler(SocketManagerConnectionHandler):
             self.add_broadcast("Locks", "State", "L" if items[1] == "lock" else "U")
 
         elif items[0] == "Fan":
-            self.add_broadcast("Fan", "Relative", int(items[1]))
+            if items[1] == "C":
+                self.add_broadcast("Fan", "Position", 0)
+            else:
+                self.add_broadcast("Fan", "Relative", int(items[1]))
 
         elif items[0] == "Light":
             stripId = "Light:%s" % items[1]
