@@ -193,6 +193,9 @@ class KeypadHandler(SocketManagerConnectionHandler):
         elif broadcast.prop == "Files" and broadcast.source == "panel":
             self.add_command("Pf%s" % (','.join(sorted(broadcast.value))))
 
+        elif broadcast.prop == "Position" and broadcast.source == "fan":
+            self.add_command("Fp%d" % broadcast.value)
+
         elif broadcast.destination is None and broadcast.prop.startswith("Light:"):
             stripId = broadcast.prop[-1]
             brightness = broadcast.value['brightness']
