@@ -255,3 +255,7 @@ class FanHandler(SocketManagerConnectionHandler):
             self.add_command("R%d" % broadcast.value)
         elif broadcast.destination == "Fan" and broadcast.prop == "Position":
             self.add_command("P%d" % broadcast.value)
+
+        # Close fan when we start moving
+        elif broadcast.prop == "Moving" and broadcast.value:
+            self.add_command("P0")
