@@ -129,6 +129,11 @@ class PhoneGPSHandler(SocketManagerConnectionHandler):
             self.add_broadcast(None, "Altitude", int(components[0]))
             self.add_broadcast(None, "Speed", int(components[1]))
             self.add_broadcast(None, "Heading", int(components[2]))
+        elif command[0] == "T":
+            # Date format is 0603232819.58;America/Denver
+            date_time_tz = command[1:].split(";", 1)
+            self.add_broadcast("Pi", "TimeZone", date_time_tz[1])
+            self.add_broadcast("Pi", "DateTime", date_time_tz[0])
 
 
 class PanelHandler(SocketManagerConnectionHandler):
