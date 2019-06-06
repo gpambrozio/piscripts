@@ -115,7 +115,6 @@ class ControllerThread(DeviceThread):
             self.send("Wp", broadcast.value or "")
         elif broadcast.destination is None and broadcast.prop == "Scan" and broadcast.source == "WiFi":
             networks = broadcast.value if broadcast.value else []
-            networks = [(n[4], int(n[1]), int(n[2]), 1 if (n[3] in ("[ESS]", "")) else 0) for n in networks if n[4] and n[4] != "agnes"]
             unique_networks = {}
             for network in networks:
                 if network[0] not in unique_networks or network[2] > unique_networks[network[0]][2]:

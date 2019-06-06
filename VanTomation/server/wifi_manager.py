@@ -29,7 +29,9 @@ class WiFiManager(SenderReceiver):
                 self.add_broadcast(None, "IP", ip)
 
                 scan = subprocess.check_output('wpa_cli -i wlan1 scan_results', shell=True).splitlines()[1:]
-                self.add_broadcast(None, "Scan", [l.split('\t') for l in scan])
+                networks = [l.split('\t') for l in scan]
+                networks = [(n[4], int(n[1]), int(n[2]), 1 if (n[3] in ("[ESS]", "")) else 0) for n in networks if n[4] and n[4] != "agnes" and "\\x00" not in n[4]]
+                self.add_broadcast(None, "Scan", networks)
                 
                 if ip is not None:
                     ip_stats = subprocess.check_output('ping -q -c 2 -t 5 google.com || true', shell=True).splitlines()[3:]
