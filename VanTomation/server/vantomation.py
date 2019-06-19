@@ -130,7 +130,7 @@ coordinator = Coordinator(managers)
 logger.debug("Starting scan")
 while True:
     try:
-        devices = scanner.scan(2)
+        devices = scanner.scan(1)
         for manager in managers:
             manager.found_devices(devices)
     except Exception, e:
