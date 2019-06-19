@@ -34,12 +34,12 @@ class WiFiManager(SenderReceiver):
                 self.add_broadcast(None, "Scan", networks)
                 
                 if ip is not None:
-                    ip_stats = subprocess.check_output('ping -q -c 2 -t 5 google.com || true', shell=True).splitlines()[3:]
+                    ip_stats = subprocess.check_output('ping -q -c 2 google.com || true', shell=True).splitlines()[3:]
                     ping_time = None
                     for ip_stat in ip_stats:
-                        ping = re.search(r'\d+ packets transmitted, \d+ received, \+\d+ errors, \d+. packet loss, time (\d+)ms', ip_stat, re.S)
+                        ping = re.search(r'rtt min/avg/max/mdev = [\d.]+/([\d.]+)/[\d.]+/[\d.]+ ms', ip_stat, re.S)
                         if ping is not None:
-                            ping_time = int(ping.group(1))
+                            ping_time = float(ping.group(1))
                             break
                     self.add_broadcast(None, "Ping", ping_time)
                     time.sleep(5)
