@@ -8,12 +8,15 @@ class StateManager(SenderReceiver):
     def __init__(self):
         SenderReceiver.__init__(self, "StateManager")
         self.current_state = {}
+        self.latest_commands = {}
 
 
     def broadcast_received(self, broadcast):
         if broadcast.destination is None:
             self.current_state = self.coordinator.current_state
             self.dump_state()
+        self.latest_commands["%s:%s" % (broadcast.destination, broadcast.prop)] = {"source": broadcast.source, "value": broadcast.value, "ts": broadcast.ts}
+        self.dump_commands()
 
 
     def set_coordinator(self, coordinator):
@@ -28,3 +31,10 @@ class StateManager(SenderReceiver):
         state_file.write(json.dumps(state))
         state_file.close()
         os.rename("/tmp/vantomation.state.json.temp", "/tmp/vantomation.state.json")
+
+
+    def dump_commands(self):
+        state_file = open("/tmp/vantomation.commands.json.temp", "w+")
+        state_file.write(json.dumps(self.latest_commands))
+        state_file.close()
+        os.rename("/tmp/vantomation.commands.json.temp", "/tmp/vantomation.commands.json")
