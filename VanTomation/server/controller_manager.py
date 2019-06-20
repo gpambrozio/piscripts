@@ -112,7 +112,7 @@ class ControllerThread(DeviceThread):
         elif broadcast.destination is None and broadcast.prop == "IP" and broadcast.source == "WiFi":
             self.send("Wi", broadcast.value or "")
         elif broadcast.destination is None and broadcast.prop == "Ping" and broadcast.source == "WiFi":
-            self.send("Wp", "%.1f" % broadcast.value)
+            self.send("Wp", ("%.1f" % broadcast.value) if broadcast.value is not None else "")
         elif broadcast.destination is None and broadcast.prop == "Scan" and broadcast.source == "WiFi":
             networks = broadcast.value if broadcast.value else []
             unique_networks = {}
