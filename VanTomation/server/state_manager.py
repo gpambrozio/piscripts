@@ -34,7 +34,6 @@ class StateManager(SenderReceiver):
 
 
     def dump_commands(self):
-        state_file = open("/tmp/vantomation.commands.json.temp", "w+")
-        state_file.write(json.dumps(self.latest_commands))
+        state_file = open("/tmp/vantomation.commands.json", "w+")
+        state_file.write(json.dumps(self.latest_commands, indent=2))
         state_file.close()
-        os.rename("/tmp/vantomation.commands.json.temp", "/tmp/vantomation.commands.json")
