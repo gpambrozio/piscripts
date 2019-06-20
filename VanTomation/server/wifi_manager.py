@@ -28,9 +28,12 @@ class WiFiManager(SenderReceiver):
                 self.add_broadcast(None, "SSID", ssid)
                 self.add_broadcast(None, "IP", ip)
 
+                existing = subprocess.check_output('wpa_cli -i wlan1 list_networks', shell=True).splitlines()[1:]
+                existing = [l.split("\t")[1] for l in existing]
+
                 scan = subprocess.check_output('wpa_cli -i wlan1 scan_results', shell=True).splitlines()[1:]
                 networks = [l.split('\t') for l in scan]
-                networks = [(n[4], int(n[1]), int(n[2]), 1 if (n[3] in ("[ESS]", "")) else 0) for n in networks if n[4] and n[4] != "agnes" and "\\x00" not in n[4]]
+                networks = [(n[4], int(n[1]), int(n[2]), 1 if (n[3] in ("[ESS]", "")) else 0, 1 if (n[4] in existing) else 0) for n in networks if n[4] and n[4] != "agnes" and "\\x00" not in n[4]]
                 self.add_broadcast(None, "Scan", networks)
                 
                 if ip is not None:
@@ -53,6 +56,19 @@ class WiFiManager(SenderReceiver):
     def broadcast_received(self, broadcast):
         if broadcast.destination == self.name and broadcast.prop == "Add":
             network_data = broadcast.value
+            existing = subprocess.check_output('wpa_cli -i wlan1 list_networks', shell=True).splitlines()[1:]
+            existing = {l.split("\t")[1]: l.split("\t")[0] for l in existing}
+            network_number = existing.get(network_data[0])
+            if network_number is not None:
+                if network_data[1]:
+                    logger.info("%s already exists. Changing password." % network_data[0])
+                    subprocess.check_output('wpa_cli -i wlan1 set_network ' + network_number + ' psk \'"' + network_data[1] + '"\'', shell=True)
+                    subprocess.check_output('wpa_cli -i wlan1 enable_network ' + network_number, shell=True)
+                    subprocess.check_output('wpa_cli -i wlan1 save_config', shell=True)
+                else:
+                    logger.info("%s already exists. Doing nothing!" % network_data[0])
+                return
+
             logger.info("Adding network %s", network_data)
             network_number = subprocess.check_output('wpa_cli -i wlan1 add_network', shell=True).strip(" \r\n")
             subprocess.check_output('wpa_cli -i wlan1 set_network ' + network_number + ' ssid \'"' + network_data[0] + '"\'', shell=True)
