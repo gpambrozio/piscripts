@@ -88,7 +88,7 @@ class Coordinator(SenderReceiver):
                     self.current_state[broadcast.key] = broadcast
 
                 # Don't send the broadcast to whoever sent it.
-                for receiver in [b for b in self.broadcasters() if b.name != broadcaster.name]:
+                for receiver in [b for b in self.broadcasters() if b.name != broadcast.source]:
                     receiver.broadcast_received(broadcast)
             
             except queue.Empty:
