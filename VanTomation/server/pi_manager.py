@@ -37,10 +37,11 @@ class PIManager(SenderReceiver):
             subprocess.call("gpio write %d 1" % port, shell=True)
             time.sleep(0.3)
             subprocess.call("gpio write %d 0" % port, shell=True)
-            time.sleep(0.2)
-            subprocess.call("gpio write %d 1" % port, shell=True)
-            time.sleep(0.3)
-            subprocess.call("gpio write %d 0" % port, shell=True)
+            if broadcast.value == "U":
+                time.sleep(0.2)
+                subprocess.call("gpio write %d 1" % port, shell=True)
+                time.sleep(0.3)
+                subprocess.call("gpio write %d 0" % port, shell=True)
         
         elif broadcast.destination == "Pi" and broadcast.prop == "DateTime":
             # Date format is 0603232819.58 (see man date)
