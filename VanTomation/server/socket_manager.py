@@ -134,6 +134,8 @@ class PhoneGPSHandler(SocketManagerConnectionHandler):
             date_time_tz = command[1:].split(";", 1)
             self.add_broadcast("Pi", "TimeZone", date_time_tz[1])
             self.add_broadcast("Pi", "DateTime", date_time_tz[0])
+        elif command[0] == "l":
+            self.add_broadcast("Locks", "State", command[1])
 
 
 class PanelHandler(SocketManagerConnectionHandler):
