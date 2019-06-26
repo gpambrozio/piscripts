@@ -41,7 +41,7 @@ class LogicManager(SenderReceiver):
     def tick(self):
         if not self.properties['Parked'] and self.stopped_time is not None:
             elapsed = (datetime.datetime.now() - self.stopped_time).seconds
-            if elapsed > 60:
+            if elapsed > 3 * 60:
                 self.set_property('Moving', False)
                 self.set_property('Parked', True)
                 self.stopped_time = None
