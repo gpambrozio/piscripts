@@ -66,7 +66,7 @@ class Coordinator(SenderReceiver):
 
 
     def update_connected_devices(self):
-        connected = ", ".join(sorted([self.devices_by_addr[addr] for addr in self.connected_devices if addr in self.devices_by_addr]))
+        connected = [self.devices_by_addr[addr] for addr in self.connected_devices if addr in self.devices_by_addr]
         self.add_broadcast(None, "Devices", connected)
 
 

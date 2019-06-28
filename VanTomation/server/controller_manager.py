@@ -93,7 +93,7 @@ class ControllerThread(DeviceThread):
 
     def broadcast_received(self, broadcast):
         if broadcast.destination is None and broadcast.prop == "Devices":
-            self.send("Dv", broadcast.value)
+            self.send("Dv", ", ".join(sorted(broadcast.value)))
 
         elif broadcast.destination is None and broadcast.prop == "Temperature" and broadcast.source == "Thermostat":
             self.send("Ti", "%.0f" % (broadcast.value * 10))
