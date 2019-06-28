@@ -15,6 +15,7 @@ class LogicManager(SenderReceiver):
             self.add_broadcast(None, name, value)
         self.stopped_time = None
         self.moving_time = None
+        self.devices = []
 
 
     def set_property(self, name, value):
@@ -37,6 +38,10 @@ class LogicManager(SenderReceiver):
             if self.stopped_time is None:
                 self.stopped_time = datetime.datetime.now()
 
+        elif broadcast.prop == 'Devices':
+            self.check_new_devices(broadcast.value)
+            self.devices = broadcast.value
+
 
     def tick(self):
         if not self.properties['Parked'] and self.stopped_time is not None:
@@ -52,3 +57,17 @@ class LogicManager(SenderReceiver):
                 self.set_property('Parked', False)
                 self.set_property('Moving', True)
                 self.moving_time = None
+
+
+    def check_new_devices(self, new_devices):
+        added = set(new_devices) - set(self.devices)
+        removed = set(self.devices) - set(new_devices)
+        if 'Panel' in added or 'Parking' in added:
+            self.set_property('Parked', False)
+            self.set_property('Moving', True)
+            self.moving_time = None
+
+        elif 'Panel' in removed:
+            self.set_property('Moving', False)
+            self.set_property('Parked', True)
+            self.stopped_time = None
