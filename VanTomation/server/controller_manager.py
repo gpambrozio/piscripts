@@ -58,6 +58,9 @@ class ControllerThread(DeviceThread):
                     if command == "A":
                         network_data = line[2:].split(",", 1)
                         self.add_broadcast("WiFi", "Add", network_data)
+                    elif command == "R":
+                        network_name = line[2:]
+                        self.add_broadcast("WiFi", "Remove", network_name)
                     else:
                         logger.info("Unknown destination: %s" % line)
                 else:

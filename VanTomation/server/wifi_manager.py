@@ -79,6 +79,18 @@ class WiFiManager(SenderReceiver):
             subprocess.check_output('wpa_cli -i wlan1 enable_network ' + network_number, shell=True)
             subprocess.check_output('wpa_cli -i wlan1 save_config', shell=True)
 
+        elif broadcast.destination == self.name and broadcast.prop == "Remove":
+            network_name = broadcast.value
+            existing = subprocess.check_output('wpa_cli -i wlan1 list_networks', shell=True).splitlines()[1:]
+            existing = {l.split("\t")[1]: l.split("\t")[0] for l in existing}
+            network_number = existing.get(network_name)
+            if network_number is not None:
+                logger.info("%s exists. Removing." % network_name)
+                subprocess.check_output('wpa_cli -i wlan1 remove_network ' + network_number, shell=True)
+                subprocess.check_output('wpa_cli -i wlan1 save_config', shell=True)
+            else:
+                logger.info("%s doesn't exist. Doing nothing!" % network_name)
+
         elif broadcast.destination == self.name and broadcast.prop == "Enable":
             network_data = broadcast.value
             networks = subprocess.check_output('wpa_cli -i wlan1 list_networks', shell=True).splitlines()[1:]
