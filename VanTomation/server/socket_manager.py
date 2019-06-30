@@ -91,7 +91,7 @@ class SocketManager(SenderReceiver):
                     continue
 
                 if handler is None:
-                    handler_class_name = lines[0] + "Handler"
+                    handler_class_name = lines[0].strip(" \r\n") + "Handler"
                     handler_class = getattr(sys.modules[__name__], handler_class_name)
                     handler = handler_class()
                     lines = lines[1:]
@@ -189,7 +189,7 @@ class KeypadHandler(SocketManagerConnectionHandler):
         elif broadcast.destination is None and broadcast.prop == "IP" and broadcast.source == "WiFi":
             self.add_command("WI%s" % (broadcast.value or ""))
 
-        elif broadcast.destination is None and broadcast.prop == "Distance" and broadcast.source == "Behinds":
+        elif broadcast.destination is None and broadcast.prop == "Distance" and broadcast.source == "Parking":
             self.add_command("Ds%s" % (broadcast.value or ""))
 
         elif broadcast.prop == "Moving" and broadcast.value and (time.time() - broadcast.ts) < 5:
@@ -266,3 +266,20 @@ class FanHandler(SocketManagerConnectionHandler):
         # Close fan when we start moving
         elif broadcast.prop == "Moving" and broadcast.value:
             self.add_command("P0")
+
+
+class ParkingHandler(SocketManagerConnectionHandler):
+
+    def __init__(self):
+        SocketManagerConnectionHandler.__init__(self, 'Parking')
+
+
+    def handle(self, command):
+        if command.startswith('D'):
+            distance = int(command[1:].strip(" \r\n"))
+            self.add_broadcast(None, "Distance", distance)
+
+
+    def broadcast_received(self, broadcast):
+        if broadcast.destination is None and broadcast.prop == "ParkingOnOff":
+            self.add_command("+" if broadcast.value else "-")

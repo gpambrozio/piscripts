@@ -15,7 +15,6 @@ from lights_manager import LightsManager
 from thermostat_manager import ThermostatManager
 from pi_manager import PIManager
 from socket_manager import SocketManager
-from parking_sensor_manager import ParkingSensorManager
 from logic_manager import LogicManager
 
 from base import SenderReceiver
@@ -33,7 +32,7 @@ class Coordinator(SenderReceiver):
             'Thermostat': 'eb:cc:ee:35:55:c0',
             'Inside'    : '98:7b:f3:59:1e:d4',
             'Outside'   : '98:7b:f3:5a:d2:3f',
-            'Parking'   : '24:0a:c4:00:a1:66',
+            'Parking'   : 'Parking',
             'GPS'       : 'gps',
             'Keypad'    : 'keypad',
             'Panel'     : 'panel',
@@ -122,7 +121,6 @@ managers = [
     SocketManager(),
     StateManager(),
     WiFiManager(),
-    ParkingSensorManager(),
     LogicManager(),
 ]
 coordinator = Coordinator(managers)
