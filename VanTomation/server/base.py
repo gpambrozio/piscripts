@@ -22,7 +22,6 @@ class BroadcastMessage(object):
     def __str__(self):
         return "Broadcast from %s to %s, %s = %s" % (self.source, self.destination, self.prop, self.value)
 
-        
 
 class SenderReceiver(object):
     def __init__(self, name):
