@@ -34,7 +34,7 @@ class ThermostatThread(DeviceThread):
         self.start_notifications(self.target_characteristic)
         self.onoff = int(struct.unpack('B', self.onoff_characteristic.read())[0])
         self.target = float(struct.unpack('<h', self.target_characteristic.read())[0]) / 10
-        self.add_broadcast(None, "ThermostatTargetOnOff", self.onoff)
+        self.add_broadcast(None, "ThermostatOnOff", self.onoff)
         self.add_broadcast(None, "ThermostatTarget", self.target)
 
 
