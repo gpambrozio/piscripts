@@ -143,7 +143,7 @@ class WeatherThread:
         while True:
             location = state.get("Location:gps")
             if location is None:
-                time.sleep(30 * 60)
+                time.sleep(60)
             else:
                 location = location["value"]
                 try:
@@ -159,26 +159,28 @@ class WeatherThread:
 
                     self.weather_data_queue.put(weather_data)
                     # No need to refetch for a while
-                    time.sleep(15 * 60 * 60)
+                    time.sleep(15 * 60)
 
                 except pyowm.exceptions.api_call_error.APICallTimeoutError as e:
-                    logger.error("Exception: %s\n%s", e, traceback.format_exc())
+                    logger.error("Timeout: %s", e)
                     # normal...
                     # Try again in 5 minues
-                    time.sleep(5 * 60 * 60)
+                    time.sleep(5 * 60)
 
                 except Exception as e:
                     logger.error("Exception: %s\n%s", e, traceback.format_exc())
                     # Try again in 5 minues
-                    time.sleep(5 * 60 * 60)
+                    time.sleep(5 * 60)
 
 
 weather_data_queue = queue.LifoQueue()
+last_weather_data = 0
 def fill_weather(state):
-    global weather_current_image, weather_current_object, weather_data_queue
+    global weather_current_image, weather_current_object, weather_data_queue, last_weather_data
 
     try:
         weather_data = weather_data_queue.get_nowait()
+        last_weather_data = time.time()
 
         weather_current_label.config(text=u"%s\n%.0f \N{DEGREE SIGN}F" % (weather_data['current'], weather_data['temperature']))
 
@@ -198,7 +200,12 @@ def fill_weather(state):
 
     except queue.Empty:
         # normal...
-        pass
+        if time.time() - last_weather_data > 6 * 60 * 60:
+            weather_current_label.config(text="?")
+            if weather_current_object is not None:
+                weather_canvas.delete(weather_current_object)
+                weather_current_image = None
+                weather_current_object = None
 
 
 weather_thread = WeatherThread(OWM_API_KEY, weather_data_queue) if OWM_API_KEY is not None else None
