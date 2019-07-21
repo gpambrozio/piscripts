@@ -67,7 +67,7 @@ class LogicManager(SenderReceiver):
             self.set_property('Moving', True)
             self.moving_time = None
 
-        elif 'Panel' in removed:
+        elif ('Panel' in removed and 'Parking' not in new_devices) or ('Parking' in removed and 'Panel' not in new_devices):
             self.set_property('Moving', False)
             self.set_property('Parked', True)
             self.stopped_time = None
