@@ -42,6 +42,9 @@ class LogicManager(SenderReceiver):
             self.check_new_devices(broadcast.value)
             self.devices = broadcast.value
 
+        elif broadcast.prop == 'Ping':
+            self.set_property('Connected', broadcast.value is not None)
+
 
     def tick(self):
         if not self.properties['Parked'] and self.stopped_time is not None:
