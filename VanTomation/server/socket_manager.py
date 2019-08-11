@@ -138,6 +138,11 @@ class PhoneGPSHandler(SocketManagerConnectionHandler):
             self.add_broadcast("Locks", "State", command[1])
 
 
+    def broadcast_received(self, broadcast):
+        if broadcast.destination is None and broadcast.prop == "Connected":
+            self.add_command("C%s" % ("1" if broadcast.value is not None else "0"))
+
+
 class PanelHandler(SocketManagerConnectionHandler):
 
     def __init__(self):
