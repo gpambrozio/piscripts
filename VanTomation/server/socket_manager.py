@@ -308,7 +308,7 @@ class CouchHandler(SocketManagerConnectionHandler):
         elif broadcast.destination == "Couch" and broadcast.prop == "Position":
             self.add_command("P%d" % broadcast.value)
 
-        # Close fan when we start moving
+        # Lower couch when we start moving
         elif broadcast.prop == "Moving" and broadcast.value:
             self.add_command("P0")
 
