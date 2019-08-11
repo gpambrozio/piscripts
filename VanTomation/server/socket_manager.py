@@ -285,3 +285,9 @@ class ParkingHandler(SocketManagerConnectionHandler):
     def broadcast_received(self, broadcast):
         if broadcast.destination is None and broadcast.prop == "ParkingOnOff":
             self.add_command("+" if broadcast.value else "-")
+
+
+class CouchHandler(SocketManagerConnectionHandler):
+
+    def __init__(self):
+        SocketManagerConnectionHandler.__init__(self, 'Couch')

@@ -33,6 +33,7 @@ class Coordinator(SenderReceiver):
             'Inside'    : '98:7b:f3:59:1e:d4',
             'Outside'   : '98:7b:f3:5a:d2:3f',
             'Parking'   : 'Parking',
+            'Couch'     : 'Couch',
             'GPS'       : 'gps',
             'Keypad'    : 'keypad',
             'Panel'     : 'panel',
