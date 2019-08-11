@@ -291,3 +291,24 @@ class CouchHandler(SocketManagerConnectionHandler):
 
     def __init__(self):
         SocketManagerConnectionHandler.__init__(self, 'Couch')
+
+
+    def handle(self, command):
+        if command.startswith('P:'):
+            try:
+                position = int(command[2:].strip(" \r\n"))
+                self.add_broadcast(None, "Position", position)
+            except Exception as e:
+                logger.error("Error parsing command: %s" % command)
+
+
+    def broadcast_received(self, broadcast):
+        if broadcast.destination == "Couch" and broadcast.prop == "Relative":
+            self.add_command("R%d" % broadcast.value)
+        elif broadcast.destination == "Couch" and broadcast.prop == "Position":
+            self.add_command("P%d" % broadcast.value)
+
+        # Close fan when we start moving
+        elif broadcast.prop == "Moving" and broadcast.value:
+            self.add_command("P0")
+
