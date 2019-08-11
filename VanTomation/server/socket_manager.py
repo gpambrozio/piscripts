@@ -203,6 +203,9 @@ class KeypadHandler(SocketManagerConnectionHandler):
         elif broadcast.prop == "Position" and broadcast.source == "fan":
             self.add_command("Fp%d" % broadcast.value)
 
+        elif broadcast.prop == "Position" and broadcast.source == "Couch":
+            self.add_command("Cp%d" % broadcast.value)
+
         elif broadcast.destination is None and broadcast.prop.startswith("Light:"):
             stripId = broadcast.prop[-1]
             brightness = broadcast.value['brightness']
@@ -232,6 +235,14 @@ class KeypadHandler(SocketManagerConnectionHandler):
                 self.add_broadcast("Fan", "Relative", 25)
             elif items[1] == "D":
                 self.add_broadcast("Fan", "Relative", -25)
+
+        elif items[0] == "Couch":
+            if items[1] == "C":
+                self.add_broadcast("Couch", "Position", 0)
+            elif items[1] == "U":
+                self.add_broadcast("Couch", "Relative", 25)
+            elif items[1] == "D":
+                self.add_broadcast("Couch", "Relative", -25)
 
         elif items[0] == "Light":
             stripId = "Light:%s" % items[1]

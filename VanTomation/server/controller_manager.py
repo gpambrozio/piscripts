@@ -46,13 +46,25 @@ class ControllerThread(DeviceThread):
                     }
 
                     self.add_broadcast(None, "Light:%s" % strip, state)
+
                 elif destination == "P":
                     self.add_broadcast("Locks", "State", line[1])
+
                 elif destination == "T":
                     self.add_broadcast(None, "ThermostatOnOff", int(line[2]))
                     self.add_broadcast(None, "ThermostatTarget", int(line[3:], 16))
+
                 elif destination == "D":
                     self.add_broadcast("Panel", "Play", line[2:])
+
+                elif destination == "C":
+                    if line[1] == "C":
+                        self.add_broadcast("Couch", "Position", 0)
+                    elif line[1] == "U":
+                        self.add_broadcast("Couch", "Relative", 25)
+                    elif line[1] == "D":
+                        self.add_broadcast("Couch", "Relative", -25)
+
                 else:
                     logger.info("Unknown destination: %s" % line)
 
