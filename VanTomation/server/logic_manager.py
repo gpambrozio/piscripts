@@ -42,9 +42,6 @@ class LogicManager(SenderReceiver):
             self.check_new_devices(broadcast.value)
             self.devices = broadcast.value
 
-        elif broadcast.prop == 'Ping':
-            self.set_property('Connected', broadcast.value is not None)
-
 
     def check_new_devices(self, new_devices):
         added = set(new_devices) - set(self.devices)

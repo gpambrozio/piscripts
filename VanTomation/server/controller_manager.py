@@ -65,6 +65,18 @@ class ControllerThread(DeviceThread):
                     elif line[1] == "D":
                         self.add_broadcast("Couch", "Relative", -25)
 
+                elif destination == "W":
+                    command = line[1]
+                    if command == "A":
+                        network_data = line[2:].split(",", 1)
+                        self.add_broadcast("WiFi", "Add", network_data)
+                    elif command == "R":
+                        network_name = line[2:]
+                        self.add_broadcast("WiFi", "Remove", network_name)
+                    elif command == "E":
+                        network_data = line[2:].rsplit(",", 1)
+                        self.add_broadcast("WiFi", "Enable", network_data)
+
                 else:
                     logger.info("Unknown destination: %s" % line)
 
@@ -111,6 +123,21 @@ class ControllerThread(DeviceThread):
             self.send("TO", "%d" % broadcast.value, True)
         elif broadcast.destination is None and broadcast.prop == "ThermostatTarget":
             self.send("Tt", "%.0f" % (broadcast.value), True)
+
+        elif broadcast.destination is None and broadcast.prop == "SSID" and broadcast.source == "WiFi":
+            self.send("Ws", broadcast.value or "")
+        elif broadcast.destination is None and broadcast.prop == "IP" and broadcast.source == "WiFi":
+            self.send("Wi", broadcast.value or "")
+        elif broadcast.destination is None and broadcast.prop == "Ping" and broadcast.source == "WiFi":
+            self.send("Wp", ("%.1f" % broadcast.value) if broadcast.value is not None else "")
+        elif broadcast.destination is None and broadcast.prop == "Scan" and broadcast.source == "WiFi":
+            networks = broadcast.value if broadcast.value else []
+            unique_networks = {}
+            for network in networks:
+                if network[0] not in unique_networks or network[2] > unique_networks[network[0]][2]:
+                    unique_networks[network[0]] = network
+
+            self.send("WS", json.dumps(unique_networks.values()))
 
         elif broadcast.prop == "Files" and broadcast.source == "panel":
             self.send("Pf", json.dumps(broadcast.value))
