@@ -1,0 +1,5 @@
+tunnels:
+  ssh:
+    proto: tcp
+    addr: 22
+

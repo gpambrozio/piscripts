@@ -45,6 +45,18 @@ cd /home/pi
 
 /home/pi/send-notification.sh "Setup node done"
 
+# ngrok
+cd /home/pi
+wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip
+unzip ngrok-stable-linux-arm.zip
+rm ngrok-stable-linux-arm.zip
+
+NGROK_AUTH_TOKEN=`cat /home/pi/ngrokauthtoken`
+cp -f /home/pi/VanTomation/ngrok.ymp /home/pi/.ngrok2/ngrok.yml
+echo "authtoken: $NGROK_AUTH_TOKEN" >> /home/pi/.ngrok2/ngrok.yml
+
+/home/pi/send-notification.sh "ngrok done"
+
 # Installing bluez
 sudo apt-get install -y libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev
 wget http://www.kernel.org/pub/linux/bluetooth/bluez-5.50.tar.xz
