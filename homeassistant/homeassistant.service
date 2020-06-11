@@ -1,0 +1,15 @@
+[Unit]
+Description=Home Assistant
+After=network-online.target
+Requires=mosquitto.service
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/home/%i/.homeassistant
+ExecStart=/srv/homeassistant/bin/hass -c "/home/%i/.homeassistant"
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
