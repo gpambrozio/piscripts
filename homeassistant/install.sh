@@ -5,10 +5,6 @@ IFS=$'\n\t'
 
 /home/pi/send-notification.sh "Setup 1 of 4"
 
-# https://raspberrypi.stackexchange.com/a/66939
-
-sudo raspi-config nonint do_ssh 1
-
 # https://www.home-assistant.io/docs/installation/raspberry-pi/
 
 sudo apt-get update
