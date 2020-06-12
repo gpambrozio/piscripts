@@ -12,6 +12,7 @@ sudo apt-get upgrade -y
 
 /home/pi/send-notification.sh "Setup 2 of 4"
 
+sudo apt-get update
 sudo apt-get install -y python3 python3-dev python3-venv python3-pip libffi-dev libssl-dev autoconf mosquitto
 sudo useradd -rm homeassistant -G dialout,gpio,i2c
 sudo mkdir /srv/homeassistant
