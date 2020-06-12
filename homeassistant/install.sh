@@ -8,7 +8,6 @@ IFS=$'\n\t'
 # https://raspberrypi.stackexchange.com/a/66939
 
 sudo raspi-config nonint do_hostname home
-sudo raspi-config nonint do_ssh 1
 
 # https://www.home-assistant.io/docs/installation/raspberry-pi/
 
