@@ -51,9 +51,10 @@ wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip
 unzip ngrok-stable-linux-arm.zip
 rm ngrok-stable-linux-arm.zip
 
-NGROK_AUTH_TOKEN=`cat /home/pi/ngrokauthtoken`
+NGROK_AUTH_TOKEN=`cat /boot/ngrokauthtoken`
 cp -f /home/pi/VanTomation/ngrok.ymp /home/pi/.ngrok2/ngrok.yml
 echo "authtoken: $NGROK_AUTH_TOKEN" >> /home/pi/.ngrok2/ngrok.yml
+sudo rm -f /boot/ngrokauthtoken
 
 /home/pi/send-notification.sh "ngrok done"
 
@@ -93,9 +94,9 @@ echo "@xset -dpms" >> /home/pi/.config/lxsession/LXDE-pi/autostart
 echo "@lxterminal -e bash -c -l /home/pi/VanTomation/monitor.py" >> /home/pi/.config/lxsession/LXDE-pi/autostart
 
 # Open weather map API key
-OWM_API_KEY=`cat /home/pi/owm_api_key`
+OWM_API_KEY=`cat /boot/owm_api_key`
 echo "export OWM_API_KEY=$OWM_API_KEY" >> .bashrc
-rm /home/pi/owm_api_key
+sudo rm -f /boot/owm_api_key
 
 # https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md
 # https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
@@ -104,10 +105,10 @@ sudo apt-get install -y hostapd dnsmasq
 sudo cp VanTomation/config/iptables.ipv4.nat /etc/
 sudo cp -f VanTomation/config/hostapd /etc/default/hostapd
 
-PASS=`cat /home/pi/wifipass`
+PASS=`cat /boot/wifipass`
 sed "s/PASSWORD/$PASS/" VanTomation/config/hostapd.conf > VanTomation/config/hostapd.conf.replaced
 sudo mv -f VanTomation/config/hostapd.conf.replaced /etc/hostapd/hostapd.conf
-rm /home/pi/wifipass
+sudo rm -f /boot/wifipass
 
 sudo cp -f VanTomation/config/interfaces.ap /etc/network/interfaces
 sudo cp -f VanTomation/config/dhcpcd.ap /etc/dhcpcd.conf
@@ -123,11 +124,11 @@ sudo sh -c 'echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf'
 
 # Dropbox uploader: https://github.com/andreafabrizi/Dropbox-Uploader
 curl "https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh" -o /home/pi/dropbox_uploader.sh
-TOKEN=`cat /home/pi/dropboxtoken`
+TOKEN=`cat /boot/dropboxtoken`
 echo "OAUTH_ACCESS_TOKEN=$TOKEN" > /home/pi/.dropbox_uploader
 sudo cp .dropbox_uploader /root/.dropbox_uploader
 sudo chmod +x /home/pi/dropbox_uploader.sh
-rm /home/pi/dropboxtoken
+sudo rm -f /boot/dropboxtoken
 
 # Download saved files
 /home/pi/dropbox_uploader.sh download wpa_supplicant.conf wpa_supplicant.conf
