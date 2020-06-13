@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import paho.mqtt.client as mqtt
 import socket
 import sys
 import threading
@@ -158,6 +159,59 @@ class SocketClient:
                 raise e
 
 
+class MQTTClient:
+    def __init__(self, host, port=1883):
+        self.host = host
+        self.port = port
+        self.client = mqtt.Client()
+        self.client.on_connect = self.on_connect
+        self.client.on_message = self.on_message
+
+        self.thread = threading.Thread(target=self.connect)
+        self.thread.daemon = True
+        self.thread.start()
+
+
+    def connect(self):
+        self.client.connect(self.host, self.port, 60)
+        # Blocking call that processes network traffic, dispatches callbacks and
+        # handles reconnecting.
+        # Other loop*() functions are available that give a threaded interface and a
+        # manual interface.
+        self.client.loop_forever()
+
+
+    # The callback for when the client receives a CONNACK response from the server.
+    def on_connect(self, client, userdata, flags, rc):
+        print("Connected with result code "+str(rc))
+
+        # Subscribing in on_connect() means that if we lose the connection and
+        # reconnect then subscriptions will be renewed.
+        self.client.subscribe("panel/#")
+
+    # The callback for when a PUBLISH message is received from the server.
+    def on_message(self, client, userdata, msg):
+        global current_command
+
+        print(msg.topic + " payload: " + str(msg.payload))
+        if msg.topic == 'panel/notification':
+            components = str(msg.payload).strip(" \r\n").split('/')
+            if components[0] == 'ping':
+                self.client.publish('panel/notification/pong', 'pong')
+            elif components[0] == 'files':
+                self.client.publish('panel/notification/files', "files:%s\n" % (','.join([i for i in images if i != 'blank'])))
+            elif len(components) < 3:
+                self.client.publish('panel/notification/state', 'error')
+            else:
+                command = components[:3]
+                try:
+                    command[2] = int(command[2])
+                except:
+                    command[2] = 0
+                current_command = command
+                self.client.publish('panel/notification/state', 'ok')
+
+
 class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_HEAD(s):
         s.send_response(200)
@@ -197,6 +251,7 @@ if __name__ == '__main__':
     images = {os.path.splitext(file_name)[0]: Image.open(os.path.join('images', file_name)).convert('RGB') 
         for file_name in os.listdir('images') if file_name[0] != '.' and os.path.splitext(file_name)[1] == '.png'}
     socket_client = SocketClient('192.168.42.1', 5000)
+    mqtt_client = MQTTClient('home.local')
     image_scroller = ImageScroller()
     if not image_scroller.process():
         image_scroller.print_help()

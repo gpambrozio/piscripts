@@ -20,4 +20,6 @@ make
 make build-python
 sudo make install-python
 
+sudo pip install paho-mqtt
+
 crontab pi-panel/crontab.txt
