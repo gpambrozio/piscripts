@@ -18,8 +18,17 @@ sudo apt-get install -y python3 python3-dev python3-venv python3-pip libffi-dev 
 sudo useradd -rm homeassistant -G dialout,gpio,i2c
 sudo mkdir /srv/homeassistant
 sudo chown homeassistant:homeassistant /srv/homeassistant
+sudo usermod -a -G homeassistant pi
 
 /home/pi/send-notification.sh "Setup 3 of 4"
+
+# Dropbox uploader: https://github.com/andreafabrizi/Dropbox-Uploader
+curl "https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh" -o /home/pi/dropbox_uploader.sh
+TOKEN=`cat /boot/dropboxtoken`
+echo "OAUTH_ACCESS_TOKEN=$TOKEN" > /home/pi/.dropbox_uploader
+sudo cp .dropbox_uploader /root/.dropbox_uploader
+sudo chmod +x /home/pi/dropbox_uploader.sh
+sudo rm -f /boot/dropboxtoken
 
 # For MQTT
 sudo apt-get install -y mosquitto
@@ -41,3 +50,4 @@ sudo apt-get -y clean
 # https://raspberrypi.stackexchange.com/a/66939
 
 sudo raspi-config nonint do_hostname home
+crontab homeassistant/crontab.txt
