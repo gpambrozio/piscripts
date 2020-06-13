@@ -20,4 +20,4 @@ make
 make build-python
 sudo make install-python
 
-crontab crontab.txt
+crontab pi-panel/crontab.txt
