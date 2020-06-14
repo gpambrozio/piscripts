@@ -38,6 +38,9 @@ sudo apt-get install -y net-tools nmap
 
 sudo -u homeassistant -H -- bash -c "mkdir /home/homeassistant/.homeassistant && cd /srv/homeassistant && python3 -m venv . && source bin/activate && python3 -m pip install wheel && pip3 install homeassistant"
 
+# for https://hacs.xyz/docs/installation/manual
+sudo -u homeassistant -H -- bash -c "mkdir -p /home/homeassistant/.homeassistant/custom_coponents/hacs && cd /home/homeassistant/.homeassistant/custom_coponents/hacs && wget https://github.com/hacs/integration/releases/latest/download/hacs.zip && unzip hacs.zip && rm hacs.zip"
+
 /home/pi/send-notification.sh "Setup 4 of 4"
 
 # https://community.home-assistant.io/t/autostart-using-systemd/199497
