@@ -22,13 +22,12 @@ sudo usermod -a -G homeassistant pi
 
 /home/pi/send-notification.sh "Setup 3 of 4"
 
-# Dropbox uploader: https://github.com/andreafabrizi/Dropbox-Uploader
-curl "https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh" -o /home/pi/dropbox_uploader.sh
+# rclone to cloud upload/download/sync
+sudo apt-get install rclone
 TOKEN=`cat /boot/dropboxtoken`
-echo "OAUTH_ACCESS_TOKEN=$TOKEN" > /home/pi/.dropbox_uploader
-sudo cp .dropbox_uploader /root/.dropbox_uploader
-sudo chmod +x /home/pi/dropbox_uploader.sh
 sudo rm -f /boot/dropboxtoken
+mkdir -p /home/pi/.config/rclone
+cat rclone.conf | sed "s/TOKEN/$TOKEN/" > /home/pi/.config/rclone/rclone.conf
 
 # For MQTT
 sudo apt-get install -y mosquitto
