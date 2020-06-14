@@ -38,6 +38,12 @@ sudo apt-get install -y net-tools nmap
 
 sudo -u homeassistant -H -- bash -c "mkdir /home/homeassistant/.homeassistant && cd /srv/homeassistant && python3 -m venv . && source bin/activate && python3 -m pip install wheel && pip3 install homeassistant"
 
+# https://appdaemon.readthedocs.io/en/stable/INSTALL.html
+sudo pip3 install appdaemon
+sudo mv /home/pi/homeassistant/appdaemon.service /etc/systemd/system/appdaemon@appdaemon.service
+sudo systemctl --system daemon-reload
+sudo systemctl enable appdaemon@appdaemon.service
+
 # for https://hacs.xyz/docs/installation/manual
 sudo -u homeassistant -H -- bash -c "mkdir -p /home/homeassistant/.homeassistant/custom_coponents/hacs && cd /home/homeassistant/.homeassistant/custom_coponents/hacs && wget https://github.com/hacs/integration/releases/latest/download/hacs.zip && unzip hacs.zip && rm hacs.zip"
 
