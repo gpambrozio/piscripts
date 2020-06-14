@@ -23,7 +23,7 @@ sudo usermod -a -G homeassistant pi
 /home/pi/send-notification.sh "Setup 3 of 4"
 
 # rclone to cloud upload/download/sync
-sudo apt-get install rclone
+sudo apt-get install -y rclone
 TOKEN=`cat /boot/dropboxtoken`
 sudo rm -f /boot/dropboxtoken
 mkdir -p /home/pi/.config/rclone
