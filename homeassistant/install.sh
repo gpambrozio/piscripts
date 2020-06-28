@@ -27,7 +27,7 @@ sudo apt-get install -y rclone
 TOKEN=`cat /boot/dropboxtoken`
 sudo rm -f /boot/dropboxtoken
 mkdir -p /home/pi/.config/rclone
-cat rclone.conf | sed "s/TOKEN/$TOKEN/" > /home/pi/.config/rclone/rclone.conf
+cat /home/pi/homeassistant/rclone.conf | sed "s/TOKEN/$TOKEN/" > /home/pi/.config/rclone/rclone.conf
 
 # For MQTT
 sudo apt-get install -y mosquitto
