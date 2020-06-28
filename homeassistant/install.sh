@@ -43,8 +43,8 @@ sudo mv /home/pi/homeassistant/appdaemon.service /etc/systemd/system/appdaemon@a
 sudo systemctl --system daemon-reload
 sudo systemctl enable appdaemon@appdaemon.service
 
-# for https://hacs.xyz/docs/installation/manual
-sudo -u homeassistant -H -- bash -c "mkdir -p /home/homeassistant/.homeassistant/custom_coponents/hacs && cd /home/homeassistant/.homeassistant/custom_coponents/hacs && wget https://github.com/hacs/integration/releases/latest/download/hacs.zip && unzip hacs.zip && rm hacs.zip"
+sudo rclone copy ha:piscripts/homeassistant/homeassistant.conf/ /home/homeassistant/.homeassistant/ --config /home/pi/.config/rclone/rclone.conf
+sudo chown -R homeassistant:homeassistant /home/homeassistant/.homeassistant
 
 /home/pi/send-notification.sh "Setup 4 of 4"
 
