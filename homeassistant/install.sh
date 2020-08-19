@@ -57,7 +57,7 @@ sudo systemctl enable home-assistant@homeassistant
 cd /home/pi
 git clone https://github.com/mysensors/MySensors.git --branch master
 cd MySensors
-./configure --my-transport=rf24
+./configure --my-transport=rf24 --my-rf24-irq-pin=15
 make
 sudo make install
 sudo systemctl enable mysgw.service
