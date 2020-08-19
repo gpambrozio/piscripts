@@ -53,6 +53,16 @@ sudo mv /home/pi/homeassistant/homeassistant.service /etc/systemd/system/home-as
 sudo systemctl --system daemon-reload
 sudo systemctl enable home-assistant@homeassistant
 
+# MySensors, from https://www.mysensors.org/build/raspberry
+cd /home/pi
+git clone https://github.com/mysensors/MySensors.git --branch master
+cd MySensors
+./configure --my-transport=rf24
+make
+sudo make install
+sudo systemctl enable mysgw.service
+sudo systemctl start mysgw.service
+
 sudo apt-get -y clean
 
 # https://raspberrypi.stackexchange.com/a/66939
