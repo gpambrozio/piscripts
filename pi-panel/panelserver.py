@@ -250,7 +250,7 @@ class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 if __name__ == '__main__':
     images = {os.path.splitext(file_name)[0]: Image.open(os.path.join('images', file_name)).convert('RGB') 
         for file_name in os.listdir('images') if file_name[0] != '.' and os.path.splitext(file_name)[1] == '.png'}
-    socket_client = SocketClient('192.168.42.1', 5000)
+    # socket_client = SocketClient('192.168.42.1', 5000)
     mqtt_client = MQTTClient('home.local')
     image_scroller = ImageScroller()
     if not image_scroller.process():
