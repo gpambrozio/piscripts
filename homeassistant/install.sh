@@ -74,6 +74,6 @@ sudo systemctl restart smbd
 sudo apt-get -y clean
 
 # https://raspberrypi.stackexchange.com/a/66939
-
 sudo raspi-config nonint do_hostname home
+
 crontab homeassistant/crontab.txt
