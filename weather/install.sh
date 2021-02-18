@@ -17,6 +17,15 @@ sudo apt-get install -y weewx
 
 /home/pi/send-notification.sh "Setup 2 of 4"
 
+# Samba, from https://pimylifeup.com/raspberry-pi-samba/
+sudo apt-get install -y samba samba-common-bin
+sudo cp -f /home/pi/homeassistant/smb.conf /etc/samba/
+sudo systemctl restart smbd
+/home/pi/send-notification.sh "Remember to run sudo smbpasswd -a pi to add user to samba"
+
+# Apache, to serve weewx
+sudo apt-get install -y apache2
+
 # Cleanup
 
 sudo apt-get -y clean
