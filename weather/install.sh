@@ -19,7 +19,7 @@ sudo apt-get install -y weewx
 
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/
 sudo apt-get install -y samba samba-common-bin
-sudo cp -f /home/pi/homeassistant/smb.conf /etc/samba/
+sudo cp -f /home/pi/weather/smb.conf /etc/samba/
 sudo systemctl restart smbd
 /home/pi/send-notification.sh "Remember to run sudo smbpasswd -a pi to add user to samba"
 
