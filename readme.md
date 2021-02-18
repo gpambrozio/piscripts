@@ -1,7 +1,17 @@
 Files with secrets to add before running install.sh:
 
-* From ~/.ssh/id_rsa.pub: /boot/authorized_keys
-* /boot/ssh to enable ssh access
+* cp ~/.ssh/id_rsa.pub /Volumes/boot/authorized_keys
+* touch /Volumes/boot/ssh
+* /boot/wpa_supplicant.conf to connect to wifi:
+
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=US
+
+network={
+ ssid=""
+ psk=""
+}
 
 ## Starting to install
 
