@@ -30,7 +30,7 @@ mkdir -p /home/pi/.config/rclone
 cat /home/pi/homeassistant/rclone.conf | sed "s/TOKEN/$TOKEN/" > /home/pi/.config/rclone/rclone.conf
 
 # For MQTT
-sudo apt-get install -y mosquitto
+sudo apt-get install -y mosquitto mosquitto-clients
 
 # for https://www.home-assistant.io/integrations/nmap_tracker/
 sudo apt-get install -y net-tools nmap
