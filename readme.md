@@ -13,6 +13,12 @@ network={
  psk=""
 }
 
+If you want USB serial console add:
+
+enable_uart=1
+
+to /boot/config.txt
+
 ## Starting to install
 
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/install.sh
