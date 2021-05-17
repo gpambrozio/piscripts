@@ -1,23 +1,21 @@
 Files with secrets to add before running install.sh:
 
-* cp ~/.ssh/id_rsa.pub /Volumes/boot/authorized_keys
-* touch /Volumes/boot/ssh
-* /boot/wpa_supplicant.conf to connect to wifi:
-
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+```
+cp ~/.ssh/id_rsa.pub /Volumes/boot/authorized_keys
+touch /Volumes/boot/ssh
+echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 country=US
 
 network={
- ssid=""
- psk=""
-}
+ ssid=\"\"
+ psk=\"\"
+}" > /Volumes/boot/wpa_supplicant.conf 
+```
 
 If you want USB serial console add:
 
-enable_uart=1
-
-to /boot/config.txt
+`echo "enable_uart=1" >> /Volumes/boot/config.txt`
 
 ## Starting to install
 
