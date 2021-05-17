@@ -35,6 +35,9 @@ sudo apt-get install -y mosquitto mosquitto-clients
 # for https://www.home-assistant.io/integrations/nmap_tracker/
 sudo apt-get install -y net-tools nmap
 
+# https://github.com/adafruit/Adafruit_CircuitPython_DHT/issues/29
+sudo apt-get install -y libgpiod2
+
 sudo -u homeassistant -H -- bash -c "mkdir /home/homeassistant/.homeassistant && cd /srv/homeassistant && python3 -m venv . && source bin/activate && python3 -m pip install wheel && pip3 install homeassistant"
 
 # https://appdaemon.readthedocs.io/en/stable/INSTALL.html
