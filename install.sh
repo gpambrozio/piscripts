@@ -56,5 +56,9 @@ chmod +x update.sh
 
 ./$1/install.sh
 
+# Cleanup
+
+sudo apt-get -y clean
+
 /home/pi/send-notification.sh "Install done on $1."
 rm -f "$0"

@@ -34,10 +34,6 @@ sudo systemctl enable motioneye
 sudo apt-get install -y wiringpi
 sudo apt-get install -y python3-gpiozero
 
-# Cleanup
-
-sudo apt-get -y clean
-
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname doorbell
 

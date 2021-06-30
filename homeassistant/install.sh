@@ -69,10 +69,6 @@ sudo cp -f /home/pi/homeassistant/smb.conf /etc/samba/
 sudo systemctl restart smbd
 /home/pi/send-notification.sh "Remember to run sudo smbpasswd -a pi to add user to samba"
 
-# Cleanup
-
-sudo apt-get -y clean
-
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname home
 

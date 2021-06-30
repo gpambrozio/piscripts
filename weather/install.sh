@@ -35,10 +35,6 @@ sudo pip3 install paho-mqtt
 sudo wee_extension --install weewx-mqtt.zip
 sudo rm -f weewx-mqtt.zip
 
-# Cleanup
-
-sudo apt-get -y clean
-
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname weather
 
