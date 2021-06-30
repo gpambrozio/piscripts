@@ -8,9 +8,6 @@ IFS=$'\n\t'
 # https://raspberrypi.stackexchange.com/a/87185
 sudo timedatectl set-timezone Pacific/Honolulu
 
-sudo apt-get update
-sudo apt-get upgrade -y
-
 /home/pi/send-notification.sh "Setup 2 of 4"
 
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/

@@ -7,9 +7,6 @@ IFS=$'\n\t'
 
 # https://www.home-assistant.io/docs/installation/raspberry-pi/
 
-sudo apt-get update
-sudo apt-get upgrade -y
-
 /home/pi/send-notification.sh "Setup 2 of 4"
 
 sudo apt-get update

@@ -10,9 +10,6 @@ sudo timedatectl set-timezone Pacific/Honolulu
 
 # http://weewx.com/docs/debian.htm
 
-sudo apt-get update
-sudo apt-get upgrade -y
-
 wget -qO - https://weewx.com/keys.html | sudo apt-key add -
 wget -qO - https://weewx.com/apt/weewx-python3.list | sudo tee /etc/apt/sources.list.d/weewx.list
 sudo apt-get update
