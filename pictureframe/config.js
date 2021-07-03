@@ -51,7 +51,7 @@ var config = {
       position: "fullscreen_below",
       config: {
     		albums: ["for the Digital Album"], // Set your album name. 
-    		updateInterval: 1000 * 60, // minimum 10 seconds.
+    		updateInterval: 1000 * 20, // minimum 10 seconds.
     		sort: "random", // "new", "old", "random"
     		uploadAlbum: null, // Only album created by `create_uploadable_album.js`.
     		condition: {
@@ -76,7 +76,7 @@ var config = {
         timeFormat: 12,
         displaySeconds: false,
         showPeriod: true,
-        showSunTimes: true,
+        showSunTimes: false,
       }
 		},
     /*
