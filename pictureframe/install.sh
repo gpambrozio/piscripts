@@ -36,6 +36,10 @@ sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -
 chmod +x pictureframe/mm.sh
 pm2 start pictureframe/mm.sh
 
+# https://github.com/MichMich/MagicMirror/wiki/Configuring-the-Raspberry-Pi#autohiding-the-mouse-pointer
+sudo apt-get install -y unclutter
+sudo sh -c 'echo "@unclutter -display :0 -idle 3 -root -noevents" >> /etc/xdg/lxsession/LXDE-pi/autostart'
+
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname pictureframe
 sudo raspi-config nonint do_vnc 0
