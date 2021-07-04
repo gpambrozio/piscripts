@@ -40,6 +40,13 @@ pm2 start pictureframe/mm.sh
 sudo apt-get install -y unclutter
 sudo sh -c 'echo "@unclutter -display :0 -idle 3 -root -noevents" >> /etc/xdg/lxsession/LXDE-pi/autostart'
 
+# To be able to control monitor
+sudo apt install -y ddcutil
+sudo sh -c 'echo "dtoverlay=vc4-kms-v3d" >> /boot/config.txt'
+
+# To control the monitor from HA
+pip3 install paho-mqtt
+
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname pictureframe
 sudo raspi-config nonint do_vnc 0
