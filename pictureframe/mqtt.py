@@ -21,6 +21,10 @@ def on_message(client, userdata, message):
             print("Turning monitor off")
             client.publish(prefix + "monitor", "off")
             subprocess.call("ddcutil setvcp D6 4", shell=True)
+        elif decoded == "power:off":
+            print("Turning power off")
+            client.publish(prefix + "power", "off")
+            subprocess.call("sudo reboot", shell=True)
 
 client = mqtt.Client("P1")
 client.on_message = on_message
@@ -28,4 +32,5 @@ client.connect(broker_address)
 client.subscribe(prefix + "#")
 client.publish(prefix + "state", "on")
 client.publish(prefix + "monitor", "on")
+client.publish(prefix + "power", "on")
 client.loop_forever()
