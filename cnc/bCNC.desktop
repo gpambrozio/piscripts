@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=bCNC
+Exec=/usr/bin/python -m bCNC

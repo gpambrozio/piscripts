@@ -13,11 +13,13 @@ sudo timedatectl set-timezone Pacific/Honolulu
 # https://github.com/vlachoudis/bCNC
 pip install --upgrade bCNC
 
-
-
-
+# Start automatically
+# Form https://learn.sparkfun.com/tutorials/how-to-run-a-raspberry-pi-program-on-startup#method-2-autostart
+mkdir /home/pi/.config/autostart
+cp cnc/bCNC.desktop /home/pi/.config/autostart/
 
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname cnc
+sudo raspi-config nonint do_vnc 0
 
-crontab doorbell/crontab.txt
+crontab cnc/crontab.txt
