@@ -3,16 +3,18 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-/home/pi/send-notification.sh "Setup 1 of 4"
+/home/pi/send-notification.sh "Setup 1 of 1"
 
 # https://raspberrypi.stackexchange.com/a/87185
 sudo timedatectl set-timezone Pacific/Honolulu
 
-/home/pi/send-notification.sh "Setup 2 of 4"
-
 # https://github.com/vlachoudis/bCNC
 cp -f /home/pi/cnc/bCNC.config /home/pi/.bCNC
 pip install --upgrade bCNC
+
+# To update firmware.
+# from https://github.com/xinabox/xLoader#flashing-on-non-windows-operating-systems
+sudo apt-get install -y avrdude
 
 # Start automatically
 # Form https://learn.sparkfun.com/tutorials/how-to-run-a-raspberry-pi-program-on-startup#method-2-autostart
