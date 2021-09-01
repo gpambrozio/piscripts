@@ -21,6 +21,12 @@ sudo apt-get install -y avrdude
 mkdir /home/pi/.config/autostart
 cp /home/pi/cnc/bCNC.desktop /home/pi/.config/autostart/
 
+# Samba, from https://pimylifeup.com/raspberry-pi-samba/
+sudo apt-get install -y samba samba-common-bin
+sudo cp -f /home/pi/cnc/smb.conf /etc/samba/
+sudo systemctl restart smbd
+/home/pi/send-notification.sh "Remember to run sudo smbpasswd -a pi to add user to samba"
+
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname cnc
 sudo raspi-config nonint do_vnc 0
