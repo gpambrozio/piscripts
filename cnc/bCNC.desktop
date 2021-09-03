@@ -1,4 +1,4 @@
 [Desktop Entry]
 Type=Application
 Name=bCNC
-Exec=/usr/bin/python -m bCNC
+Exec=nice -n 20 /usr/bin/python -m bCNC
