@@ -30,5 +30,6 @@ sudo systemctl restart smbd
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname cnc
 sudo raspi-config nonint do_vnc 0
+sudo raspi-config nonint do_camera 0
 
 crontab cnc/crontab.txt
