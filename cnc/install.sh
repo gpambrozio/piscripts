@@ -10,6 +10,7 @@ sudo timedatectl set-timezone Pacific/Honolulu
 
 # https://github.com/vlachoudis/bCNC
 cp -f /home/pi/cnc/bCNC.config /home/pi/.bCNC
+sudo apt-get install -y python-imaging-tk python-opencv
 pip install --upgrade bCNC
 
 # To update firmware.
