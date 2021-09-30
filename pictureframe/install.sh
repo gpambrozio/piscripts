@@ -51,6 +51,4 @@ pip3 install paho-mqtt
 sudo raspi-config nonint do_hostname pictureframe
 sudo raspi-config nonint do_vnc 0
 
-crontab pictureframe/crontab.txt
-
 /home/pi/send-notification.sh "You need to run cd ~/MagicMirror/modules/MMM-GooglePhotos && node generate_token.js on the desktop"
