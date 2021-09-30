@@ -19,6 +19,7 @@ If you want USB serial console add:
 
 ## Starting to install
 
+ssh pi@raspberry.local
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/install.sh
 chown pi:pi /home/pi/install.sh && chmod +x /home/pi/install.sh
 /home/pi/install.sh <name>
