@@ -9,7 +9,6 @@ IFS=$'\n\t'
 sudo timedatectl set-timezone Pacific/Honolulu
 
 # https://github.com/vlachoudis/bCNC
-cp -f /home/pi/cnc/bCNC.config /home/pi/.bCNC
 sudo apt-get install -y python-imaging-tk python-opencv
 pip install --upgrade bCNC
 
@@ -20,7 +19,6 @@ sudo apt-get install -y avrdude
 # Start automatically
 # Form https://learn.sparkfun.com/tutorials/how-to-run-a-raspberry-pi-program-on-startup#method-2-autostart
 mkdir /home/pi/.config/autostart
-cp /home/pi/cnc/bCNC.desktop /home/pi/.config/autostart/
 
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/
 sudo apt-get install -y samba samba-common-bin
@@ -45,7 +43,6 @@ cd ..
 
 sudo usermod -a -G tty pi
 sudo usermod -a -G dialout pi
-sudo cp /home/pi/cnc/octoprint.service /etc/systemd/system/octoprint.service
 
 sudo apt-get install -y libjpeg62-turbo-dev imagemagick ffmpeg libv4l-dev cmake
 git clone https://github.com/jacksonliam/mjpg-streamer.git
@@ -53,10 +50,3 @@ cd mjpg-streamer/mjpg-streamer-experimental
 export LD_LIBRARY_PATH=.
 make
 cd ../..
-sudo cp /home/pi/cnc/webcamd.service /etc/systemd/system/webcamd.service
-
-sudo systemctl daemon-reload
-sudo systemctl enable octoprint.service
-sudo systemctl enable webcamd.service
-
-crontab cnc/crontab.txt

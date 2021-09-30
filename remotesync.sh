@@ -12,6 +12,7 @@ while true ; do
    if [[ $oldfilelist != $newfilelist ]] ; then
       oldfilelist=$newfilelist
       rsync --exclude='.*' --exclude='node_modules' --exclude='owm_icons' --exclude='*.pyc' --delete --recursive --perms --itemize-changes --times --compress --human-readable --rsh=ssh "$1/" "pi@$2:/home/pi/$1/"
+      ssh pi@$2 "/home/pi/$1/update.sh"
    fi
    sleep 1 || exit 2 
 done

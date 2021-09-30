@@ -55,6 +55,7 @@ chmod +x update.sh
 /home/pi/send-notification.sh "Config started on $1"
 
 ./$1/install.sh
+./$1/update.sh
 
 # Cleanup
 
