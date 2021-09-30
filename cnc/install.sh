@@ -33,4 +33,18 @@ sudo raspi-config nonint do_hostname cnc
 sudo raspi-config nonint do_vnc 0
 sudo raspi-config nonint do_camera 0
 
+# octopi, from https://octoprint.org/download/ and 
+# https://community.octoprint.org/t/setting-up-octoprint-on-a-raspberry-pi-running-raspbian-or-raspberry-pi-os/2337
+mkdir OctoPrint
+cd OctoPrint
+python3 -m venv venv
+source venv/bin/activate
+pip install pip --upgrade
+pip install octoprint
+sudo usermod -a -G tty pi
+sudo usermod -a -G dialout pi
+sudo cp /home/pi/cnc/octoprint.service /etc/systemd/system/octoprint.service
+sudo systemctl enable octoprint.service
+cd ..
+
 crontab cnc/crontab.txt
