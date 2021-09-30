@@ -41,10 +41,22 @@ python3 -m venv venv
 source venv/bin/activate
 pip install pip --upgrade
 pip install octoprint
+cd ..
+
 sudo usermod -a -G tty pi
 sudo usermod -a -G dialout pi
 sudo cp /home/pi/cnc/octoprint.service /etc/systemd/system/octoprint.service
+
+sudo apt-get install -y libjpeg62-turbo-dev imagemagick ffmpeg libv4l-dev cmake
+git clone https://github.com/jacksonliam/mjpg-streamer.git
+cd mjpg-streamer/mjpg-streamer-experimental
+export LD_LIBRARY_PATH=.
+make
+cd ../..
+sudo cp /home/pi/cnc/webcamd.service /etc/systemd/system/webcamd.service
+
+sudo systemctl daemon-reload
 sudo systemctl enable octoprint.service
-cd ..
+sudo systemctl enable webcamd.service
 
 crontab cnc/crontab.txt
