@@ -50,3 +50,31 @@ cd mjpg-streamer/mjpg-streamer-experimental
 export LD_LIBRARY_PATH=.
 make
 cd ../..
+
+# OctoPiPanel
+# https://github.com/gpambrozio/OctoPiPanel.git
+sudo sh -c 'echo "hdmi_force_hotplug=0" >> /boot/config.txt'
+sudo sh -c 'echo "dtparam=spi=on" >> /boot/config.txt'
+sudo sh -c 'echo "dtparam=i2c1=on" >> /boot/config.txt'
+sudo sh -c 'echo "dtparam=i2c_arm=on" >> /boot/config.txt'
+sudo sh -c 'echo "dtoverlay=pitft28-resistive,rotate=270,speed=64000000,fps=30" >> /boot/config.txt'
+
+sudo sh -c 'echo "SUBSYSTEM==\"input\", ATTRS{name}==\"*stmpe*\", ENV{DEVNAME}==\"*event*\", SYMLINK+=\"input/touchscreen\"" >> /etc/udev/rules.d/95-stmpe.rules'
+sudo rmmod stmpe_ts; sudo modprobe stmpe_ts
+
+wget https://www.dropbox.com/s/0tkdym8ojhcmbu2/libsdl1.2debian_1.2.15+veloci1-1_armhf.deb
+sudo dpkg -i libsdl1.2debian_1.2.15+veloci1-1_armhf.deb
+sudo apt-get -f -y install
+
+git clone --branch devel https://github.com/gpambrozio/OctoPiPanel.git
+cd OctoPiPanel
+sudo pip install -r requirements.txt
+sudo pip install evdev
+
+chmod +x OctoPiPanel.py
+sudo cp scripts/octopipanel.init /etc/init.d/octopipanel
+sudo chmod +x /etc/init.d/octopipanel
+sudo cp scripts/octopipanel.default /etc/default/octopipanel
+sudo update-rc.d octopipanel defaults
+
+cd ..
