@@ -53,11 +53,15 @@ cd ../..
 
 # OctoPiPanel
 # https://github.com/gpambrozio/OctoPiPanel.git
-sudo sh -c 'echo "hdmi_force_hotplug=0" >> /boot/config.txt'
+sudo sh -c 'echo "hdmi_force_hotplug=1" >> /boot/config.txt'
 sudo sh -c 'echo "dtparam=spi=on" >> /boot/config.txt'
 sudo sh -c 'echo "dtparam=i2c1=on" >> /boot/config.txt'
 sudo sh -c 'echo "dtparam=i2c_arm=on" >> /boot/config.txt'
-sudo sh -c 'echo "dtoverlay=pitft28-resistive,rotate=270,speed=64000000,fps=30" >> /boot/config.txt'
+sudo sh -c 'echo "framebuffer_width=1280" >> /boot/config.txt'
+sudo sh -c 'echo "framebuffer_height=1024" >> /boot/config.txt'
+
+# Next line would make console logs show on capacitive display but it screws up VNC/X
+sudo sh -c 'echo "# dtoverlay=pitft28-resistive,rotate=270,speed=64000000,fps=30" >> /boot/config.txt'
 
 sudo sh -c 'echo "SUBSYSTEM==\"input\", ATTRS{name}==\"*stmpe*\", ENV{DEVNAME}==\"*event*\", SYMLINK+=\"input/touchscreen\"" >> /etc/udev/rules.d/95-stmpe.rules'
 sudo rmmod stmpe_ts; sudo modprobe stmpe_ts
