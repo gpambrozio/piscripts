@@ -5,12 +5,8 @@ IFS=$'\n\t'
 
 INSTALL_NAME=`cat /home/pi/install_name`
 
-/home/pi/send-notification.sh "Setup 1 of 4"
-
 # https://raspberrypi.stackexchange.com/a/87185
 sudo timedatectl set-timezone Pacific/Honolulu
-
-/home/pi/send-notification.sh "Setup 2 of 4"
 
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y samba samba-common-bin

@@ -5,12 +5,8 @@ IFS=$'\n\t'
 
 INSTALL_NAME=`cat /home/pi/install_name`
 
-/home/pi/send-notification.sh "Setup 1 of 4"
-
 # https://raspberrypi.stackexchange.com/a/87185
 sudo timedatectl set-timezone Pacific/Honolulu
-
-/home/pi/send-notification.sh "Setup 2 of 4"
 
 # picture frame
 # https://www.tomshardware.com/how-to/raspberry-pi-photo-frame

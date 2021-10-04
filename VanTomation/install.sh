@@ -5,19 +5,6 @@ IFS=$'\n\t'
 
 INSTALL_NAME=`cat /home/pi/install_name`
 
-didError () {
-    errcode=$? # save the exit code as the first thing done in the trap function
-    echo "error $errcode"
-    echo "the command executing at the time of the error was"
-    echo "$BASH_COMMAND"
-    echo "on line ${BASH_LINENO[0]}"
-	/home/pi/send-notification.sh "Error happend during install"
-    exit $errcode  # or use some other value or do return instead
-}
-trap didError ERR
-
-cd /home/pi
-
 # Bluepy: https://github.com/IanHarvey/bluepy
 sudo apt-get install -y python-pip libglib2.0-dev
 sudo pip install bluepy==1.1.4
@@ -45,8 +32,6 @@ sudo apt-get install -y bluetooth bluez libbluetooth-dev libudev-dev
 npm install bleno
 cd /home/pi
 
-/home/pi/send-notification.sh "Setup node done"
-
 # ngrok
 cd /home/pi
 wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip
@@ -57,8 +42,6 @@ NGROK_AUTH_TOKEN=`cat /boot/ngrokauthtoken`
 cp -f /home/pi/VanTomation/ngrok.ymp /home/pi/.ngrok2/ngrok.yml
 echo "authtoken: $NGROK_AUTH_TOKEN" >> /home/pi/.ngrok2/ngrok.yml
 sudo rm -f /boot/ngrokauthtoken
-
-/home/pi/send-notification.sh "ngrok done"
 
 # Installing bluez
 sudo apt-get install -y libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev
@@ -76,8 +59,6 @@ sudo systemctl enable bluetooth
 sudo sh -c 'sed --in-place "s/blutoothd/bluetoothd --experimental/" /lib/systemd/system/bluetooth.service'
 
 cd /home/pi
-
-/home/pi/send-notification.sh "Setup bluez done"
 
 # Make display work better for small screen
 sudo sh -c 'echo "hdmi_ignore_hotplug=1" >> /boot/config.txt'
