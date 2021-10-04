@@ -11,6 +11,7 @@ network={
  ssid=\"\"
  psk=\"\"
 }" > /Volumes/boot/wpa_supplicant.conf 
+mate /Volumes/boot/wpa_supplicant.conf
 ```
 
 If you want USB serial console add:
