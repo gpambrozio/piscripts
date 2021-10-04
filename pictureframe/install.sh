@@ -3,6 +3,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+INSTALL_NAME=`cat /home/pi/install_name`
+
 /home/pi/send-notification.sh "Setup 1 of 4"
 
 # https://raspberrypi.stackexchange.com/a/87185
@@ -25,16 +27,13 @@ npm install
 
 SECRET=`cat /boot/googlesecret`
 sudo rm -f /boot/googlesecret
-cat /home/pi/pictureframe/credentials.json | sed "s/CLIENT_SECRET/$SECRET/" > /home/pi/MagicMirror/modules/MMM-GooglePhotos/credentials.json
-
-cp /home/pi/pictureframe/config.js /home/pi/MagicMirror/config/config.js
-cp /home/pi/pictureframe/custom.css /home/pi/MagicMirror/css/custom.css
+cat /home/pi/$INSTALL_NAME/credentials.json | sed "s/CLIENT_SECRET/$SECRET/" > /home/pi/MagicMirror/modules/MMM-GooglePhotos/credentials.json
 
 cd /home/pi
 sudo npm install -g pm2
 sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u pi --hp /home/pi
-chmod +x pictureframe/mm.sh
-pm2 start pictureframe/mm.sh
+chmod +x $INSTALL_NAME/mm.sh
+pm2 start $INSTALL_NAME/mm.sh
 
 # https://github.com/MichMich/MagicMirror/wiki/Configuring-the-Raspberry-Pi#autohiding-the-mouse-pointer
 sudo apt-get install -y unclutter
@@ -48,7 +47,5 @@ sudo sh -c 'echo "dtoverlay=vc4-kms-v3d" >> /boot/config.txt'
 pip3 install paho-mqtt
 
 # https://raspberrypi.stackexchange.com/a/66939
-sudo raspi-config nonint do_hostname pictureframe
+sudo raspi-config nonint do_hostname $INSTALL_NAME
 sudo raspi-config nonint do_vnc 0
-
-/home/pi/send-notification.sh "You need to run cd ~/MagicMirror/modules/MMM-GooglePhotos && node generate_token.js on the desktop"

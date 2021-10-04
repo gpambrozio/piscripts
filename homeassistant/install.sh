@@ -3,6 +3,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+INSTALL_NAME=`cat /home/pi/install_name`
+
 /home/pi/send-notification.sh "Setup 1 of 4"
 
 # https://www.home-assistant.io/docs/installation/raspberry-pi/
@@ -24,7 +26,7 @@ curl https://rclone.org/install.sh | sudo bash
 TOKEN=`cat /boot/dropboxtoken`
 sudo rm -f /boot/dropboxtoken
 mkdir -p /home/pi/.config/rclone
-cat /home/pi/homeassistant/rclone.conf | sed "s/TOKEN/$TOKEN/" > /home/pi/.config/rclone/rclone.conf
+cat /home/pi/$INSTALL_NAME/rclone.conf | sed "s/TOKEN/$TOKEN/" > /home/pi/.config/rclone/rclone.conf
 
 # For MQTT
 sudo apt-get install -y mosquitto mosquitto-clients
@@ -39,17 +41,17 @@ sudo -u homeassistant -H -- bash -c "mkdir /home/homeassistant/.homeassistant &&
 
 # https://appdaemon.readthedocs.io/en/stable/INSTALL.html
 sudo pip3 install appdaemon
-sudo mv /home/pi/homeassistant/appdaemon.service /etc/systemd/system/appdaemon@appdaemon.service
+sudo mv /home/pi/$INSTALL_NAME/appdaemon.service /etc/systemd/system/appdaemon@appdaemon.service
 sudo systemctl --system daemon-reload
 sudo systemctl enable appdaemon@appdaemon.service
 
-sudo rclone copy ha:piscripts/homeassistant/homeassistant.conf/ /home/homeassistant/.homeassistant/ --config /home/pi/.config/rclone/rclone.conf
+sudo rclone copy ha:piscripts/$INSTALL_NAME/homeassistant.conf/ /home/homeassistant/.homeassistant/ --config /home/pi/.config/rclone/rclone.conf
 sudo chown -R homeassistant:homeassistant /home/homeassistant/.homeassistant
 
 /home/pi/send-notification.sh "Setup 4 of 4"
 
 # https://community.home-assistant.io/t/autostart-using-systemd/199497
-sudo mv /home/pi/homeassistant/homeassistant.service /etc/systemd/system/home-assistant@homeassistant.service
+sudo cp /home/pi/$INSTALL_NAME/homeassistant.service /etc/systemd/system/home-assistant@homeassistant.service
 sudo systemctl --system daemon-reload
 sudo systemctl enable home-assistant@homeassistant
 
@@ -65,10 +67,8 @@ sudo systemctl start mysgw.service
 
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y samba samba-common-bin
-sudo cp -f /home/pi/homeassistant/smb.conf /etc/samba/
+sudo cp -f /home/pi/$INSTALL_NAME/smb.conf /etc/samba/
 sudo systemctl restart smbd
 
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname home
-
-crontab homeassistant/crontab.txt

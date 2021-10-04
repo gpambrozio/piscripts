@@ -3,6 +3,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+INSTALL_NAME=`cat /home/pi/install_name`
+
 /home/pi/send-notification.sh "Setup 1 of 4"
 
 # https://raspberrypi.stackexchange.com/a/87185
@@ -19,7 +21,7 @@ sudo apt-get install -y weewx
 
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y samba samba-common-bin
-sudo cp -f /home/pi/weather/smb.conf /etc/samba/
+sudo cp -f /home/pi/$INSTALL_NAME/smb.conf /etc/samba/
 sudo systemctl restart smbd
 
 # Apache, to serve weewx
@@ -35,6 +37,4 @@ sudo wee_extension --install weewx-mqtt.zip
 sudo rm -f weewx-mqtt.zip
 
 # https://raspberrypi.stackexchange.com/a/66939
-sudo raspi-config nonint do_hostname weather
-
-crontab weather/crontab.txt
+sudo raspi-config nonint do_hostname $INSTALL_NAME

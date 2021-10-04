@@ -3,6 +3,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+INSTALL_NAME=`cat /home/pi/install_name`
+
 /home/pi/send-notification.sh "Setup 1 of 4"
 
 sudo apt-get install python2.7-dev python-pillow -y
@@ -21,5 +23,3 @@ make build-python
 sudo make install-python
 
 sudo pip install paho-mqtt
-
-crontab pi-panel/crontab.txt

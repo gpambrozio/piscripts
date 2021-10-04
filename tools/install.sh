@@ -3,6 +3,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+INSTALL_NAME=`cat /home/pi/install_name`
+
 /home/pi/send-notification.sh "Setup 1 of 1"
 
 # https://raspberrypi.stackexchange.com/a/87185
@@ -22,11 +24,11 @@ mkdir /home/pi/.config/autostart
 
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y samba samba-common-bin
-sudo cp -f /home/pi/cnc/smb.conf /etc/samba/
+sudo cp -f /home/pi/$INSTALL_NAME/smb.conf /etc/samba/
 sudo systemctl restart smbd
 
 # https://raspberrypi.stackexchange.com/a/66939
-sudo raspi-config nonint do_hostname cnc
+sudo raspi-config nonint do_hostname $INSTALL_NAME
 sudo raspi-config nonint do_vnc 1
 sudo raspi-config nonint do_camera 0
 

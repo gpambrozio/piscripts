@@ -5,4 +5,4 @@ IFS=$'\n\t'
 
 INSTALL_NAME=`cat /home/pi/install_name`
 
-crontab $INSTALL_NAME/crontab.txt
+cd ~/MagicMirror/modules/MMM-GooglePhotos && node generate_token.js

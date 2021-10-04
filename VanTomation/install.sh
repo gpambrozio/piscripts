@@ -3,6 +3,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+INSTALL_NAME=`cat /home/pi/install_name`
+
 didError () {
     errcode=$? # save the exit code as the first thing done in the trap function
     echo "error $errcode"

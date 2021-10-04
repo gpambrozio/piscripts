@@ -3,8 +3,10 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-cp /home/pi/pictureframe/config.js /home/pi/MagicMirror/config/config.js
-cp /home/pi/pictureframe/custom.css /home/pi/MagicMirror/css/custom.css
+INSTALL_NAME=`cat /home/pi/install_name`
 
-crontab pictureframe/crontab.txt
+cp /home/pi/$INSTALL_NAME/config.js /home/pi/MagicMirror/config/config.js
+cp /home/pi/$INSTALL_NAME/custom.css /home/pi/MagicMirror/css/custom.css
+
+crontab $INSTALL_NAME/crontab.txt
 
