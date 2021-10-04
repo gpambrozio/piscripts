@@ -28,7 +28,7 @@ sudo systemctl restart smbd
 
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname cnc
-sudo raspi-config nonint do_vnc 0
+sudo raspi-config nonint do_vnc 1
 sudo raspi-config nonint do_camera 0
 
 # octopi, from https://octoprint.org/download/ and 
@@ -59,9 +59,7 @@ sudo sh -c 'echo "dtparam=i2c1=on" >> /boot/config.txt'
 sudo sh -c 'echo "dtparam=i2c_arm=on" >> /boot/config.txt'
 sudo sh -c 'echo "framebuffer_width=1280" >> /boot/config.txt'
 sudo sh -c 'echo "framebuffer_height=1024" >> /boot/config.txt'
-
-# Next line would make console logs show on capacitive display but it screws up VNC/X
-sudo sh -c 'echo "# dtoverlay=pitft28-resistive,rotate=270,speed=64000000,fps=30" >> /boot/config.txt'
+sudo sh -c 'echo "dtoverlay=pitft28-resistive,rotate=270,speed=64000000,fps=30" >> /boot/config.txt'
 
 sudo sh -c 'echo "SUBSYSTEM==\"input\", ATTRS{name}==\"*stmpe*\", ENV{DEVNAME}==\"*event*\", SYMLINK+=\"input/touchscreen\"" >> /etc/udev/rules.d/95-stmpe.rules'
 sudo rmmod stmpe_ts; sudo modprobe stmpe_ts

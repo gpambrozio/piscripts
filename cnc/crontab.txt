@@ -21,3 +21,4 @@
 #
 # m h  dom mon dow   command
 * * * * * ps axf | grep -i octopipanel.py | grep -v grep || sudo service octopipanel restart
+@reboot sleep 10 && sudo -u pi vncserver -randr=1280x1024 -rfbport=5900
