@@ -21,10 +21,9 @@ sudo apt-get install -y avrdude
 mkdir /home/pi/.config/autostart
 
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/
-sudo apt-get install -y samba samba-common-bin
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y samba samba-common-bin
 sudo cp -f /home/pi/cnc/smb.conf /etc/samba/
 sudo systemctl restart smbd
-/home/pi/send-notification.sh "Remember to run 'sudo smbpasswd -a pi' to add user to samba"
 
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname cnc
@@ -83,6 +82,5 @@ sudo update-rc.d octopipanel defaults
 # To calibrate
 # See https://prajoshpremdas.wordpress.com/2016/09/30/calibrating-touch-using-tslib-in-linux/
 sudo apt-get install -y libts-bin
-/home/pi/send-notification.sh "Remember to run 'sudo TSLIB_FBDEVICE=/dev/fb1 TSLIB_TSDEVICE=/dev/input/touchscreen ts_calibrate' to calibrate display"
 
 cd ..

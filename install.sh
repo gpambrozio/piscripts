@@ -62,4 +62,9 @@ chmod +x update.sh
 sudo apt-get -y clean
 
 /home/pi/send-notification.sh "Install done on $1."
+
+if [ -f "/home/pi/$1/post-install.sh" ] ; then
+  /home/pi/send-notification.sh "Remember to run '/home/pi/$1/post-install.sh' to finish your installation"
+fi
+
 rm -f "$0"

@@ -11,10 +11,9 @@ sudo timedatectl set-timezone Pacific/Honolulu
 /home/pi/send-notification.sh "Setup 2 of 4"
 
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/
-sudo apt-get install -y samba samba-common-bin
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y samba samba-common-bin
 sudo cp -f /home/pi/doorbell/smb.conf /etc/samba/
 sudo systemctl restart smbd
-/home/pi/send-notification.sh "Remember to run sudo smbpasswd -a pi to add user to samba"
 
 # Motioneye
 # https://github.com/ccrisan/motioneye/wiki/Install-On-Debian

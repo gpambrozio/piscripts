@@ -64,10 +64,9 @@ sudo systemctl enable mysgw.service
 sudo systemctl start mysgw.service
 
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/
-sudo apt-get install -y samba samba-common-bin
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y samba samba-common-bin
 sudo cp -f /home/pi/homeassistant/smb.conf /etc/samba/
 sudo systemctl restart smbd
-/home/pi/send-notification.sh "Remember to run sudo smbpasswd -a pi to add user to samba"
 
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname home
