@@ -57,9 +57,6 @@ sudo sh -c 'echo "dtparam=i2c1=on" >> /boot/config.txt'
 sudo sh -c 'echo "dtparam=i2c_arm=on" >> /boot/config.txt'
 sudo sh -c 'echo "dtoverlay=pitft28-resistive,rotate=270,speed=64000000,fps=30" >> /boot/config.txt'
 
-sudo sh -c 'echo "SUBSYSTEM==\"input\", ATTRS{name}==\"*stmpe*\", ENV{DEVNAME}==\"*event*\", SYMLINK+=\"input/touchscreen\"" >> /etc/udev/rules.d/95-stmpe.rules'
-sudo rmmod stmpe_ts; sudo modprobe stmpe_ts
-
 # From https://www.raspberrypi.org/forums/viewtopic.php?t=250001
 wget https://www.dropbox.com/s/0tkdym8ojhcmbu2/libsdl1.2debian_1.2.15+veloci1-1_armhf.deb
 sudo dpkg -i libsdl1.2debian_1.2.15+veloci1-1_armhf.deb
@@ -79,5 +76,6 @@ sudo update-rc.d octopipanel defaults
 # To calibrate
 # See https://prajoshpremdas.wordpress.com/2016/09/30/calibrating-touch-using-tslib-in-linux/
 sudo apt-get install -y libts-bin
+sudo sh -c 'echo "SUBSYSTEM==\"input\", ATTRS{name}==\"stmpe-ts\", ENV{DEVNAME}==\"*event*\", SYMLINK+=\"input/touchscreen\"" >> /etc/udev/rules.d/95-stmpe.rules'
 
 cd ..
