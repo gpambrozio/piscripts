@@ -31,6 +31,10 @@ sudo apt-get install -y net-tools nmap
 # https://github.com/adafruit/Adafruit_CircuitPython_DHT/issues/29
 sudo apt-get install -y libgpiod2
 
+# https://community.home-assistant.io/t/cannot-update-to-2021-10-0/344695/3
+sudo -u homeassistant -H -- bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+sudo apt-get install -y libssl-dev rustc
+
 sudo -u homeassistant -H -- bash -c "mkdir /home/homeassistant/.homeassistant && cd /srv/homeassistant && python3 -m venv . && source bin/activate && python3 -m pip install wheel && pip3 install homeassistant"
 
 # https://appdaemon.readthedocs.io/en/stable/INSTALL.html
