@@ -12,10 +12,6 @@ sudo timedatectl set-timezone Pacific/Honolulu
 sudo apt-get install -y python-imaging-tk python-opencv
 pip install --upgrade bCNC
 
-# To update firmware.
-# from https://github.com/xinabox/xLoader#flashing-on-non-windows-operating-systems
-sudo apt-get install -y avrdude
-
 # Start automatically
 # Form https://learn.sparkfun.com/tutorials/how-to-run-a-raspberry-pi-program-on-startup#method-2-autostart
 mkdir /home/pi/.config/autostart
