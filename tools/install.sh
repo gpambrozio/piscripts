@@ -47,6 +47,7 @@ make
 cd ../..
 
 # screen resolution
+# Based on https://github.com/UCTRONICS/UCTRONICS_HDMI_CTS/blob/master/uc586/hdmi_480x800_cfg.sh
 sudo sh -c 'echo "
 # Screen resolution
 hdmi_force_hotplug=1
