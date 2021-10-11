@@ -45,3 +45,13 @@ cd mjpg-streamer/mjpg-streamer-experimental
 export LD_LIBRARY_PATH=.
 make
 cd ../..
+
+# screen resolution
+sudo sh -c 'echo "
+# Screen resolution
+hdmi_force_hotplug=1
+max_usb_current=1
+hdmi_group=2
+hdmi_mode=16
+hdmi_cvt 800 480 60 6 0 0 0
+hdmi_drive=1" >> /boot/config.txt'
