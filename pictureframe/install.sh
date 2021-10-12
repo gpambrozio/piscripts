@@ -37,7 +37,18 @@ sudo sh -c 'echo "@unclutter -display :0 -idle 3 -root -noevents" >> /etc/xdg/lx
 
 # To be able to control monitor
 sudo apt install -y ddcutil
-sudo sh -c 'echo "dtoverlay=vc4-kms-v3d" >> /boot/config.txt'
+sudo sh -c 'echo "
+dtoverlay=vc4-kms-v3d
+avoid_warnings=1
+
+# if hdmi display is not detected and composite is being output
+hdmi_force_hotplug=1
+
+# to force a specific HDMI mode (this will force VGA)
+hdmi_group=2
+hdmi_mode=82
+
+" >> /boot/config.txt'
 
 # To control the monitor from HA
 pip3 install paho-mqtt
