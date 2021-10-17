@@ -39,7 +39,7 @@ def on_connect(client, userdata, flags, rc):
 def on_disconnect(client, userdata, rc):
     client.reconnect()
 
-client = mqtt.Client("P1")
+client = mqtt.Client("pictureframe")
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
 client.on_message = on_message
