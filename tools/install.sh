@@ -9,8 +9,8 @@ INSTALL_NAME=`cat /home/pi/install_name`
 sudo timedatectl set-timezone Pacific/Honolulu
 
 # https://github.com/vlachoudis/bCNC
-sudo apt-get install -y python-imaging-tk python-opencv
-pip install --upgrade bCNC
+sudo apt-get install -y python-imaging-tk python-opencv python-paho-mqtt
+pip install --upgrade git+https://github.com/gpambrozio/bCNC.git@mqtt
 
 # Start automatically
 # Form https://learn.sparkfun.com/tutorials/how-to-run-a-raspberry-pi-program-on-startup#method-2-autostart
