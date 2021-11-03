@@ -26,6 +26,9 @@ sudo raspi-config nonint do_hostname $INSTALL_NAME
 sudo raspi-config nonint do_vnc 0
 sudo raspi-config nonint do_camera 0
 
+# No power saving for wifi
+sudo iwconfig wlan0 power off
+
 # octopi, from https://octoprint.org/download/ and 
 # https://community.octoprint.org/t/setting-up-octoprint-on-a-raspberry-pi-running-raspbian-or-raspberry-pi-os/2337
 mkdir OctoPrint
