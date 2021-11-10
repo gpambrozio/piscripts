@@ -14,7 +14,7 @@ pip install --upgrade git+https://github.com/gpambrozio/bCNC.git@mqtt
 
 # Start automatically
 # Form https://learn.sparkfun.com/tutorials/how-to-run-a-raspberry-pi-program-on-startup#method-2-autostart
-mkdir /home/pi/.config/autostart
+mkdir -p /home/pi/.config/autostart
 
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y samba samba-common-bin
