@@ -21,5 +21,5 @@ If you want USB serial console add:
 ## Starting to install
 
 ssh -o CheckHostIP=no -o StrictHostKeyChecking=no -o UpdateHostKeys=no -o UserKnownHostsFile=/dev/null pi@raspberrypi.local
-wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/install.sh && chmod +x /home/pi/install.sh
+wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/install.sh && chmod +x /home/pi/install.sh && passwd
 /home/pi/install.sh <name>
