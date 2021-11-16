@@ -20,4 +20,4 @@
 # For more information see the manual pages of crontab(5) and cron(8)
 #
 # m h  dom mon dow   command
-@reboot sleep 10 && sudo -u pi vncserver -randr=1280x1024 -rfbport=5900
+#@reboot sleep 10 && sudo -u pi vncserver -randr=1280x1024 -rfbport=5900
