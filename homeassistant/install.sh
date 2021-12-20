@@ -46,11 +46,6 @@ sudo systemctl enable appdaemon@appdaemon.service
 sudo rclone copy ha:piscripts/$INSTALL_NAME/homeassistant.conf/ /home/homeassistant/.homeassistant/ --config /home/pi/.config/rclone/rclone.conf
 sudo chown -R homeassistant:homeassistant /home/homeassistant/.homeassistant
 
-# https://community.home-assistant.io/t/autostart-using-systemd/199497
-sudo cp /home/pi/$INSTALL_NAME/homeassistant.service /etc/systemd/system/home-assistant@homeassistant.service
-sudo systemctl --system daemon-reload
-sudo systemctl enable home-assistant@homeassistant
-
 # MySensors, from https://www.mysensors.org/build/raspberry
 cd /home/pi
 git clone https://github.com/mysensors/MySensors.git --branch master
@@ -63,8 +58,6 @@ sudo systemctl start mysgw.service
 
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y samba samba-common-bin
-sudo cp -f /home/pi/$INSTALL_NAME/smb.conf /etc/samba/
-sudo systemctl restart smbd
 
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname home
