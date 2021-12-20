@@ -8,14 +8,16 @@ VENV_BASE=/srv/homeassistant
 
 INSTALLED=$(find /usr/lib -name libjemalloc.so -print|wc -l)
 if [ ${INSTALLED} -eq 0 ]; then
-	echo "Updating packages and installing libjemalloc"
+	echo "Updating and installing required packages"
 	sudo apt update
-	sudo apt install libjemalloc-dev
 
-	echo "Assuming other packages may not be installed"
-	sudo apt install build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline-dev \
+	echo "Assuming required packages may not be installed"
+	sudo apt -y install build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline-dev \
 		libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev \
-		zlib1g-dev libudev-dev libc-dev libffi-dev libbluetooth-dev libtirpc-dev libjemalloc-dev 
+		zlib1g-dev libudev-dev libc-dev libffi-dev libbluetooth-dev libtirpc-dev libjemalloc-dev \
+		cargo
+
+	sudo ldconfig
 fi
 
 if [ ! -f ${FILE} ]; then
@@ -53,22 +55,22 @@ echo "Configuring, then making, then installing" \
         EXTRA_CFLAGS="-DTHREAD_STACK_SIZE=0x100000" \
     && sudo make alt install
 
+# Create the venv
 if [ ! -d ${VENV_BASE} ]; then
-	mkdir ${VENV_BASE}
-	chown ${HA_USER} ${VENV_BASE}
+  mkdir ${VENV_BASE}
+  chown ${HA_USER} ${VENV_BASE}
 fi
 if [ ! -d ${VENV_BASE}/venv_${PY_VER} ]; then
-	sudo -u ${HA_USER} -H -s <<-EOM
-	python$(echo ${PY_VER}|rev|cut -d. -f2-|rev) -m venv ${VENV_BASE}/venv_${PY_VER}
-	source ${VENV_BASE}/venv_${PY_VER}/bin/activate
-	pip3 install --upgrade homeassistant
-	# This installs a bunch of relevant packages automatically, speeding up first startup
-	hass --script check_config
-	# Now we install requirements
-	wget --quiet https://raw.githubusercontent.com/home-assistant/docker/master/base/requirements.txt | while read LINE
-	do
-		pip3 install --upgrade ${LINE}
-	done
-	EOM
+  sudo -u ${HA_USER} -H -s <<-EOM
+  python$(echo ${PY_VER}|rev|cut -d. -f2-|rev) -m venv ${VENV_BASE}/venv_${PY_VER}
+  source ${VENV_BASE}/venv_${PY_VER}/bin/activate
+  pip3 install --upgrade homeassistant
+  # This installs a bunch of relevant packages automatically, speeding up first startup
+  hass --script check_config
+  # Now we install requirements
+  wget --quiet https://raw.githubusercontent.com/home-assistant/docker/master/requirements.txt -O - | while read LINE
+  do
+    pip3 install --upgrade ${LINE}
+  done
+  EOM
 fi
-
