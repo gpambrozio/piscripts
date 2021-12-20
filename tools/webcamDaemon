@@ -5,7 +5,7 @@ MJPGSTREAMER_INPUT_USB="input_uvc.so"
 MJPGSTREAMER_INPUT_RASPICAM="input_raspicam.so"
 
 # init configuration
-camera="auto"
+camera="raspi"
 camera_usb_options="-r 640x480 -f 10"
 camera_raspi_options="-fps 10"
 
