@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
  
 # Based on https://github.com/DubhAd/Home-AssistantConfig/blob/live/local/bin/build_python
 
