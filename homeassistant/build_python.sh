@@ -64,16 +64,16 @@ if [ ! -d ${VENV_BASE} ]; then
   sudo chown ${HA_USER} ${VENV_BASE}
 fi
 if [ ! -d ${VENV_BASE}/venv_${PY_VER} ]; then
-  sudo -u ${HA_USER} -H -s <<-EOM
-  python$(echo ${PY_VER}|rev|cut -d. -f2-|rev) -m venv ${VENV_BASE}/venv_${PY_VER}
-  source ${VENV_BASE}/venv_${PY_VER}/bin/activate
-  pip3 install --upgrade homeassistant
-  # This installs a bunch of relevant packages automatically, speeding up first startup
-  hass --script check_config
-  # Now we install requirements
-  wget --quiet https://raw.githubusercontent.com/home-assistant/docker/master/requirements.txt -O - | while read LINE
-  do
-    pip3 install --upgrade ${LINE}
-  done
-  EOM
+  sudo -u ${HA_USER} -H -s <<-EOM 
+	python$(echo ${PY_VER}|rev|cut -d. -f2-|rev) -m venv ${VENV_BASE}/venv_${PY_VER}
+	source ${VENV_BASE}/venv_${PY_VER}/bin/activate
+	pip3 install --upgrade homeassistant
+	# This installs a bunch of relevant packages automatically, speeding up first startup
+	hass --script check_config
+	# Now we install requirements
+	wget --quiet https://raw.githubusercontent.com/home-assistant/docker/master/requirements.txt -O - | while read LINE
+	do
+	  pip3 install --upgrade ${LINE}
+	done
+	EOM
 fi
