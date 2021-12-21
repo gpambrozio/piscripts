@@ -35,8 +35,11 @@ sudo apt-get install -y libgpiod2
 sudo -u homeassistant -H -- bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
 sudo apt-get install -y libssl-dev rustc
 
-sudo -u homeassistant -H -- bash -c "mkdir /home/homeassistant/.homeassistant"
-/home/pi/$INSTALL_NAME/build_python.sh 3.10.1
+# https://itheo.tech/ultimate-python-installation-on-a-raspberry-pi-ubuntu-script/
+/home/pi/$INSTALL_NAME/python.sh 3.10.1
+
+# https://github.com/DubhAd/Home-AssistantConfig/blob/live/local/bin/build_python
+sudo -u homeassistant -H -- bash -c "/home/pi/$INSTALL_NAME/ha.sh 3.10.1"
 
 # https://appdaemon.readthedocs.io/en/stable/INSTALL.html
 sudo pip3 install appdaemon
@@ -44,6 +47,7 @@ sudo mv /home/pi/$INSTALL_NAME/appdaemon.service /etc/systemd/system/appdaemon@a
 sudo systemctl --system daemon-reload
 sudo systemctl enable appdaemon@appdaemon.service
 
+sudo -u homeassistant -H -- bash -c "mkdir /home/homeassistant/.homeassistant"
 sudo rclone copy ha:piscripts/$INSTALL_NAME/homeassistant.conf/ /home/homeassistant/.homeassistant/ --config /home/pi/.config/rclone/rclone.conf
 sudo chown -R homeassistant:homeassistant /home/homeassistant/.homeassistant
 
