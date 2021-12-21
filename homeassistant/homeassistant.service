@@ -7,7 +7,7 @@ Requires=mosquitto.service
 Type=simple
 User=%i
 WorkingDirectory=/home/%i/.homeassistant
-ExecStart=/srv/homeassistant_venv_3.8.7/bin/hass -c "/home/%i/.homeassistant"
+ExecStart=/srv/homeassistant/venv_3.10.1/bin/hass -c "/home/%i/.homeassistant"
 Restart=on-failure
 RestartSec=5s
 

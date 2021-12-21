@@ -36,7 +36,7 @@ sudo -u homeassistant -H -- bash -c "curl --proto '=https' --tlsv1.2 -sSf https:
 sudo apt-get install -y libssl-dev rustc
 
 sudo -u homeassistant -H -- bash -c "mkdir /home/homeassistant/.homeassistant"
-/home/pi/$INSTALL_NAME/build_python.sh
+/home/pi/$INSTALL_NAME/build_python.sh 3.10.1
 
 # https://appdaemon.readthedocs.io/en/stable/INSTALL.html
 sudo pip3 install appdaemon

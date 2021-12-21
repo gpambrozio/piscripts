@@ -5,7 +5,7 @@ IFS=$'\n\t'
 
 sudo systemctl stop home-assistant@homeassistant
 
-sudo -u homeassistant -H -- bash -c "cd /srv/homeassistant_venv_3.8.7 && source bin/activate && python3 -m pip install --upgrade homeassistant"
+sudo -u homeassistant -H -- bash -c "cd /srv/homeassistant/venv_3.10.1 && source bin/activate && python3 -m pip install --upgrade homeassistant"
 
 sudo systemctl start home-assistant@homeassistant
 
