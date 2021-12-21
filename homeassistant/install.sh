@@ -35,7 +35,8 @@ sudo apt-get install -y libgpiod2
 sudo -u homeassistant -H -- bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
 sudo apt-get install -y libssl-dev rustc
 
-sudo -u homeassistant -H -- bash -c "mkdir /home/homeassistant/.homeassistant && cd /srv/homeassistant && python3 -m venv . && source bin/activate && python3 -m pip install wheel && pip3 install homeassistant"
+sudo -u homeassistant -H -- bash -c "mkdir /home/homeassistant/.homeassistant"
+/home/pi/$INSTALL_NAME/build_python.sh
 
 # https://appdaemon.readthedocs.io/en/stable/INSTALL.html
 sudo pip3 install appdaemon

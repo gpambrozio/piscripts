@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -euo pipefail
+
 PY_VER=${1}
 FOLDER=Python-${PY_VER}
 FILE=${FOLDER}.tar.xz
@@ -58,7 +61,7 @@ echo "Configuring, then making, then installing" \
 # Create the venv
 if [ ! -d ${VENV_BASE} ]; then
   mkdir ${VENV_BASE}
-  chown ${HA_USER} ${VENV_BASE}
+  sudo chown ${HA_USER} ${VENV_BASE}
 fi
 if [ ! -d ${VENV_BASE}/venv_${PY_VER} ]; then
   sudo -u ${HA_USER} -H -s <<-EOM
