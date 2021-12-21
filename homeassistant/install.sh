@@ -32,7 +32,9 @@ sudo apt-get install -y net-tools nmap
 sudo apt-get install -y libgpiod2
 
 # https://community.home-assistant.io/t/cannot-update-to-2021-10-0/344695/3
-sudo -u homeassistant -H -- bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+wget https://sh.rustup.rs -O rustup-init.sh
+chmod +x rustup-init.sh
+sudo -u homeassistant -H -- bash -c "./rustup-init.sh -y"
 sudo apt-get install -y libssl-dev rustc
 
 # https://itheo.tech/ultimate-python-installation-on-a-raspberry-pi-ubuntu-script/
