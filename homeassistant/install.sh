@@ -39,8 +39,11 @@ sudo apt-get install -y libssl-dev rustc
 
 # https://itheo.tech/ultimate-python-installation-on-a-raspberry-pi-ubuntu-script/
 sudo bash /home/pi/$INSTALL_NAME/python.sh 3.10.1
+sudo rm /usr/bin/python3
+sudo ln -s /usr/bin/python3.10 /usr/bin/python3
 
 # https://github.com/DubhAd/Home-AssistantConfig/blob/live/local/bin/build_python
+sudo apt-get install -y libopenjp2-7 libtiff-dev
 sudo -u homeassistant -H -- bash -c "/home/pi/$INSTALL_NAME/ha.sh 3.10.1"
 
 # https://appdaemon.readthedocs.io/en/stable/INSTALL.html
@@ -62,6 +65,7 @@ make
 sudo make install
 sudo systemctl enable mysgw.service
 sudo systemctl start mysgw.service
+cd ..
 
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y samba samba-common-bin
