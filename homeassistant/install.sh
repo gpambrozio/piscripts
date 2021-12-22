@@ -38,14 +38,14 @@ sudo -u homeassistant -H -- bash -c "./rustup-init.sh -y"
 sudo apt-get install -y libssl-dev rustc
 
 # https://itheo.tech/ultimate-python-installation-on-a-raspberry-pi-ubuntu-script/
-sudo bash /home/pi/$INSTALL_NAME/python.sh 3.10.1
+sudo bash /home/pi/$INSTALL_NAME/python.sh 3.9.9
 
 # https://github.com/DubhAd/Home-AssistantConfig/blob/live/local/bin/build_python
 sudo apt-get install -y libopenjp2-7 libtiff-dev
-su -c '/home/pi/$INSTALL_NAME/ha.sh 3.10.1' homeassistant
+sudo -u homeassistant -H -- bash -c "/home/pi/$INSTALL_NAME/ha.sh 3.9.9"
 
 # https://appdaemon.readthedocs.io/en/stable/INSTALL.html
-sudo pip3 install appdaemon
+sudo python -m pip install appdaemon
 sudo mv /home/pi/$INSTALL_NAME/appdaemon.service /etc/systemd/system/appdaemon@appdaemon.service
 sudo systemctl --system daemon-reload
 sudo systemctl enable appdaemon@appdaemon.service
@@ -53,6 +53,9 @@ sudo systemctl enable appdaemon@appdaemon.service
 sudo -u homeassistant -H -- bash -c "mkdir /home/homeassistant/.homeassistant"
 sudo rclone copy ha:piscripts/$INSTALL_NAME/homeassistant.conf/ /home/homeassistant/.homeassistant/ --config /home/pi/.config/rclone/rclone.conf
 sudo chown -R homeassistant:homeassistant /home/homeassistant/.homeassistant
+
+# This installs a bunch of relevant packages automatically, speeding up first startup
+sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && hass --script check_config"
 
 # MySensors, from https://www.mysensors.org/build/raspberry
 cd /home/pi
