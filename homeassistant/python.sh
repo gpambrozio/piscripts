@@ -27,8 +27,6 @@
 # or via github by
 # wget -qO - https://raw.githubusercontent.com/tvdsluijs/raspberry_python_sh_install/main/python.sh | sudo bash -s 3.10.0
 
-set -euo pipefail
-
 install_python () {
 
     new_version="$1"
