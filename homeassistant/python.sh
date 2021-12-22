@@ -68,7 +68,7 @@ install_python () {
 
     echo "Let's cleanup!"
     cd ..
-    rm -r ${Python-$new_version}
+    rm -r Python-${new_version}
     rm -rf ${file}
 
     new_python_version=$(python -c 'import platform; print(platform.python_version())')
