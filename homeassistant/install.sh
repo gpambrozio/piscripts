@@ -42,7 +42,7 @@ sudo bash /home/pi/$INSTALL_NAME/python.sh 3.10.1
 
 # https://github.com/DubhAd/Home-AssistantConfig/blob/live/local/bin/build_python
 sudo apt-get install -y libopenjp2-7 libtiff-dev
-sudo -u homeassistant -H -- bash -c "/home/pi/$INSTALL_NAME/ha.sh 3.10.1"
+su -c '/home/pi/$INSTALL_NAME/ha.sh 3.10.1' homeassistant
 
 # https://appdaemon.readthedocs.io/en/stable/INSTALL.html
 sudo pip3 install appdaemon
