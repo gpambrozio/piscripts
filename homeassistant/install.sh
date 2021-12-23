@@ -42,7 +42,11 @@ sudo bash /home/pi/$INSTALL_NAME/python.sh 3.9.9
 
 # https://github.com/DubhAd/Home-AssistantConfig/blob/live/local/bin/build_python
 sudo apt-get install -y libopenjp2-7 libtiff-dev unixodbc-dev
+
+# Fixes error looking for newer library
 sudo ln -s /usr/lib/arm-linux-gnueabihf/libffi.so.6 /usr/lib/arm-linux-gnueabihf/libffi.so.7
+
+# Install ha in a venv
 sudo -u homeassistant -H -- bash -c "/home/pi/$INSTALL_NAME/ha.sh 3.9.9"
 
 # https://appdaemon.readthedocs.io/en/stable/INSTALL.html
@@ -54,6 +58,9 @@ sudo systemctl enable appdaemon@appdaemon.service
 sudo -u homeassistant -H -- bash -c "mkdir /home/homeassistant/.homeassistant"
 sudo rclone copy ha:piscripts/$INSTALL_NAME/homeassistant.conf/ /home/homeassistant/.homeassistant/ --config /home/pi/.config/rclone/rclone.conf
 sudo chown -R homeassistant:homeassistant /home/homeassistant/.homeassistant
+
+# for keymaster
+sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && pip install python-openzwave-mqtt"
 
 # This installs a bunch of relevant packages automatically, speeding up first startup
 sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && hass --script check_config"
