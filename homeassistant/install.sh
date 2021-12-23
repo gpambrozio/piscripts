@@ -41,7 +41,7 @@ sudo apt-get install -y libssl-dev rustc
 sudo bash /home/pi/$INSTALL_NAME/python.sh 3.9.9
 
 # https://github.com/DubhAd/Home-AssistantConfig/blob/live/local/bin/build_python
-sudo apt-get install -y libopenjp2-7 libtiff-dev pyodbc
+sudo apt-get install -y libopenjp2-7 libtiff-dev unixodbc-dev
 sudo -u homeassistant -H -- bash -c "/home/pi/$INSTALL_NAME/ha.sh 3.9.9"
 
 # https://appdaemon.readthedocs.io/en/stable/INSTALL.html
