@@ -42,6 +42,7 @@ sudo bash /home/pi/$INSTALL_NAME/python.sh 3.9.9
 
 # https://github.com/DubhAd/Home-AssistantConfig/blob/live/local/bin/build_python
 sudo apt-get install -y libopenjp2-7 libtiff-dev unixodbc-dev
+sudo ln -s /usr/lib/arm-linux-gnueabihf/libffi.so.6 /usr/lib/arm-linux-gnueabihf/libffi.so.7
 sudo -u homeassistant -H -- bash -c "/home/pi/$INSTALL_NAME/ha.sh 3.9.9"
 
 # https://appdaemon.readthedocs.io/en/stable/INSTALL.html
