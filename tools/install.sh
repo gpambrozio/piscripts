@@ -29,7 +29,8 @@ mkdir -p /home/pi/.config/rclone
 cat /home/pi/$INSTALL_NAME/rclone.conf | sed "s/TOKEN/$TOKEN/" > /home/pi/.config/rclone/rclone.conf
 
 # rclone restore
-sudo rclone copy ha:piscripts/$INSTALL_NAME/bCNC.config /home/pi/.bCNC --config /home/pi/.config/rclone/rclone.conf
+sudo rclone copy ha:piscripts/$INSTALL_NAME/bCNC.config /home/pi/ --config /home/pi/.config/rclone/rclone.conf
+sudo mv /home/pi/bCNC.config /home/pi/.bCNC
 mkdir /home/pi/gcode/
 sudo rclone copy ha:piscripts/$INSTALL_NAME/gcode/ /home/pi/gcode/ --config /home/pi/.config/rclone/rclone.conf
 

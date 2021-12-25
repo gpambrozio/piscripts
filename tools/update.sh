@@ -5,7 +5,6 @@ IFS=$'\n\t'
 
 INSTALL_NAME=`cat /home/pi/install_name`
 
-cp -f /home/pi/$INSTALL_NAME/bCNC.config /home/pi/.bCNC
 cp -f /home/pi/$INSTALL_NAME/bCNC.desktop /home/pi/.config/autostart/
 sudo cp -f /home/pi/$INSTALL_NAME/smb.conf /etc/samba/
 
