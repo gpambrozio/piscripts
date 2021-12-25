@@ -33,6 +33,8 @@ sudo rclone copy ha:piscripts/$INSTALL_NAME/bCNC.config /home/pi/ --config /home
 sudo mv /home/pi/bCNC.config /home/pi/.bCNC
 mkdir /home/pi/gcode/
 sudo rclone copy ha:piscripts/$INSTALL_NAME/gcode/ /home/pi/gcode/ --config /home/pi/.config/rclone/rclone.conf
+sudo rclone copy ha:piscripts/$INSTALL_NAME/Desktop/ /home/pi/Desktop/ --config /home/pi/.config/rclone/rclone.conf
+sudo rclone copy ha:piscripts/$INSTALL_NAME/localshare/ /home/pi/.share/local/ --config /home/pi/.config/rclone/rclone.conf
 
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname $INSTALL_NAME
