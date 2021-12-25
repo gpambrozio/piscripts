@@ -26,6 +26,9 @@ sudo raspi-config nonint do_hostname $INSTALL_NAME
 sudo raspi-config nonint do_vnc 0
 sudo raspi-config nonint do_camera 0
 
+# https://raspberrypi.stackexchange.com/a/87185
+sudo timedatectl set-timezone Pacific/Honolulu
+
 # No power saving for wifi
 sudo iwconfig wlan0 power off
 
@@ -59,3 +62,4 @@ hdmi_group=2
 hdmi_mode=16
 hdmi_cvt 800 480 60 6 0 0 0
 hdmi_drive=1" >> /boot/config.txt'
+

@@ -81,3 +81,6 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y samba samba-common-bin
 
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname home
+
+# https://raspberrypi.stackexchange.com/a/87185
+sudo timedatectl set-timezone Pacific/Honolulu
