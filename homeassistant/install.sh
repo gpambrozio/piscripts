@@ -76,6 +76,19 @@ sudo systemctl enable mysgw.service
 sudo systemctl start mysgw.service
 cd ..
 
+# Fix sqlite version
+# https://community.home-assistant.io/t/raspberrypi-ha-core-version-3-27-2-of-sqlite-is-not-supported/352858/2?u=gpambrozio
+cd /home/pi
+wget https://sqlite.org/2021/sqlite-autoconf-3370100.tar.gz
+tar -xvf sqlite-autoconf-3370100.tar.gz
+rm sqlite-autoconf-3370100.tar.gz
+cd sqlite-autoconf-3370100
+./configure
+make
+sudo make install
+sudo cp /usr/local/lib/*sql* /usr/lib/arm-linux-gnueabihf/
+cd ..
+
 # Samba, from https://pimylifeup.com/raspberry-pi-samba/
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y samba samba-common-bin
 
