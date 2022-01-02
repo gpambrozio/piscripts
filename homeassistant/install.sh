@@ -55,6 +55,24 @@ sudo mv /home/pi/$INSTALL_NAME/appdaemon.service /etc/systemd/system/appdaemon@a
 sudo systemctl --system daemon-reload
 sudo systemctl enable appdaemon@appdaemon.service
 
+# For zwave-js
+# NodeJS first
+curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# https://github.com/zwave-js/zwave-js-server
+sudo npm i -g @zwave-js/server
+NETWORK_KEY=`cat /boot/zwavekey`
+sudo rm -f /boot/zwavekey
+cat /home/pi/$INSTALL_NAME/zwavejs-config.js | sed "s/NETWORK_KEY/$NETWORK_KEY/" > /home/pi/.config/zwavejs-config.js
+
+# To start on boot
+sudo npm install -g pm2
+sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u pi --hp /home/pi
+chmod +x $INSTALL_NAME/zwavejs.sh
+pm2 start $INSTALL_NAME/zwavejs.sh
+
+# Restore backup
 sudo -u homeassistant -H -- bash -c "mkdir /home/homeassistant/.homeassistant"
 sudo rclone copy ha:piscripts/$INSTALL_NAME/homeassistant.conf/ /home/homeassistant/.homeassistant/ --config /home/pi/.config/rclone/rclone.conf
 sudo chown -R homeassistant:homeassistant /home/homeassistant/.homeassistant
