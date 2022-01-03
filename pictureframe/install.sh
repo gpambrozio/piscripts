@@ -30,6 +30,7 @@ sudo npm install -g pm2
 sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u pi --hp /home/pi
 chmod +x $INSTALL_NAME/mm.sh
 pm2 start $INSTALL_NAME/mm.sh
+pm2 save
 
 # https://github.com/MichMich/MagicMirror/wiki/Configuring-the-Raspberry-Pi#autohiding-the-mouse-pointer
 sudo apt-get install -y unclutter
