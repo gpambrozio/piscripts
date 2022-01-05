@@ -39,10 +39,14 @@ def on_connect(client, userdata, flags, rc):
 def on_disconnect(client, userdata, rc):
     client.reconnect()
 
-client = mqtt.Client("pictureframe")
-client.on_connect = on_connect
-client.on_disconnect = on_disconnect
-client.on_message = on_message
+while True:
+    try:
+        client = mqtt.Client("pictureframe")
+        client.on_connect = on_connect
+        client.on_disconnect = on_disconnect
+        client.on_message = on_message
 
-client.connect(broker_address)
-client.loop_forever()
+        client.connect(broker_address)
+        client.loop_forever()
+    except Error as e:
+        print("Error in loop: %s" % e)
