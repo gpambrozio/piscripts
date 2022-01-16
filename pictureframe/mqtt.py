@@ -48,5 +48,5 @@ while True:
 
         client.connect(broker_address)
         client.loop_forever()
-    except Error as e:
-        print("Error in loop: %s" % e)
+    except BaseException as e:
+        print("BaseException in loop: %s" % e)
