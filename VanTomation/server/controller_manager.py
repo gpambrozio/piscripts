@@ -6,7 +6,7 @@ import time
 from base import logger, SerialBuffer
 from device_manager import DeviceManager, DeviceThread
 
-
+# Controller is the VanTomation iOS app
 class ControllerManager(DeviceManager):
 
     def __init__(self):
@@ -64,6 +64,14 @@ class ControllerThread(DeviceThread):
                         self.add_broadcast("Couch", "Relative", 25)
                     elif line[1] == "D":
                         self.add_broadcast("Couch", "Relative", -25)
+
+                elif destination == "F":
+                    if line[1] == "P":
+                        self.add_broadcast("Fan", "Position", -1)
+                    elif line[1] == "U":
+                        self.add_broadcast("Fan", "Position", 100)
+                    elif line[1] == "D":
+                        self.add_broadcast("Fan", "Position", 0)
 
                 elif destination == "W":
                     command = line[1]
