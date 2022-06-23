@@ -28,12 +28,12 @@ class LogicManager(SenderReceiver):
         if broadcast.destination is None:
             self.current_state[broadcast.prop]= broadcast.value
 
-        if broadcast.prop == 'Speed' and broadcast.value > 10 and not self.properties['Moving']:
+        if broadcast.prop == 'Speed' and broadcast.value > 40:
             self.stopped_time = None
             if self.moving_time is None:
                 self.moving_time = datetime.datetime.now()
 
-        elif broadcast.prop == 'Speed' and broadcast.value < 3 and not self.properties['Parked']:
+        elif broadcast.prop == 'Speed' and broadcast.value < 5:
             self.moving_time = None
             if self.stopped_time is None:
                 self.stopped_time = datetime.datetime.now()
@@ -53,7 +53,7 @@ class LogicManager(SenderReceiver):
 
         elif not self.properties['Moving'] and self.moving_time is not None:
             elapsed = (datetime.datetime.now() - self.moving_time).seconds
-            if elapsed > 15:
+            if elapsed > 60:
                 self.set_property('Parked', False)
                 self.set_property('Moving', True)
                 self.moving_time = None
@@ -62,12 +62,4 @@ class LogicManager(SenderReceiver):
     def check_new_devices(self, new_devices):
         added = set(new_devices) - set(self.devices)
         removed = set(self.devices) - set(new_devices)
-        if 'Panel' in added or 'Parking' in added:
-            self.set_property('Parked', False)
-            self.set_property('Moving', True)
-            self.moving_time = None
-
-        elif ('Panel' in removed and 'Parking' not in new_devices) or ('Parking' in removed and 'Panel' not in new_devices):
-            self.set_property('Moving', False)
-            self.set_property('Parked', True)
-            self.stopped_time = None
+        # Do nothing for now...
