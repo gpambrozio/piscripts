@@ -283,7 +283,7 @@ class FanHandler(SocketManagerConnectionHandler):
 
         # Close/open fan when we start/stop moving
         elif broadcast.prop == "Moving" and broadcast.value:
-            self.add_command("P0")
+            self.add_command("P40")
         elif broadcast.prop == "Parked" and broadcast.value:
             self.add_command("P100")
 
