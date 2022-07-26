@@ -83,6 +83,7 @@ class SocketManager(SenderReceiver):
                     continue
 
                 if data == '':   # connection closed
+                    logger.error("No data, breaking")
                     break
 
                 past_data.received(data)
@@ -105,6 +106,10 @@ class SocketManager(SenderReceiver):
 
                 for line in lines:
                     handler.handle(line)
+
+        except Exception as e:
+            logger.error("Error in loop: %s" % e)
+
         finally:
             # Clean up the connection
             logger.debug("Closed socket")
