@@ -4,9 +4,12 @@ set -euo pipefail
 IFS=$'\n\t'
 
 sudo systemctl stop home-assistant@homeassistant
+pm2 stop homeassistant/zwavejs.sh
+
+sudo npm install -g @zwave-js/server@latest
+pm2 start homeassistant/zwavejs.sh
 
 sudo -u homeassistant -H -- bash -c "cd /srv/homeassistant/venv_3.9.9 && source bin/activate && python3 -m pip install --upgrade homeassistant"
-
 sudo systemctl start home-assistant@homeassistant
 
 echo "Done."
