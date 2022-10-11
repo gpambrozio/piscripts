@@ -17,7 +17,7 @@ git clone https://github.com/MichMich/MagicMirror
 cd MagicMirror
 npm install
 cd modules
-git clone https://github.com/eouia/MMM-GooglePhotos.git
+git clone https://github.com/aneaville/MMM-GooglePhotos.git
 cd MMM-GooglePhotos
 npm install
 

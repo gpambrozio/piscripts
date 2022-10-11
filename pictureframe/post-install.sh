@@ -5,4 +5,4 @@ IFS=$'\n\t'
 
 INSTALL_NAME=`cat /home/pi/install_name`
 
-cd ~/MagicMirror/modules/MMM-GooglePhotos && node generate_token.js
+cd ~/MagicMirror/modules/MMM-GooglePhotos && node generate_token_v2.js
