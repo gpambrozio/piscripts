@@ -9,7 +9,7 @@ INSTALL_NAME=`cat /home/pi/install_name`
 
 sudo apt-get update
 sudo apt-get install -y python3 python3-dev python3-venv python3-pip libffi-dev libssl-dev autoconf libxslt1-dev libc6 bluez
-sudo apt-get install -y libatlas-base-dev python3-numpy
+sudo apt-get install -y libatlas-base-dev
 
 sudo useradd -rm homeassistant -G dialout,gpio,i2c,pi
 sudo mkdir /srv/homeassistant
@@ -84,6 +84,9 @@ sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/ac
 
 # This installs a bunch of relevant packages automatically, speeding up first startup
 sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && hass --script check_config"
+
+# to fix numpy issues. https://stackoverflow.com/a/62084261
+sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && pip3 install numpy --global-option=\"-mfloat-abi=hard\" --force-reinstall"
 
 # MySensors, from https://www.mysensors.org/build/raspberry
 cd /home/pi
