@@ -8,9 +8,12 @@ INSTALL_NAME=`cat /home/pi/install_name`
 # https://raspberrypi.stackexchange.com/a/87185
 sudo timedatectl set-timezone Pacific/Honolulu
 
+# https://itheo.tech/ultimate-python-installation-on-a-raspberry-pi-ubuntu-script/
+sudo bash /home/pi/$INSTALL_NAME/python.sh 3.11.0
+
 # https://github.com/vlachoudis/bCNC
 sudo apt-get install -y python-imaging-tk python-opencv python-paho-mqtt
-pip install --upgrade git+https://github.com/gpambrozio/bCNC.git@gustavo
+pip install --upgrade git+https://github.com/gpambrozio/bCNC.git@gustavo2
 
 # Start automatically
 # Form https://learn.sparkfun.com/tutorials/how-to-run-a-raspberry-pi-program-on-startup#method-2-autostart
