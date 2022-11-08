@@ -27,6 +27,8 @@
 # or via github by
 # wget -qO - https://raw.githubusercontent.com/tvdsluijs/raspberry_python_sh_install/main/python.sh | sudo bash -s 3.10.0
 
+set -euo pipefail
+
 install_python () {
 
     new_version="$1"
@@ -48,10 +50,10 @@ install_python () {
     apt -qq update < /dev/null
 
     echo "Installing system essentials"
-    apt -qq install wget build-essential checkinstall < /dev/null
+    apt -qq install -y wget build-essential checkinstall < /dev/null
 
     echo "Installing Python essentials"
-    apt -qq install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev < /dev/null
+    apt -qq install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev < /dev/null
 
     echo "Downloading Python ${new_version}"
     wget ${url}
