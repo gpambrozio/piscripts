@@ -73,7 +73,7 @@ install_python () {
     rm -r Python-${new_version}
     rm -rf ${file}
 
-    new_python_version=$(python -c 'import platform; print(platform.python_version())')
+    old_python_version=$(python -c 'import platform; print(platform.python_version())')
     if [ $old_python_version = $new_version ]; then
         echo "Version okay!"
     else
