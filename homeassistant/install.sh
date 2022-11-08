@@ -39,7 +39,7 @@ sudo -u homeassistant -H -- bash -c "./rustup-init.sh -y"
 sudo apt-get install -y libssl-dev rustc
 
 # https://itheo.tech/ultimate-python-installation-on-a-raspberry-pi-ubuntu-script/
-sudo bash /home/pi/$INSTALL_NAME/python.sh 3.9.9
+sudo /home/pi/$INSTALL_NAME/python.sh 3.9.9
 
 # https://github.com/DubhAd/Home-AssistantConfig/blob/live/local/bin/build_python
 sudo apt-get install -y libopenjp2-7 libtiff-dev unixodbc-dev

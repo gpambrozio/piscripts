@@ -9,7 +9,7 @@ INSTALL_NAME=`cat /home/pi/install_name`
 sudo timedatectl set-timezone Pacific/Honolulu
 
 # https://itheo.tech/ultimate-python-installation-on-a-raspberry-pi-ubuntu-script/
-sudo bash /home/pi/$INSTALL_NAME/python.sh 3.11.0
+sudo /home/pi/$INSTALL_NAME/python.sh 3.11.0
 
 # https://github.com/vlachoudis/bCNC
 sudo apt-get install -y python-imaging-tk python-opencv python-paho-mqtt
