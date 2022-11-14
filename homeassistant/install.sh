@@ -8,7 +8,7 @@ INSTALL_NAME=`cat /home/pi/install_name`
 # https://www.home-assistant.io/docs/installation/raspberry-pi/
 
 sudo apt-get update
-sudo apt-get install -y python3 python3-dev python3-venv python3-pip libffi-dev libssl-dev autoconf libxslt1-dev libc6 bluez
+sudo apt-get install -y python3 python3-dev python3-venv python3-pip libffi-dev libssl-dev autoconf libxslt1-dev libc6 bluez ffmpeg
 sudo apt-get install -y libatlas-base-dev
 
 sudo useradd -rm homeassistant -G dialout,gpio,i2c,pi
