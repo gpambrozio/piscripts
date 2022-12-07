@@ -35,8 +35,7 @@ sudo apt-get install -y libgpiod2
 # https://community.home-assistant.io/t/cannot-update-to-2021-10-0/344695/3
 wget https://sh.rustup.rs -O rustup-init.sh
 chmod +x rustup-init.sh
-sudo -u homeassistant -H -- bash -c "./rustup-init.sh -y"
-sudo apt-get install -y libssl-dev rustc
+sudo -u homeassistant -H -- bash -c "/home/pi/rustup-init.sh -y"
 
 # https://itheo.tech/ultimate-python-installation-on-a-raspberry-pi-ubuntu-script/
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/python.sh
