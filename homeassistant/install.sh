@@ -89,6 +89,9 @@ sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/ac
 # to fix numpy issues. https://stackoverflow.com/a/62084261
 sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && pip3 install numpy --global-option=\"-mfloat-abi=hard\" --force-reinstall"
 
+# to fix miniaudio issues: https://github.com/home-assistant/core/issues/66378#issuecomment-1040059972
+sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && pip install --ignore-installed miniaudio --no-binary :all:"
+
 # MySensors, from https://www.mysensors.org/build/raspberry
 cd /home/pi
 git clone https://github.com/mysensors/MySensors.git --branch master
