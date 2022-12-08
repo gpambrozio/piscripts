@@ -29,9 +29,6 @@ sudo apt-get install -y mosquitto mosquitto-clients
 # for https://www.home-assistant.io/integrations/nmap_tracker/
 sudo apt-get install -y net-tools nmap
 
-# https://github.com/adafruit/Adafruit_CircuitPython_DHT/issues/29
-sudo apt-get install -y libgpiod2
-
 # https://community.home-assistant.io/t/cannot-update-to-2021-10-0/344695/3
 wget https://sh.rustup.rs -O rustup-init.sh
 chmod +x rustup-init.sh
@@ -92,17 +89,6 @@ sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/ac
 # to fix miniaudio issues: https://github.com/home-assistant/core/issues/66378#issuecomment-1040059972
 sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && pip install --ignore-installed miniaudio --no-binary :all:"
 
-# MySensors, from https://www.mysensors.org/build/raspberry
-cd /home/pi
-git clone https://github.com/mysensors/MySensors.git --branch master
-cd MySensors
-./configure --my-transport=rf24 --my-rf24-irq-pin=15
-make
-sudo make install
-sudo systemctl enable mysgw.service
-sudo systemctl start mysgw.service
-cd ..
-
 # Fix sqlite version
 # https://community.home-assistant.io/t/raspberrypi-ha-core-version-3-27-2-of-sqlite-is-not-supported/352858/2?u=gpambrozio
 cd /home/pi
@@ -121,6 +107,11 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y samba samba-common-bin
 
 # https://raspberrypi.stackexchange.com/a/66939
 sudo raspi-config nonint do_hostname home
+
+# For BME280
+sudo apt-get install -y python3-smbus
+sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && pip install i2cdevice smbus"
+sudo raspi-config nonint do_i2c 0
 
 # https://raspberrypi.stackexchange.com/a/87185
 sudo timedatectl set-timezone Pacific/Honolulu
