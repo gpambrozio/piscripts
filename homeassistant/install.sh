@@ -80,6 +80,9 @@ sudo chown -R homeassistant:homeassistant /home/homeassistant/.homeassistant
 # for keymaster
 sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && pip install python-openzwave-mqtt"
 
+# for BME280
+sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && pip install RPi.bme280"
+
 # This installs a bunch of relevant packages automatically, speeding up first startup
 sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && hass --script check_config"
 
