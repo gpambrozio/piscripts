@@ -41,3 +41,4 @@ sudo raspi-config nonint do_hostname $INSTALL_NAME
 # raspi-config nonint do_camera %d
 # %d - Integer input - 0 is in general success / yes / selected, 1 is failed / no / not selected
 sudo raspi-config nonint do_camera 0
+sudo raspi-config nonint do_vnc 0
