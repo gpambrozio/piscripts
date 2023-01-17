@@ -34,7 +34,3 @@ sudo raspi-config nonint do_hostname $INSTALL_NAME
 # raspi-config nonint do_camera %d
 # %d - Integer input - 0 is in general success / yes / selected, 1 is failed / no / not selected
 sudo raspi-config nonint do_camera 0
-
-# Fixes ir camera color
-# https://www.raspberrypi.org/forums/viewtopic.php?f=43&t=245994
-sudo sh -c 'echo "awb_auto_is_greyworld=1" >> /boot/config.txt'
