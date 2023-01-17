@@ -11,11 +11,19 @@ sudo cp -f /home/pi/$INSTALL_NAME/smb.conf /etc/samba/
 sudo systemctl restart smbd
 
 # Motioneye
-# https://github.com/ccrisan/motioneye/wiki/Install-On-Debian
-sudo apt-get install -y motion ffmpeg v4l-utils
-sudo apt-get install -y python-pip python-dev python-setuptools curl libssl-dev libcurl4-openssl-dev libjpeg-dev libz-dev
-sudo apt-get install -y python-pil
-sudo pip install motioneye
+# https://github.com/motioneye-project/motioneye/wiki/Install-on-Raspbian-Bullseye
+sudo apt-get install -y ffmpeg libmariadb3 libpq5 libmicrohttpd12
+wget https://github.com/Motion-Project/motion/releases/download/release-4.3.2/pi_buster_motion_4.3.2-1_armhf.deb
+sudo dpkg -i pi_buster_motion_4.3.2-1_armhf.deb
+
+sudo systemctl stop motion
+sudo systemctl disable motion
+
+sudo apt-get install -y python2 python-dev-is-python2
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
+sudo python2 get-pip.py
+sudo apt-get install -y libssl-dev libcurl4-openssl-dev libjpeg-dev zlib1g-dev python-pil
+sudo pip2 install motioneye
 
 sudo mkdir -p /etc/motioneye /var/lib/motioneye
 
