@@ -17,10 +17,6 @@ trap didError ERR
 cd /home/pi
 echo -n "$1" > install_name
 
-# We need to disable IPV6 otherwise a lot of things doesn't work (like notifications)
-# From https://askubuntu.com/a/38468
-sudo sh -c 'echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf'
-
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/send-notification.sh
 chmod +x send-notification.sh
 
