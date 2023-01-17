@@ -34,14 +34,6 @@ chmod +x ~/.bash_aliases
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/screenrc.txt
 mv -f screenrc.txt ~/.screenrc
 
-if [ -f /boot/authorized_keys ] ; then
-    sudo mkdir /home/pi/.ssh
-    sudo mv /boot/authorized_keys /home/pi/.ssh/
-    sudo chown -R pi:pi /home/pi/.ssh
-    sudo chmod 700 /home/pi/.ssh
-    sudo chmod 600 /home/pi/.ssh/authorized_keys
-fi
-
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get check || exit 0
