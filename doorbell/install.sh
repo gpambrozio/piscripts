@@ -28,7 +28,7 @@ sudo apt-get install -y wiringpi
 sudo apt-get install -y python3-gpiozero
 
 # https://raspberrypi.stackexchange.com/a/66939
-sudo raspi-config nonint do_hostname doorbell2
+sudo raspi-config nonint do_hostname $INSTALL_NAME
 
 # https://raspberrypi.stackexchange.com/a/109221
 # raspi-config nonint do_camera %d
