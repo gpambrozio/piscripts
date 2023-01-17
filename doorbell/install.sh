@@ -22,7 +22,7 @@ sudo systemctl disable motion
 sudo apt-get install -y python2 python-dev-is-python2
 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
 sudo python2 get-pip.py
-sudo apt-get install -y libssl-dev libcurl4-openssl-dev libjpeg-dev zlib1g-dev python-pil
+sudo apt-get install -y libssl-dev libcurl4-openssl-dev libjpeg-dev zlib1g-dev
 sudo pip2 install motioneye
 
 sudo mkdir -p /etc/motioneye /var/lib/motioneye
@@ -32,7 +32,6 @@ sudo systemctl daemon-reload
 sudo systemctl enable motioneye
 
 # GPIO
-sudo apt-get install -y wiringpi
 sudo apt-get install -y python3-gpiozero
 
 # https://raspberrypi.stackexchange.com/a/66939
