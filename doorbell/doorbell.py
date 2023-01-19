@@ -30,6 +30,8 @@ while True:
     for value in range(0, 100):
         led.value = value / 100
         sleep(0.01)
+    sleep(0.3)
     for value in range(100, 0, -1):
         led.value = value / 100
         sleep(0.01)
+    sleep(0.3)
