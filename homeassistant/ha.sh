@@ -10,9 +10,12 @@ VENV_BASE=/srv/homeassistant
 python -m venv ${VENV_BASE}/venv_${PY_VER}
 source ${VENV_BASE}/venv_${PY_VER}/bin/activate
 python -m pip install --upgrade pip
+python -m pip install --upgrade setuptools
+
+python -m pip install wheel
+
+# to fix miniaudio issues: https://github.com/home-assistant/core/issues/66378#issuecomment-1040059972
+python -m pip install --ignore-installed miniaudio --no-cache-dir --force-reinstall --no-binary :all:
+
+python -m pip install -r /home/homeassistant/requirements.txt
 python -m pip install --upgrade homeassistant
-# Now we install requirements
-wget --quiet https://raw.githubusercontent.com/home-assistant/docker/master/requirements.txt -O - | while read LINE
-do
-  python -m pip install --upgrade ${LINE}
-done

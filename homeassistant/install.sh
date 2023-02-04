@@ -37,7 +37,7 @@ sudo -u homeassistant -H -- bash -c "/home/pi/rustup-init.sh -y"
 # https://itheo.tech/ultimate-python-installation-on-a-raspberry-pi-ubuntu-script/
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/python.sh
 chmod +x python.sh
-sudo ./python.sh 3.9.9
+sudo ./python.sh 3.11.1
 
 # https://github.com/DubhAd/Home-AssistantConfig/blob/live/local/bin/build_python
 sudo apt-get install -y libopenjp2-7 libtiff-dev unixodbc-dev
@@ -45,8 +45,11 @@ sudo apt-get install -y libopenjp2-7 libtiff-dev unixodbc-dev
 # Fixes error looking for newer library
 sudo ln -s /usr/lib/arm-linux-gnueabihf/libffi.so.6 /usr/lib/arm-linux-gnueabihf/libffi.so.7
 
+# Needed this when installing ha for python 3.10
+sudo apt-get install -y default-libmysqlclient-dev libudev-dev libpq-dev
+
 # Install ha in a venv
-sudo -u homeassistant -H -- bash -c "/home/pi/$INSTALL_NAME/ha.sh 3.9.9"
+sudo -u homeassistant -H -- bash -c "/home/pi/$INSTALL_NAME/ha.sh 3.11.1"
 
 # https://appdaemon.readthedocs.io/en/stable/INSTALL.html
 sudo python -m pip install appdaemon
@@ -78,19 +81,16 @@ sudo rclone copy ha:piscripts/$INSTALL_NAME/homeassistant.conf/ /home/homeassist
 sudo chown -R homeassistant:homeassistant /home/homeassistant/.homeassistant
 
 # for keymaster
-sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && pip install python-openzwave-mqtt"
+sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.10.9/bin/activate && pip install python-openzwave-mqtt"
 
 # for BME280
-sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && pip install RPi.bme280"
+sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.10.9/bin/activate && pip install RPi.bme280"
 
 # This installs a bunch of relevant packages automatically, speeding up first startup
-sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && hass --script check_config"
+sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.10.9/bin/activate && hass --script check_config"
 
 # to fix numpy issues. https://stackoverflow.com/a/62084261
-sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && pip3 install numpy --global-option=\"-mfloat-abi=hard\" --force-reinstall"
-
-# to fix miniaudio issues: https://github.com/home-assistant/core/issues/66378#issuecomment-1040059972
-sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && pip install --ignore-installed miniaudio --no-binary :all:"
+sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.10.9/bin/activate && pip3 install numpy --global-option=\"-mfloat-abi=hard\" --force-reinstall"
 
 # Fix sqlite version
 # https://community.home-assistant.io/t/raspberrypi-ha-core-version-3-27-2-of-sqlite-is-not-supported/352858/2?u=gpambrozio
@@ -113,7 +113,7 @@ sudo raspi-config nonint do_hostname home
 
 # For BME280
 sudo apt-get install -y python3-smbus
-sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.9.9/bin/activate && pip install i2cdevice smbus"
+sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.10.9/bin/activate && pip install i2cdevice smbus"
 sudo raspi-config nonint do_i2c 0
 
 # https://raspberrypi.stackexchange.com/a/87185
