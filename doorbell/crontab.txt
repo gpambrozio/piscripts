@@ -21,3 +21,4 @@
 #
 # m h  dom mon dow   command
 @reboot /home/pi/doorbell/start.sh
+4 0 * * * sudo reboot
