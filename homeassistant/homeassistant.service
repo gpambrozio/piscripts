@@ -1,7 +1,7 @@
 [Unit]
 Description=Home Assistant
-After=network-online.target
-Requires=mosquitto.service
+After=network-online.target mosquitto.service time-sync.target
+Requires=network-online.target mosquitto.service time-sync.target
 
 [Service]
 Type=simple
