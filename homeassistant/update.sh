@@ -14,3 +14,11 @@ sudo systemctl enable home-assistant@homeassistant
 
 sudo cp -f /home/pi/$INSTALL_NAME/smb.conf /etc/samba/
 sudo systemctl restart smbd
+
+sudo cp -f /home/pi/$INSTALL_NAME/nut/nut.conf /etc/nut/
+sudo cp -f /home/pi/$INSTALL_NAME/nut/ups.conf /etc/nut/
+sudo cp -f /home/pi/$INSTALL_NAME/nut/upsd.conf /etc/nut/
+sudo cp -f /home/pi/$INSTALL_NAME/nut/upsd.users /etc/nut/
+sudo systemctl restart nut-driver.service
+sudo systemctl restart nut-server.service
+sudo systemctl restart nut-monitor.service

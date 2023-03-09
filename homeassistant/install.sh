@@ -48,6 +48,9 @@ sudo ln -s /usr/lib/arm-linux-gnueabihf/libffi.so.6 /usr/lib/arm-linux-gnueabihf
 # Needed this when installing ha for python 3.10
 sudo apt-get install -y default-libmysqlclient-dev libudev-dev libpq-dev
 
+# Install nut (https://networkupstools.org/)
+sudo apt-get install -y nut
+
 # Install ha in a venv
 sudo -u homeassistant -H -- bash -c "/home/pi/$INSTALL_NAME/ha.sh 3.11.1"
 
