@@ -86,11 +86,11 @@ sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.10.9/bin/a
 # for BME280
 sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.10.9/bin/activate && pip install RPi.bme280"
 
-# This installs a bunch of relevant packages automatically, speeding up first startup
-sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.10.9/bin/activate && hass --script check_config"
-
 # to fix numpy issues. https://stackoverflow.com/a/62084261
 sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.10.9/bin/activate && pip3 install numpy --global-option=\"-mfloat-abi=hard\" --force-reinstall"
+
+# This installs a bunch of relevant packages automatically, speeding up first startup
+sudo -u homeassistant -H -- bash -c "source /srv/homeassistant/venv_3.10.9/bin/activate && hass --script check_config"
 
 # Fix sqlite version
 # https://community.home-assistant.io/t/raspberrypi-ha-core-version-3-27-2-of-sqlite-is-not-supported/352858/2?u=gpambrozio
