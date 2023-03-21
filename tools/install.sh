@@ -88,3 +88,6 @@ hdmi_mode=16
 hdmi_cvt 800 480 60 6 0 0 0
 hdmi_drive=1" >> /boot/config.txt'
 
+# To stream the desktop
+# See https://gist.github.com/atlury/16e5994b1a97aad261275b612ba2470f
+sudo apt-get install -y vlc vlc-plugin-access-extra

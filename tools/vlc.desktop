@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=VLC Streaming
+Exec=/home/pi/tools/vlc.sh
