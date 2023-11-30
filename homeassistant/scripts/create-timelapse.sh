@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-IN_DIR="/home/homeassistant/.homeassistant/www/cam_captures"
-OUT_DIR="/home/homeassistant/.homeassistant/www/timelapses"
+IN_DIR="/config/www/cam_captures"
+OUT_DIR="/config/www/timelapses"
 PREFIX="$1"
 
 N=$(ls ${IN_DIR}/${PREFIX}/${PREFIX}_*.jpg | wc -l)
