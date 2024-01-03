@@ -91,3 +91,6 @@ hdmi_drive=1" >> /boot/config.txt'
 # To stream the desktop
 # See https://gist.github.com/atlury/16e5994b1a97aad261275b612ba2470f
 sudo apt-get install -y vlc vlc-plugin-access-extra
+
+# To update board's firmware (via octoprint plugin https://github.com/OctoPrint/OctoPrint-FirmwareUpdater/blob/master/doc/avrdude.md)
+sudo apt-get install -y avrdude
