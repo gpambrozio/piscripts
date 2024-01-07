@@ -19,7 +19,7 @@ def button_pressed():
 
     print("Telling HA")
     conn = http.client.HTTPConnection("home.local:8123")
-    conn.request("POST", "/api/webhook/doorbell")
+    conn.request("GET", "/api/webhook/doorbell")
     r = conn.getresponse()
     print(r.status, r.reason)
     conn.close()
