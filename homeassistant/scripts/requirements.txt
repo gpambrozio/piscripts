@@ -1,3 +1,0 @@
-i2cdevice 
-smbus
-RPi.bme280
