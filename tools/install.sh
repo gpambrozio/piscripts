@@ -31,8 +31,8 @@ sudo systemctl restart smbd
 
 # rclone to cloud upload/download/sync
 curl https://rclone.org/install.sh | sudo bash
-TOKEN=`cat /boot/dropboxtoken`
-sudo rm -f /boot/dropboxtoken
+TOKEN=`cat /boot/firmware/dropboxtoken`
+sudo rm -f /boot/firmware/dropboxtoken
 mkdir -p /home/pi/.config/rclone
 cat /home/pi/$INSTALL_NAME/rclone.conf | sed "s/TOKEN/$TOKEN/" > /home/pi/.config/rclone/rclone.conf
 
@@ -88,7 +88,7 @@ max_usb_current=1
 hdmi_group=2
 hdmi_mode=16
 hdmi_cvt 800 480 60 6 0 0 0
-hdmi_drive=1" >> /boot/config.txt'
+hdmi_drive=1" >> /boot/firmware/config.txt'
 
 # To stream the desktop
 # See https://gist.github.com/atlury/16e5994b1a97aad261275b612ba2470f

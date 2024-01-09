@@ -9,8 +9,8 @@ camera="raspi"
 camera_usb_options="-r 640x480 -f 10"
 camera_raspi_options="-fps 10"
 
-if [ -e "/boot/octopi.txt" ]; then
-    source "/boot/octopi.txt"
+if [ -e "/boot/firmware/octopi.txt" ]; then
+    source "/boot/firmware/octopi.txt"
 fi
 
 # runs MJPG Streamer, using the provided input plugin + configuration

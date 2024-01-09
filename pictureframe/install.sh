@@ -21,8 +21,8 @@ git clone https://github.com/aneaville/MMM-GooglePhotos.git
 cd MMM-GooglePhotos
 npm install
 
-SECRET=`cat /boot/googlesecret`
-sudo rm -f /boot/googlesecret
+SECRET=`cat /boot/firmware/googlesecret`
+sudo rm -f /boot/firmware/googlesecret
 cat /home/pi/$INSTALL_NAME/credentials.json | sed "s/CLIENT_SECRET/$SECRET/" > /home/pi/MagicMirror/modules/MMM-GooglePhotos/credentials.json
 
 cd /home/pi

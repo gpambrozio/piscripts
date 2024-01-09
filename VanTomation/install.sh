@@ -38,10 +38,10 @@ wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip
 unzip ngrok-stable-linux-arm.zip
 rm ngrok-stable-linux-arm.zip
 
-NGROK_AUTH_TOKEN=`cat /boot/ngrokauthtoken`
+NGROK_AUTH_TOKEN=`cat /boot/firmware/ngrokauthtoken`
 cp -f /home/pi/VanTomation/ngrok.ymp /home/pi/.ngrok2/ngrok.yml
 echo "authtoken: $NGROK_AUTH_TOKEN" >> /home/pi/.ngrok2/ngrok.yml
-sudo rm -f /boot/ngrokauthtoken
+sudo rm -f /boot/firmware/ngrokauthtoken
 
 # Installing bluez
 sudo apt-get install -y libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev
@@ -61,11 +61,11 @@ sudo sh -c 'sed --in-place "s/blutoothd/bluetoothd --experimental/" /lib/systemd
 cd /home/pi
 
 # Make display work better for small screen
-sudo sh -c 'echo "hdmi_ignore_hotplug=1" >> /boot/config.txt'
-sudo sh -c 'echo "sdtv_mode=0" >> /boot/config.txt'
-sudo sh -c 'echo "enable_uart=1" >> /boot/config.txt'
-sudo sh -c 'echo "framebuffer_width=800" >> /boot/config.txt'
-sudo sh -c 'echo "framebuffer_height=600" >> /boot/config.txt'
+sudo sh -c 'echo "hdmi_ignore_hotplug=1" >> /boot/firmware/config.txt'
+sudo sh -c 'echo "sdtv_mode=0" >> /boot/firmware/config.txt'
+sudo sh -c 'echo "enable_uart=1" >> /boot/firmware/config.txt'
+sudo sh -c 'echo "framebuffer_width=800" >> /boot/firmware/config.txt'
+sudo sh -c 'echo "framebuffer_height=600" >> /boot/firmware/config.txt'
 
 # No screen saver
 # From https://www.raspberrypi.org/forums/viewtopic.php?t=57552
@@ -77,9 +77,9 @@ echo "@xset -dpms" >> /home/pi/.config/lxsession/LXDE-pi/autostart
 echo "@lxterminal -e bash -c -l /home/pi/VanTomation/monitor.py" >> /home/pi/.config/lxsession/LXDE-pi/autostart
 
 # Open weather map API key
-OWM_API_KEY=`cat /boot/owm_api_key`
+OWM_API_KEY=`cat /boot/firmware/owm_api_key`
 echo "export OWM_API_KEY=$OWM_API_KEY" >> .bashrc
-sudo rm -f /boot/owm_api_key
+sudo rm -f /boot/firmware/owm_api_key
 
 # https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md
 # https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
@@ -88,10 +88,10 @@ sudo apt-get install -y hostapd dnsmasq
 sudo cp VanTomation/config/iptables.ipv4.nat /etc/
 sudo cp -f VanTomation/config/hostapd /etc/default/hostapd
 
-PASS=`cat /boot/wifipass`
+PASS=`cat /boot/firmware/wifipass`
 sed "s/PASSWORD/$PASS/" VanTomation/config/hostapd.conf > VanTomation/config/hostapd.conf.replaced
 sudo mv -f VanTomation/config/hostapd.conf.replaced /etc/hostapd/hostapd.conf
-sudo rm -f /boot/wifipass
+sudo rm -f /boot/firmware/wifipass
 
 sudo cp -f VanTomation/config/interfaces.ap /etc/network/interfaces
 sudo cp -f VanTomation/config/dhcpcd.ap /etc/dhcpcd.conf
@@ -107,11 +107,11 @@ sudo sh -c 'echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf'
 
 # Dropbox uploader: https://github.com/andreafabrizi/Dropbox-Uploader
 curl "https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh" -o /home/pi/dropbox_uploader.sh
-TOKEN=`cat /boot/dropboxtoken`
+TOKEN=`cat /boot/firmware/dropboxtoken`
 echo "OAUTH_ACCESS_TOKEN=$TOKEN" > /home/pi/.dropbox_uploader
 sudo cp .dropbox_uploader /root/.dropbox_uploader
 sudo chmod +x /home/pi/dropbox_uploader.sh
-sudo rm -f /boot/dropboxtoken
+sudo rm -f /boot/firmware/dropboxtoken
 
 # Download saved files
 /home/pi/dropbox_uploader.sh download wpa_supplicant.conf wpa_supplicant.conf
@@ -122,6 +122,6 @@ sudo ln -s /home/pi/VanTomation/dhcp_up.sh /etc/dhcpcd.enter-hook
 
 # For temperature controller
 # From https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/ds18b20
-sudo sh -c 'echo "dtoverlay=w1-gpio" >> /boot/config.txt'
+sudo sh -c 'echo "dtoverlay=w1-gpio" >> /boot/firmware/config.txt'
 
 crontab VanTomation/config/crontab.txt
