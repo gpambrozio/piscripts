@@ -94,3 +94,8 @@ sudo apt-get install -y vlc vlc-plugin-access-extra
 
 # To update board's firmware (via octoprint plugin https://github.com/OctoPrint/OctoPrint-FirmwareUpdater/blob/master/doc/avrdude.md)
 sudo apt-get install -y avrdude
+
+# Install octodash (https://github.com/UnchartedBull/OctoDash/wiki/Installation#manual-installation)
+sudo apt-get install -y libgtk-3-0 libnotify4 libnss3 libxss1 libxtst6 xdg-utils libatspi2.0-0 libuuid1 libappindicator3-1 libsecret-1-0 gir1.2-gnomekeyring-1.0
+wget -O octodash.deb https://github.com/UnchartedBull/OctoDash/releases/download/v2.3.1/octodash_2.3.1_armv7l.deb
+sudo dpkg -iy octodash.deb
