@@ -33,9 +33,15 @@ mv -f screenrc.txt ~/.screenrc
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get check || exit 0
-sudo apt-get install -y subversion git screen
+sudo apt-get install -y git screen
 
-svn checkout "https://github.com/gpambrozio/piscripts/trunk/$1"
+# From https://stackoverflow.com/a/52269934
+git clone -n --depth=1 --filter=tree:0 https://github.com/gpambrozio/piscripts
+cd piscripts
+git sparse-checkout set --no-cone "$1"
+git checkout
+cd ..
+ln -s "piscripts/$1" "$1"
 
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/update.sh
 chmod +x update.sh
