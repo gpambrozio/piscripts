@@ -8,17 +8,15 @@ INSTALL_NAME=`cat /home/pi/install_name`
 # https://raspberrypi.stackexchange.com/a/87185
 sudo timedatectl set-timezone Pacific/Honolulu
 
-# https://itheo.tech/ultimate-python-installation-on-a-raspberry-pi-ubuntu-script/
-sudo apt-get install -y python-imaging-tk python-opencv python-paho-mqtt
-sudo apt-get install -y python-tk python3-tk tk-dev
-
-wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/python.sh
-chmod +x python.sh
-sudo ./python.sh 3.11.0
-
 # https://github.com/vlachoudis/bCNC
+mkdir bCNC
+cd bCNC
+python3 -m venv venv
+source venv/bin/activate
 pip install --upgrade git+https://github.com/gpambrozio/bCNC.git@gustavo2
 pip install paho-mqtt
+deactivate
+cd ..
 
 # Start automatically
 # Form https://learn.sparkfun.com/tutorials/how-to-run-a-raspberry-pi-program-on-startup#method-2-autostart
@@ -65,8 +63,8 @@ mkdir OctoPrint
 cd OctoPrint
 python3 -m venv venv
 source venv/bin/activate
-pip install pip --upgrade
 pip install octoprint
+deactivate
 cd ..
 
 sudo usermod -a -G tty pi
