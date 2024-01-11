@@ -51,9 +51,6 @@ sudo raspi-config nonint do_hostname $INSTALL_NAME
 sudo raspi-config nonint do_vnc 0
 sudo raspi-config nonint do_camera 0
 
-# https://raspberrypi.stackexchange.com/a/87185
-sudo timedatectl set-timezone Pacific/Honolulu
-
 # No power saving for wifi
 sudo iwconfig wlan0 power off
 
