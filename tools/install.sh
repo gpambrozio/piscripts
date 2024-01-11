@@ -93,6 +93,8 @@ sudo apt-get install -y vlc vlc-plugin-access-extra
 sudo apt-get install -y avrdude
 
 # Install octodash (https://github.com/UnchartedBull/OctoDash/wiki/Installation#manual-installation)
-sudo apt-get install -y libgtk-3-0 libnotify4 libnss3 libxss1 libxtst6 xdg-utils libatspi2.0-0 libuuid1 libappindicator3-1 libsecret-1-0 gir1.2-gnomekeyring-1.0
+
+# Dependencies from https://github.com/UnchartedBull/OctoDash/blob/main/scripts/install.sh
+sudo apt-get install -y libgtk-3-0 libnotify4 libnss3 libxss1 libxtst6 xdg-utils libatspi2.0-0 libuuid1 libappindicator3-1 libsecret-1-0 xserver-xorg ratpoison x11-xserver-utils xinit libgtk-3-0 bc desktop-file-utils libavahi-compat-libdnssd1 libpam0g-dev libx11-dev
 wget -O octodash.deb https://github.com/UnchartedBull/OctoDash/releases/download/v2.3.1/octodash_2.3.1_armv7l.deb
-sudo dpkg -iy octodash.deb
+sudo dpkg -i --ignore-depends=gir1.2-gnomekeyring-1.0 octodash.deb
