@@ -46,6 +46,10 @@ ln -s "piscripts/$1" "$1"
 wget https://raw.githubusercontent.com/gpambrozio/piscripts/master/update.sh
 chmod +x update.sh
 
+# From https://loganmarchione.com/2021/07/raspi-configs-mostly-undocumented-non-interactive-mode/
+sudo raspi-config nonint do_wifi_country US
+sudo raspi-config nonint do_change_locale en_US.UTF-8
+
 /home/pi/send-notification.sh "Config started on $1"
 
 ./$1/install.sh
