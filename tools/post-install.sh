@@ -9,4 +9,4 @@ echo "Entre samba password:"
 sudo smbpasswd -a pi
 
 echo "Enter new pi password"
-passwd
+sudo passwd pi
