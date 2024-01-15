@@ -55,10 +55,6 @@ sudo raspi-config nonint do_change_locale en_US.UTF-8
 ./$1/install.sh
 ./$1/update.sh
 
-# From https://forums.raspberrypi.com/search.php?author_id=288467&sr=posts&sid=fe3e671ff6a89f0f285bdb74d611e9fb
-# Avoids setup wizard shown on startup
-sudo rm /etc/xdg/autostart/piwiz.desktop
-
 # Cleanup
 
 sudo apt-get -y clean
