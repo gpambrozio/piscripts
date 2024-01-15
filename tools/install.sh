@@ -67,12 +67,9 @@ cd ..
 sudo usermod -a -G tty pi
 sudo usermod -a -G dialout pi
 
-sudo apt-get install -y libjpeg62-turbo-dev imagemagick ffmpeg libv4l-dev cmake
-git clone https://github.com/jacksonliam/mjpg-streamer.git
-cd mjpg-streamer/mjpg-streamer-experimental
-export LD_LIBRARY_PATH=.
-make
-cd ../..
+# Camera streaming
+# From https://github.com/ayufan/camera-streamer/releases/tag/v0.2.8
+
 
 # screen resolution
 # Based on https://github.com/UCTRONICS/UCTRONICS_HDMI_CTS/blob/master/uc586/hdmi_480x800_cfg.sh
@@ -95,3 +92,4 @@ sudo apt-get install -y avrdude
 # Install octodash (https://github.com/UnchartedBull/OctoDash/wiki/Installation#manual-installation)
 wget -O octodash.deb https://github.com/UnchartedBull/OctoDash/releases/download/v2.3.1/octodash_2.3.1_armv7l.deb
 sudo apt install -y ./octodash.deb
+rm octodash.deb
