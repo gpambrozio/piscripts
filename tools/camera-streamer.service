@@ -6,7 +6,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=pi
-ExecStart=/home/pi/tools/webcamDaemon
+ExecStart=/home/pi/tools/stream.py
 
 [Install]
 WantedBy=multi-user.target

@@ -67,10 +67,6 @@ cd ..
 sudo usermod -a -G tty pi
 sudo usermod -a -G dialout pi
 
-# Camera streaming
-# From https://github.com/ayufan/camera-streamer/releases/tag/v0.2.8
-
-
 # screen resolution
 # Based on https://github.com/UCTRONICS/UCTRONICS_HDMI_CTS/blob/master/uc586/hdmi_480x800_cfg.sh
 sudo sh -c 'echo "
