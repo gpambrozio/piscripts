@@ -1,4 +1,4 @@
 [Desktop Entry]
 Type=Application
 Name=bCNC
-Exec=sudo nice -n -20 sudo -u pi /usr/bin/python -m bCNC
+Exec=/home/pi/tools/bCNC.sh
