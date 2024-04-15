@@ -72,4 +72,7 @@
 # MONITOR myups@localhost 1 upsmon pass master	(or slave)
 [ha]
         password = myhaserver
+        actions = set
+        actions = fsd
+        instcmds = all
         upsmon master
