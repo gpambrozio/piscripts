@@ -1,7 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Name=VLC Streaming
-Terminal=false
-Exec=lxterminal -e "bash -c '/home/pi/tools/vlc.sh;$SHELL'"
-Type=Application
-Categories=Application;
